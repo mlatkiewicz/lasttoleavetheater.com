@@ -272,17 +272,33 @@ h1, h2, h3, p, ul {
 }
 
 .hero__tape .tape {
-  padding: 0.85rem 2.75rem 0.85rem 1.75rem;
+  width: clamp(16rem, 24vw, 24rem);
+  aspect-ratio: 500 / 178;
+  background-image: url('../images/tape-hero.png');
+  background-size: 100% 100%;
+  background-color: transparent;
+  clip-path: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 3rem 0 2rem;
 }
 
 .hero__tape-text {
   font-family: var(--font-body);
   font-weight: 600;
   color: var(--black);
-  font-size: clamp(1.3rem, 3.6vw, 1.9rem);
-  line-height: 1.15;
+  font-size: clamp(1.1rem, 3vw, 1.6rem);
+  line-height: 1.25;
   text-align: left;
-  letter-spacing: 0.1em;
+}
+
+.hero__tape-text .word--potent {
+  letter-spacing: 0.09em;
+}
+
+.hero__tape-text .word--theater {
+  letter-spacing: 0;
 }
 
 .hero__la {
