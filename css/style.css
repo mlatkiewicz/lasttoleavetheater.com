@@ -237,6 +237,7 @@ h1, h2, h3, p, ul {
    ========================================================================== */
 
 .hero {
+  --wordmark-w: min(60vw, 34rem);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -248,7 +249,7 @@ h1, h2, h3, p, ul {
 }
 
 .hero__lockup {
-  width: min(60vw, 34rem);
+  width: var(--wordmark-w, min(60vw, 34rem));
   height: auto;
   margin-top: 0;
   transform: rotate(-2deg) translateY(16px);
@@ -260,11 +261,14 @@ h1, h2, h3, p, ul {
 
 .hero__tape {
   margin-top: 2rem;
-  transform: rotate(-2deg) translateY(16px);
+  /* right edge aligned to the bulb graphic baked into the wordmark PNG,
+     measured at 93.3% of the wordmark's own width */
+  --tape-offset: calc(0.433 * var(--wordmark-w) - 50%);
+  transform: translateX(var(--tape-offset)) translateY(16px) rotate(4.3deg);
 }
 
 .hero__tape.is-visible {
-  transform: rotate(-2deg) translateY(0);
+  transform: translateX(var(--tape-offset)) translateY(0) rotate(4.3deg);
 }
 
 .hero__tape .tape {
@@ -272,13 +276,13 @@ h1, h2, h3, p, ul {
 }
 
 .hero__tape-text {
-  font-family: var(--font-display);
-  font-weight: 700;
+  font-family: var(--font-body);
+  font-weight: 600;
   color: var(--black);
   font-size: clamp(1.3rem, 3.6vw, 1.9rem);
   line-height: 1.15;
   text-align: left;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.1em;
 }
 
 .hero__la {
@@ -708,11 +712,12 @@ h1, h2, h3, p, ul {
 }
 
 .footer__tape-text {
-  font-family: var(--font-display);
-  font-weight: 700;
+  font-family: var(--font-body);
+  font-weight: 600;
   color: var(--black);
   font-size: 1.1rem;
   line-height: 1.15;
+  letter-spacing: 0.1em;
 }
 
 .footer__la {
