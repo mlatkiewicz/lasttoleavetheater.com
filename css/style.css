@@ -285,15 +285,15 @@ h1, h2, h3, p, ul {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 0 2.5rem;
+  padding: 0.9rem 3rem 0 2rem;
 }
 
 .hero__tape-text {
   font-family: var(--font-body);
-  font-weight: 600;
+  font-weight: 500;
   color: var(--black);
-  font-size: clamp(1.25rem, 3.4vw, 1.8rem);
-  line-height: 1.25;
+  font-size: clamp(1.375rem, 3.74vw, 1.98rem);
+  line-height: 1.15;
   text-align: center;
 }
 
@@ -309,12 +309,23 @@ h1, h2, h3, p, ul {
   margin-top: 1.1rem;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(1.4rem, 4vw, 2.1rem);
-  transform: rotate(-1deg) translateY(16px);
+  font-size: clamp(1.68rem, 4.8vw, 2.52rem);
+  transform: translateY(16px);
 }
 
 .hero__la.is-visible {
-  transform: rotate(-1deg) translateY(0);
+  transform: translateY(0);
+}
+
+.hero__la .word--los {
+  display: inline-block;
+  transform: rotate(-1deg);
+}
+
+.hero__la .word--angeles {
+  display: inline-block;
+  /* 8% read as an 8% grade (rise/run), atan(0.08) ≈ 4.6deg */
+  transform: translateY(10px) rotate(4.6deg);
 }
 
 /* ==========================================================================
