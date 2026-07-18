@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Last to Leave — Potent theater. Los Angeles.</title>
+<meta name="description" content="Last to Leave is a new Los Angeles theater company founded by Matthew Latkiewicz and Paul Luoma. Our debut production is announced Aug. 5.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Bulb intro overlay: plays once per session, never blocks scrolling -->
+<div class="intro-overlay" id="introOverlay" aria-hidden="true">
+  <img src="images/bulb.png" alt="" class="intro-overlay__bulb">
+</div>
+
+<!-- ==========================================================
+     1 — Hero
+     ========================================================== -->
+<section class="hero" id="hero">
+  <img
+    class="hero__lockup hero-reveal"
+    src="images/wordmark-lockup.png"
+    alt="Last to Leave theater company"
+  >
+  <div class="hero__tape hero-reveal">
+    <span class="tape">
+      <span class="hero__tape-text">POTENT<br>THEATER</span>
+    </span>
+  </div>
+  <p class="hero__la hero-reveal">Los Angeles</p>
+</section>
+
+<!-- ==========================================================
+     2 — Flag beat
+     ========================================================== -->
+<section class="flag" id="flag">
+  <div class="flag__bulb-wrap">
+    <img src="images/bulb.png" alt="" class="flag__bulb">
+  </div>
+  <div class="flag__text">
+    <p class="mono-aside flag__line--flag fade-in"><span class="flag__flag-rotate">This is<br>a flag</span></p>
+    <p class="mono-aside flag__line--planted fade-in">planted in<br>the real</p>
+  </div>
+</section>
+
+<!-- ==========================================================
+     3 — Manifesto
+     ========================================================== -->
+<section class="manifesto" id="manifesto">
+  <h2 class="manifesto__title fade-in">POTENT<br>THEATER</h2>
+  <div class="manifesto__body">
+    <ul class="manifesto__lines fade-in">
+      <li>Aims for the nervous system</li>
+      <li>Designs for deep attention</li>
+      <li>Builds environments, not sets</li>
+      <li>Pushes beyond entertainment</li>
+    </ul>
+    <div class="manifesto__video-wrap fade-in">
+      <div class="video-frame">
+        <span class="tape tape--black tape--tl"></span>
+        <span class="tape tape--black tape--tr"></span>
+        <span class="tape tape--black tape--bl"></span>
+        <span class="tape tape--black tape--br"></span>
+        <div class="video-frame__media">
+          <!-- TEMP: poster + source pulled from images/launch-video.mp4, pending
+               confirmation this is the current cut (see chat) before final ship -->
+          <video
+            id="manifestoVideo"
+            poster="images/launch-video-poster-TEMP.jpg"
+            playsinline
+            muted
+            preload="none"
+          >
+            <source src="images/launch-video-web.mp4" type="video/mp4">
+          </video>
+          <button class="video-frame__play" id="videoPlayBtn" aria-label="Play video">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================
+     4A — Debut teaser (REPLACEABLE — becomes the Assassins feature
+     on Aug 5). Keep this block self-contained; do not merge markup
+     or styling with 4B below, even though they read as one beat now.
+     ========================================================== -->
+<section class="debut-teaser" id="debut-teaser">
+  <div class="debut-teaser__tape fade-in">
+    <span class="tape">
+      <span class="debut-teaser__tape-text">Our debut production will be<br>announced Aug. 5</span>
+    </span>
+  </div>
+  <p class="mono-aside debut-teaser__aside fade-in">...or you find out late</p>
+</section>
+
+<!-- ==========================================================
+     4B — Conversion (SURVIVES Aug 5 — gets promoted to its own
+     standalone section then). Self-contained on purpose: only
+     needs a standalone heading added once it's lifted out.
+     ========================================================== -->
+<section class="conversion" id="conversion">
+  <div class="ghost-column" aria-hidden="true">
+    <span>FOLLOW</span><span>FOLLOW</span><span>FOLLOW</span><span>FOLLOW</span>
+    <span>FOLLOW</span><span>FOLLOW</span><span>FOLLOW</span><span>FOLLOW</span>
+    <span>FOLLOW</span><span>FOLLOW</span><span>FOLLOW</span><span>FOLLOW</span>
+    <span>SIGN UP</span><span>SIGN UP</span><span>SIGN UP</span><span>SIGN UP</span>
+    <span>SIGN UP</span><span>SIGN UP</span><span>SIGN UP</span><span>SIGN UP</span>
+  </div>
+
+  <div class="conversion__inner">
+    <img src="images/so-obviously.png" alt="so, obviously" class="conversion__aside-img fade-in">
+
+    <h2 class="conversion__heading fade-in">FOLLOW &amp;</h2>
+    <div class="conversion__socials fade-in">
+      <div class="social-row">
+        <a href="https://instagram.com/lasttoleavetheater" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.98-6.98.058-1.28.072-1.689.072-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.98-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <a href="https://facebook.com/lasttoleavetheater" target="_blank" rel="noopener" aria-label="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg>
+        </a>
+        <a href="https://tiktok.com/@lasttoleavetheater" target="_blank" rel="noopener" aria-label="TikTok">
+          <svg viewBox="0 0 24 24"><path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+        </a>
+        <!-- YouTube dropped: not live yet per pre-build check -->
+      </div>
+      <a href="https://instagram.com/lasttoleavetheater" target="_blank" rel="noopener" class="social-handle">@lasttoleavetheater</a>
+    </div>
+
+    <div class="conversion__signup fade-in">
+      <h2 class="conversion__heading">SIGN UP</h2>
+      <p>for our newsletter</p>
+      <form class="signup-form" action="https://buttondown.com/api/emails/embed-subscribe/ltltheater" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/ltltheater', 'popupwindow')">
+        <label for="conversion-email" class="visually-hidden">Email address</label>
+        <input type="email" id="conversion-email" name="email" class="signup-form__email" placeholder="you@email.com" required>
+        <input type="hidden" name="embed" value="1">
+        <button type="submit" class="signup-form__submit">Submit</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================
+     Shared black→grey→black gradient wrapper for sections 5–7
+     (matches the real Canva render — see plan notes)
+     ========================================================== -->
+<div class="grade-wrap">
+
+  <!-- ========================================================
+       5 — Who we are
+       ======================================================== -->
+  <section class="who-we-are" id="who-we-are">
+    <h2 class="who-we-are__heading fade-in">
+      <span class="accent">Last to Leave</span> is a new Los Angeles theater company founded by co-artistic directors Matthew Latkiewicz and Paul Luoma
+    </h2>
+
+    <div class="who-we-are__people">
+      <div class="person fade-in">
+        <div class="person__photo-wrap">
+          <span class="tape tape--tl"></span>
+          <img src="images/matthew-latkiewicz.jpg" alt="Matthew Latkiewicz">
+          <span class="tape tape--br"></span>
+        </div>
+        <p class="person__bio">
+          Matthew's last LA show, <a href="https://www.hollywoodfringe.org/projects/5773?tab=details" target="_blank" rel="noopener"><em>Life Plan</em></a> premiered at the 2019 Hollywood Fringe Festival. He created and hosted truTV's <em>You Can Do Better</em>, based on his book <em>You Suck at Drinking</em>. His writing has appeared in <em>McSweeney's</em>, <em>Wired</em>, <em>Details</em>, and other small zines and academic journals you'd be hard pressed to find nowadays.
+        </p>
+      </div>
+
+      <div class="person fade-in">
+        <div class="person__photo-wrap">
+          <span class="tape tape--tl"></span>
+          <img src="images/paul-luoma.jpg" alt="Paul Luoma">
+          <span class="tape tape--br"></span>
+        </div>
+        <p class="person__bio">
+          Paul is a professional stage performer (AEA) whose recent favorite roles include the Baker in <em>Into the Woods</em> and Giorgio in <em>Passion</em>. He earned a BFA in Musical Theatre from Western Michigan University and studied TV writing at NYU. On the other side of the camera, he's worked in creative development at NBCUniversal, Netflix, Center Theatre Group, and currently, Endemol Shine North America.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       6 — Play Reading Club
+       ======================================================== -->
+  <section class="reading-club" id="reading-club">
+    <div class="reading-club__heading-wrap fade-in">
+      <p class="reading-club__eyebrow">You are invited to LtL's</p>
+      <h2 class="reading-club__heading"><span>PLAY</span><span>READING</span><span>CLUB</span></h2>
+    </div>
+    <div class="reading-club__body fade-in">
+      <p>Once a month, we get on a call with theater friends from across the country and read a play out loud, top to bottom. Low stakes way to read new plays, meet new folks.</p>
+      <p>The group picks what we read. Everyone who wants a part gets one.</p>
+      <p><em>Some of the plays we've read: <em>The Dumb Waiter</em>, <em>The Pillowman</em>, and <em>The Aliens</em></em></p>
+      <p><em>Add your name to the newsletter. We'll send the invite.</em></p>
+
+      <form class="signup-form" action="https://buttondown.com/api/emails/embed-subscribe/ltltheater" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/ltltheater', 'popupwindow')">
+        <label for="reading-club-email" class="visually-hidden">Email address</label>
+        <input type="email" id="reading-club-email" name="email" class="signup-form__email" placeholder="you@email.com" required>
+        <input type="hidden" name="embed" value="1">
+        <button type="submit" class="signup-form__submit">Submit</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       7 — Lights-out beat + Footer
+       ======================================================== -->
+  <section class="lights-out" id="lights-out">
+    <div class="lights-out__row fade-in">
+      <img src="images/wordmark-lockup.png" alt="Last to Leave theater company" class="lights-out__lockup">
+      <p class="mono-aside lights-out__text">will turn<br>out the<br>lights</p>
+    </div>
+  </section>
+
+  <footer class="footer" id="footer">
+    <div class="footer__brand fade-in">
+      <img src="images/wordmark-lockup.png" alt="Last to Leave theater company" class="footer__lockup">
+      <div>
+        <span class="tape footer__tape">
+          <span class="footer__tape-text">POTENT<br>THEATER</span>
+        </span>
+        <p class="footer__la">Los Angeles</p>
+      </div>
+    </div>
+
+    <div class="footer__meta fade-in">
+      <div>
+        <h3>Contact</h3>
+        <a href="mailto:info@lasttoleavetheater.com">info@lasttoleavetheater.com</a>
+      </div>
+      <div>
+        <h3>Follow</h3>
+        <div class="social-row">
+          <a href="https://instagram.com/lasttoleavetheater" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.98-6.98.058-1.28.072-1.689.072-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.98-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </a>
+          <a href="https://facebook.com/lasttoleavetheater" target="_blank" rel="noopener" aria-label="Facebook">
+            <svg viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg>
+          </a>
+          <a href="https://tiktok.com/@lasttoleavetheater" target="_blank" rel="noopener" aria-label="TikTok">
+            <svg viewBox="0 0 24 24"><path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <p class="footer__copyright">© 2026 Last to Leave Theater Company, LLC</p>
+  </footer>
+
+</div><!-- /.grade-wrap -->
+
+<script src="js/main.js"></script>
+</body>
+</html>
