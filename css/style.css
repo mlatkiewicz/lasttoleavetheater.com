@@ -262,13 +262,16 @@ h1, h2, h3, p, ul {
 .hero__tape {
   margin-top: 2rem;
   /* right edge aligned to the bulb graphic baked into the wordmark PNG,
-     measured at 93.3% of the wordmark's own width */
+     measured at 93.3% of the wordmark's own width. Rotation is 1deg (not
+     the tape's overall ~4.3deg tilt) because the tape-hero.png artwork
+     already has its own ~1deg inherent tilt baked in; this cancels it out
+     so the shape's own bottom edge renders horizontal. */
   --tape-offset: calc(0.433 * var(--wordmark-w) - 50%);
-  transform: translateX(var(--tape-offset)) translateY(16px) rotate(4.3deg);
+  transform: translateX(var(--tape-offset)) translateY(16px) rotate(1deg);
 }
 
 .hero__tape.is-visible {
-  transform: translateX(var(--tape-offset)) translateY(0) rotate(4.3deg);
+  transform: translateX(var(--tape-offset)) translateY(0) rotate(1deg);
 }
 
 .hero__tape .tape {
@@ -281,16 +284,17 @@ h1, h2, h3, p, ul {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0 3rem 0 2rem;
+  align-items: center;
+  padding: 0 2.5rem;
 }
 
 .hero__tape-text {
   font-family: var(--font-body);
   font-weight: 600;
   color: var(--black);
-  font-size: clamp(1.1rem, 3vw, 1.6rem);
+  font-size: clamp(1.25rem, 3.4vw, 1.8rem);
   line-height: 1.25;
-  text-align: left;
+  text-align: center;
 }
 
 .hero__tape-text .word--potent {
