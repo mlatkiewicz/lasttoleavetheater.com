@@ -236,8 +236,33 @@ h1, h2, h3, p, ul {
    1 — Hero
    ========================================================================== */
 
-.hero {
+.hero-flag-group {
   --wordmark-w: min(60vw, 34rem);
+  position: relative;
+}
+
+/* Bulb is shared across Hero + Flag: loads alone, stays sticky through
+   both sections, then releases back into normal flow exactly when
+   .hero-flag-group's bottom edge is reached. That release point is tuned
+   via .flag's height + .flag__line--planted's `top` (see comments below)
+   so it coincides with "planted in the real" reaching the bulb's line. */
+.shared-bulb-wrap {
+  position: sticky;
+  top: 0;
+  height: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  pointer-events: none;
+}
+
+.shared-bulb {
+  width: clamp(3rem, 6vw, 4.5rem);
+  transform: translateX(calc(0.39 * var(--wordmark-w)));
+}
+
+.hero {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -248,14 +273,14 @@ h1, h2, h3, p, ul {
   position: relative;
 }
 
-.hero__lockup {
+.hero__wordmark {
   width: var(--wordmark-w, min(60vw, 34rem));
   height: auto;
   margin-top: 0;
   transform: rotate(-2deg) translateY(16px);
 }
 
-.hero__lockup.is-visible {
+.hero__wordmark.is-visible {
   transform: rotate(-2deg) translateY(0);
 }
 
@@ -290,7 +315,7 @@ h1, h2, h3, p, ul {
 
 .hero__tape-text {
   font-family: var(--font-body);
-  font-weight: 500;
+  font-weight: 600;
   color: var(--black);
   font-size: clamp(1.375rem, 3.74vw, 1.98rem);
   line-height: 1.15;
@@ -324,44 +349,38 @@ h1, h2, h3, p, ul {
 
 .hero__la .word--angeles {
   display: inline-block;
-  /* 8% read as an 8% grade (rise/run), atan(0.08) ≈ 4.6deg */
-  transform: translateY(10px) rotate(4.6deg);
+  transform: translateY(20px) rotate(8deg);
 }
 
 /* ==========================================================================
    2 — Flag beat
    ========================================================================== */
 
+/* Height is load-bearing: the shared bulb (see .shared-bulb-wrap) is a
+   zero-height sticky element, so it only releases once
+   .hero-flag-group's bottom edge clears the viewport TOP entirely —
+   i.e. at scrollY = hero-height + this flag height (not minus a
+   viewport, since the sticky element itself has no height to subtract).
+   .flag__line--planted's `top` is set to equal this same height, so its
+   document position (hero-height + this) equals that release scrollY,
+   landing it exactly at the bulb's line the moment it unsticks. Change
+   both numbers together. */
 .flag {
   position: relative;
-  min-height: 140vh;
+  min-height: 200vh;
   background: var(--black);
-}
-
-.flag__bulb-wrap {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  display: flex;
-  justify-content: flex-end;
-  pointer-events: none;
-}
-
-.flag__bulb {
-  width: clamp(3rem, 9vw, 5.5rem);
-  margin-right: clamp(1rem, 6vw, 5rem);
-  margin-top: 0;
 }
 
 .flag__text {
   position: absolute;
   inset: 0;
-  padding: var(--section-pad-x);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 14vh;
   pointer-events: none;
+}
+
+.flag__line--flag {
+  position: absolute;
+  top: 50vh;
+  left: var(--section-pad-x);
 }
 
 .flag__flag-rotate {
@@ -370,6 +389,9 @@ h1, h2, h3, p, ul {
 }
 
 .flag__line--planted {
+  position: absolute;
+  top: 200vh;
+  left: var(--section-pad-x);
   max-width: 20rem;
 }
 
@@ -387,6 +409,12 @@ h1, h2, h3, p, ul {
   justify-content: center;
   gap: clamp(1.5rem, 4vh, 3rem);
   position: relative;
+  /* Pulled up to overlap the tail of the flag beat, with a z-index above
+     the shared bulb (10), so the pink block visually arrives over the
+     still-stuck bulb/text right before the release point, rather than
+     just appearing after it in plain document flow. */
+  margin-top: -15vh;
+  z-index: 20;
 }
 
 .manifesto__title {
@@ -780,49 +808,27 @@ h1, h2, h3, p, ul {
 }
 
 /* ==========================================================================
-   Bulb intro overlay
-   ========================================================================== */
-
-.intro-overlay {
-  position: fixed;
-  inset: 0;
-  background: var(--black);
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-}
-
-.intro-overlay__bulb {
-  width: clamp(3rem, 10vw, 5rem);
-  opacity: 0;
-}
-
-.intro-overlay.is-playing .intro-overlay__bulb {
-  animation: bulb-appear 0.6s ease forwards;
-}
-
-.intro-overlay.is-done {
-  animation: overlay-fade 0.6s ease forwards;
-}
-
-@keyframes bulb-appear {
-  to { opacity: 1; }
-}
-
-@keyframes overlay-fade {
-  to { opacity: 0; visibility: hidden; }
-}
-
-/* ==========================================================================
    Responsive — mobile
    ========================================================================== */
 
 @media (max-width: 640px) {
-  .hero__lockup {
+  .hero__wordmark {
     width: 85vw;
     margin-left: 0;
+  }
+
+  /* Sticky-bulb-across-two-sections is a desktop scroll effect; on mobile
+     it just renders once, inline, above the wordmark. */
+  .shared-bulb-wrap {
+    position: static;
+    height: auto;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .shared-bulb {
+    width: 3.5rem;
+    transform: rotate(8deg);
   }
 
   .flag {
@@ -830,23 +836,15 @@ h1, h2, h3, p, ul {
     padding: clamp(3rem, 12vh, 5rem) 0;
   }
 
-  .flag__bulb-wrap {
-    position: static;
-    height: auto;
-    justify-content: center;
-    margin-bottom: 2rem;
-  }
-
-  .flag__bulb {
-    width: 3.5rem;
-    margin-right: 0;
-    transform: rotate(8deg);
-  }
-
   .flag__text {
     position: static;
     padding: 0 var(--section-pad-x);
-    gap: 2.5rem;
+  }
+
+  .flag__line--flag,
+  .flag__line--planted {
+    position: static;
+    margin-bottom: 2.5rem;
   }
 
   .flag__flag-rotate {
