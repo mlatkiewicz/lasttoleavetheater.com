@@ -238,6 +238,7 @@ h1, h2, h3, p, ul {
 
 .hero-flag-group {
   --wordmark-w: min(60vw, 34rem);
+  --bulb-w: clamp(4.5rem, 9vw, 6.75rem);
   position: relative;
 }
 
@@ -258,7 +259,7 @@ h1, h2, h3, p, ul {
 }
 
 .shared-bulb {
-  width: clamp(3rem, 6vw, 4.5rem);
+  width: var(--bulb-w);
   transform: translateX(calc(0.5317 * var(--wordmark-w)));
 }
 
@@ -269,7 +270,13 @@ h1, h2, h3, p, ul {
   align-items: center;
   justify-content: flex-start;
   padding: var(--section-pad-x);
-  padding-top: 0;
+  /* Pushes the wordmark down so the bulb's own bottom (the glass globe,
+     91.4% down bulb.png's height, not counting its cord) lines up with
+     the top of the "y" in "company" (73.34% down wordmark-only.png's
+     height). Both measured pixel-for-pixel from the actual assets, and
+     expressed as a formula (not a fixed value) so it stays correct as
+     --bulb-w / --wordmark-w change at different viewport sizes. */
+  padding-top: calc(var(--bulb-w) * 5.799 - var(--wordmark-w) * 0.6554);
   position: relative;
 }
 
@@ -813,6 +820,13 @@ h1, h2, h3, p, ul {
    ========================================================================== */
 
 @media (max-width: 640px) {
+  .hero {
+    /* Desktop's push-down formula is for the sticky bulb sitting above
+       the wordmark; on mobile the bulb is static/inline instead, so it
+       doesn't apply. */
+    padding-top: var(--section-pad-x);
+  }
+
   .hero__wordmark {
     width: 85vw;
     margin-left: 0;
