@@ -97,26 +97,22 @@ h1, h2, h3, p, ul {
 
 .fade-in {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
+  transition: opacity 1.6s ease;
 }
 
 .fade-in.is-visible {
   opacity: 1;
-  transform: translateY(0);
 }
 
 /* Hero elements fade up on their own timer (synced to the bulb intro
    finishing in main.js), not on scroll-into-view like .fade-in */
 .hero-reveal {
   opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.9s ease, transform 0.9s ease;
+  transition: opacity 1.8s ease;
 }
 
 .hero-reveal.is-visible {
   opacity: 1;
-  transform: translateY(0);
 }
 
 /* Shared: tape strips -------------------------------------------------------
@@ -260,7 +256,7 @@ h1, h2, h3, p, ul {
 
 .shared-bulb {
   width: var(--bulb-w);
-  transform: translateX(calc(0.5317 * var(--wordmark-w)));
+  transform: translateX(calc(0.5317 * var(--wordmark-w) + 20px));
 }
 
 .hero {
@@ -284,11 +280,7 @@ h1, h2, h3, p, ul {
   width: var(--wordmark-w, min(60vw, 34rem));
   height: auto;
   margin-top: 0;
-  transform: rotate(-2deg) translateY(16px);
-}
-
-.hero__wordmark.is-visible {
-  transform: rotate(-2deg) translateY(0);
+  transform: rotate(-2deg);
 }
 
 .hero__tape {
@@ -300,11 +292,7 @@ h1, h2, h3, p, ul {
      its own ~1deg inherent tilt baked in; this cancels it out so the
      shape's own bottom edge renders horizontal. */
   --tape-offset: calc(0.6089 * var(--wordmark-w) - 50%);
-  transform: translateX(var(--tape-offset)) translateY(16px) rotate(1deg);
-}
-
-.hero__tape.is-visible {
-  transform: translateX(var(--tape-offset)) translateY(0) rotate(1deg);
+  transform: translateX(var(--tape-offset)) rotate(1deg);
 }
 
 .hero__tape .tape {
@@ -343,11 +331,6 @@ h1, h2, h3, p, ul {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: clamp(1.68rem, 4.8vw, 2.52rem);
-  transform: translateY(16px);
-}
-
-.hero__la.is-visible {
-  transform: translateY(0);
 }
 
 .hero__la .word--los {
@@ -540,11 +523,7 @@ h1, h2, h3, p, ul {
   max-width: 38rem;
   margin-inline: auto;
   text-align: left;
-  transform: rotate(-1.5deg) translateY(24px);
-}
-
-.debut-teaser__tape.is-visible {
-  transform: rotate(-1.5deg) translateY(0);
+  transform: rotate(-1.5deg);
 }
 
 .debut-teaser__tape .tape {
