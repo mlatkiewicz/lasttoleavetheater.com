@@ -379,6 +379,20 @@ h1, h2, h3, p, ul {
   line-height: 0.95;
   letter-spacing: -0.06em;
   text-transform: uppercase;
+  /* .manifesto is display:flex, so this h2 is a flex item -- and flex
+     items are always block-level ("blockified") no matter what display
+     you give them; display:inline-block here would compute back to
+     block regardless. The actual reason it was stretching to full
+     width is align-items:stretch (the flex default on .manifesto),
+     which sizes every flex item to the container's cross-axis size
+     unless it opts out. align-self:flex-start opts this one out, so it
+     shrinks to its actual text width instead -- without this,
+     getBoundingClientRect() always reports the CONTAINER's width here,
+     not the rendered text width, making syncManifestoTitle()'s fit
+     measurement in js/main.js a silent no-op (it reads back the target
+     width whether or not the text actually reaches it, so font-size
+     never gets corrected off the fallback clamp below). */
+  align-self: flex-start;
   /* Exact font-size is set by syncManifestoTitle() in js/main.js, which
      fits this to span the full content width of #manifesto (not just an
      approximation via vw units) -- this clamp is only the pre-JS/no-JS
