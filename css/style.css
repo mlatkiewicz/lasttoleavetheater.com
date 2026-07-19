@@ -428,6 +428,7 @@ h1, h2, h3, p, ul {
      to avoid wrapping the list (see syncManifestoVideoSize in
      js/main.js); above it there's no more benefit, just extra gap. */
   max-width: 73rem;
+  margin-inline: auto;
 }
 
 .manifesto__lines {
