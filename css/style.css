@@ -751,11 +751,14 @@ h1, h2, h3, p, ul {
    ========================================================================== */
 
 .who-we-are {
+  background: var(--black);
   padding: clamp(4rem, 10vh, 7rem) var(--section-pad-x);
-  max-width: 64rem;
 }
 
 .who-we-are__heading {
+  max-width: 90vw;
+  margin-inline: auto;
+  text-align: left;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: clamp(1.8rem, 4.2vw, 2.75rem);
@@ -767,10 +770,12 @@ h1, h2, h3, p, ul {
 }
 
 .who-we-are__people {
+  max-width: 76.5vw;
+  margin-inline: auto;
   margin-top: clamp(3rem, 8vh, 5rem);
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: clamp(2rem, 6vw, 4rem);
+  grid-template-columns: repeat(2, 35%);
+  justify-content: space-evenly;
 }
 
 .person__photo-wrap {
@@ -789,17 +794,24 @@ h1, h2, h3, p, ul {
 
 .person__photo-wrap .tape {
   position: absolute;
-  width: 4.5rem;
-  height: 2rem;
+  height: 2.75rem;
+  /* Solid strip, not the shared .tape class's jagged clip-path cut. */
+  clip-path: none;
 }
 
-.person__photo-wrap .tape--tl { top: -1rem; left: -1.25rem; transform: rotate(-35deg); }
-.person__photo-wrap .tape--br { bottom: -1rem; right: -1.25rem; transform: rotate(40deg); }
+/* Each piece's center lands exactly on the corner/edge point it overlaps
+   (translate ±50%,±50% before rotating), so it straddles evenly -- half
+   on the photo, half off -- at any rotation angle. Widths vary per piece
+   so the four read as separately torn strips, not copies of one shape. */
+.person__photo-wrap .tape--tl { top: 0; left: 0; width: 7rem; transform: translate(-50%, -50%) rotate(-47deg); }
+.person__photo-wrap .tape--br { bottom: 0; right: 0; width: 5rem; transform: translate(50%, 50%) rotate(-40deg); }
+.person__photo-wrap .tape--tr { top: 0; right: 0; width: 5.5rem; transform: translate(50%, -50%) rotate(37deg); }
+.person__photo-wrap .tape--bc { bottom: 0; left: 50%; width: 9rem; transform: translate(-50%, 50%); }
 
 .person__bio {
-  margin-top: 1.25rem;
-  font-size: 0.95rem;
-  color: #d8d8d8;
+  margin-top: 3.25rem;
+  font-size: 1.09rem;
+  color: var(--white);
 }
 
 .person__bio a {
@@ -809,20 +821,10 @@ h1, h2, h3, p, ul {
 
 /* ==========================================================================
    6 — Play Reading Club  /  7 — Lights-out + Footer
-   These two sections share one continuous background gradient: black at the
-   top of "who we are" (see above), deepening to #3C3C3C around the Reading
-   Club heading, then fading back toward black through the footer — matches
-   the real Canva render, not a flat color swap.
    ========================================================================== */
 
 .grade-wrap {
-  background: linear-gradient(
-    to bottom,
-    var(--black) 0%,
-    var(--grey-dark) 22%,
-    var(--grey-dark) 68%,
-    var(--black) 100%
-  );
+  background: var(--black);
 }
 
 .reading-club {
