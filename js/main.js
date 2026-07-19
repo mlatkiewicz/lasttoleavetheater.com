@@ -15,7 +15,20 @@
      normal flow (position:static, no margin) to read its true un-stuck
      position, diff that against flagPhrases' top, and pull up by exactly
      that -- correct regardless of slack, viewport size, or font scaling.
-     Re-measured on resize since layout can change. */
+
+     The sticky `top` offset ALSO needs to be set dynamically, not left at
+     a fixed CSS value: it must equal flagPhrases' own resting screen
+     position, so Manifesto is already sitting exactly at its stuck
+     threshold at scroll 0. Otherwise (e.g. a fixed `top: 30vh`) Manifesto
+     first drifts upward with normal scroll for a while, covering the SAME
+     content the whole time, and only starts revealing once it happens to
+     reach that offset -- a dead-scroll preamble where the pink section
+     looks like it's just scrolling normally. With `top` matched to its
+     resting position, any scroll at all -- even 1px -- immediately exceeds
+     the threshold and freezes it in place, so the reveal starts on the
+     very first scroll pixel instead of after a delay.
+
+     Both values are re-measured on resize since layout can change. */
   var flagPhrases = document.getElementById('flagPhrases');
   var manifesto = document.getElementById('manifesto');
 
@@ -23,9 +36,15 @@
     if (!flagPhrases || !manifesto) return;
     manifesto.style.position = 'static';
     manifesto.style.marginTop = '0px';
-    var gap = manifesto.getBoundingClientRect().top - flagPhrases.getBoundingClientRect().top;
+    var manifestoNaturalTop = manifesto.getBoundingClientRect().top;
+    var flagRect = flagPhrases.getBoundingClientRect();
+    var gap = manifestoNaturalTop - flagRect.top;
     manifesto.style.position = '';
     manifesto.style.marginTop = '-' + gap + 'px';
+    /* Normalize by current scrollY so this is correct even if a resize
+       fires mid-scroll, not just at rest. No-op on mobile, where the
+       stylesheet resolves `position` to static and `top` has no effect. */
+    manifesto.style.top = (flagRect.top + window.scrollY) + 'px';
   }
 
   syncManifestoOverlap();
