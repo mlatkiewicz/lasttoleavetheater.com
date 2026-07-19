@@ -376,9 +376,40 @@ h1, h2, h3, p, ul {
 .manifesto__title {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(3rem, 14vw, 17rem);
   line-height: 0.95;
   letter-spacing: -0.06em;
+  text-transform: uppercase;
+  /* Exact font-size is set by syncManifestoTitle() in js/main.js, which
+     fits this to span the full content width of #manifesto (not just an
+     approximation via vw units) -- this clamp is only the pre-JS/no-JS
+     fallback. white-space:nowrap keeps "Potent Theater" from wrapping
+     mid-fit; the mobile breakpoint below switches each word to its own
+     line and lets JS fit them independently instead. */
+  font-size: clamp(2rem, 12vw, 10rem);
+  white-space: nowrap;
+}
+
+.manifesto__title-word {
+  /* Always inline-block, never block -- a block element stretches to
+     its container's width regardless of font-size, which would make
+     syncManifestoTitle()'s width measurement always read the container
+     width back (a no-op fit). inline-block sizes to content instead, on
+     both desktop and the stacked mobile layout below. The line break
+     between words on mobile comes from .manifesto__title-break, not
+     from changing this to block. letter-spacing is redeclared here (not
+     just inherited from .manifesto__title) because an em-based value
+     resolves against the font-size of the element it's declared ON --
+     inherited, it would stay frozen at the H2's font-size even as JS
+     sets each word's OWN font-size independently on mobile, breaking
+     the proportional width-vs-font-size relationship fitFontToWidth()
+     relies on for its one-shot scaling in js/main.js. Declared directly
+     here, it scales with each word's own size instead. */
+  letter-spacing: -0.06em;
+  display: inline-block;
+}
+
+.manifesto__title-break {
+  display: none;
 }
 
 .manifesto__body {
@@ -386,16 +417,33 @@ h1, h2, h3, p, ul {
   gap: clamp(2rem, 6vw, 5rem);
   align-items: flex-start;
   flex-wrap: wrap;
+  /* Keeps the list and video from drifting far apart on very wide
+     screens, even though .manifesto__title above spans full width.
+     73rem specifically: past this row width, .manifesto__lines' font-
+     size (clamp ceiling 2rem) and .video-frame's height-matched ideal
+     width are both already maxed out and constant, so this is the exact
+     threshold where the list's natural (no-wrap) width + gap + the
+     video's height-matched width all fit with nothing to spare --
+     below it the video would have to give up some of the height match
+     to avoid wrapping the list (see syncManifestoVideoSize in
+     js/main.js); above it there's no more benefit, just extra gap. */
+  max-width: 73rem;
 }
 
 .manifesto__lines {
-  flex: 2 1 0;
+  /* flex-basis:0, not auto -- with auto, the flex-wrap decision is based
+     on this list's own unwrapped max-content width (i.e. its longest
+     line rendered on one line), which is wide enough to trigger a
+     premature wrap of the whole row well before space is actually
+     tight. With basis 0, the wrap decision is driven by .video-frame's
+     content width instead, and this just grows to fill whatever's left. */
+  flex: 1 1 0;
   min-width: 0;
   display: flex;
   flex-direction: column;
   gap: clamp(1.25rem, 4vh, 2.5rem);
   font-family: var(--font-body);
-  font-size: clamp(1.1rem, 3.7vw, 2.9rem);
+  font-size: clamp(1.1rem, 2.6vw, 2rem);
   font-weight: 300;
   letter-spacing: 0.02em;
   text-transform: uppercase;
@@ -404,11 +452,12 @@ h1, h2, h3, p, ul {
 }
 
 .manifesto__video-wrap {
-  /* 1 share against .manifesto__lines' 2 shares, both flex-basis:0 -- so
-     this always takes exactly 1/3 of .manifesto__body's content width
-     (gap excluded first), growing and shrinking with the viewport instead
-     of sitting at a fixed rem size. */
-  flex: 1 1 0;
+  /* Width is NOT a flex share -- js/main.js's syncManifestoVideoSize()
+     sets .video-frame's width to whatever makes its height (via its own
+     aspect-ratio) match .manifesto__lines' rendered height, so the two
+     columns balance vertically instead of the video sitting at some
+     unrelated size. This wrap just shrinks to fit that. */
+  flex: 0 0 auto;
   min-width: 0;
   align-self: center;
 }
@@ -416,7 +465,6 @@ h1, h2, h3, p, ul {
 .video-frame {
   position: relative;
   transform: rotate(3deg);
-  width: 100%;
 }
 
 .video-frame__media {
@@ -797,6 +845,14 @@ h1, h2, h3, p, ul {
 
   .manifesto__body {
     flex-direction: column;
+  }
+
+  /* "Potent" / "Theater" split to their own stacked lines here, each
+     fit independently to full width by syncManifestoTitle(). The words
+     stay inline-block (see base rule) -- only the break between them
+     switches on, forcing the second word onto its own line. */
+  .manifesto__title-break {
+    display: inline;
   }
 
   .video-frame {

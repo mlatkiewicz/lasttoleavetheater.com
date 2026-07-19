@@ -50,6 +50,109 @@
   syncManifestoOverlap();
   window.addEventListener('resize', syncManifestoOverlap);
 
+  /* "Potent Theater" is fit to exactly span #manifesto's own content
+     width (not just approximated via vw units) -- desktop measures both
+     words together as one line; below the 640px breakpoint (matches the
+     stylesheet's .manifesto__title-word { display:block }) each word
+     becomes its own stacked line, and "Potent" / "Theater" need
+     DIFFERENT font-sizes to each independently reach full width, so
+     they're fit separately. Font-size scales the glyph widths AND the
+     em-based letter-spacing together, so a single proportional pass
+     (measured width -> target width) lands exactly on width, not just
+     approximately -- no iteration needed. Re-fit on resize and once
+     webfonts finish loading, since measuring against a fallback font
+     would otherwise bake in that font's metrics. */
+  var manifestoTitle = document.getElementById('manifestoTitle');
+  var manifestoTitleWords = manifestoTitle
+    ? manifestoTitle.querySelectorAll('.manifesto__title-word')
+    : [];
+
+  function contentWidth(el) {
+    var cs = getComputedStyle(el);
+    return el.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+  }
+
+  function fitFontToWidth(el, targetWidth) {
+    el.style.fontSize = '';
+    var naturalWidth = el.getBoundingClientRect().width;
+    if (naturalWidth <= 0) return;
+    var naturalSize = parseFloat(getComputedStyle(el).fontSize);
+    el.style.fontSize = (naturalSize * (targetWidth / naturalWidth)) + 'px';
+  }
+
+  function syncManifestoTitle() {
+    if (!manifestoTitle || manifestoTitleWords.length < 2 || !manifesto) return;
+    manifestoTitleWords.forEach(function (w) { w.style.fontSize = ''; });
+    manifestoTitle.style.fontSize = '';
+
+    var targetWidth = contentWidth(manifesto);
+    var isStacked = window.matchMedia('(max-width: 640px)').matches;
+
+    if (isStacked) {
+      manifestoTitleWords.forEach(function (w) { fitFontToWidth(w, targetWidth); });
+    } else {
+      fitFontToWidth(manifestoTitle, targetWidth);
+    }
+  }
+
+  /* .video-frame's width is set to whatever makes its height (via its
+     own aspect-ratio) match .manifesto__lines' rendered height, so the
+     text and video columns balance vertically instead of the video
+     sitting at some unrelated, independently-derived size -- but never
+     at the cost of wrapping the list. Deriving the video's width from
+     .manifesto__lines' height at whatever width the list CURRENTLY has
+     is not safe: giving the video a width shrinks the row space left
+     for the list, which can wrap a line and grow its height, which (via
+     the 16/9 ratio) grows the video wider still, shrinking the list
+     further -- a feedback loop that runs away rather than settles,
+     since 16/9 > 1 amplifies each round.
+
+     Instead: temporarily neutralize BOTH columns' flex sizing (list to
+     its natural max-content/no-wrap size, video collapsed to zero) to
+     measure, in one shot, the width the list actually needs to avoid
+     wrapping at all, and the height it has at that width. Reserve that
+     width for the list; whatever's left in the row goes to the video,
+     capped at the height-matching ideal. If there's enough room, the
+     two columns balance exactly; if not, the video ends up shorter than
+     the list rather than forcing the list to wrap -- legible text wins
+     over an exact height match. */
+  var manifestoLines = document.querySelector('.manifesto__lines');
+  var manifestoVideoWrap = document.querySelector('.manifesto__video-wrap');
+  var manifestoBody = document.querySelector('.manifesto__body');
+  var videoFrame = document.querySelector('.video-frame');
+
+  function syncManifestoVideoSize() {
+    if (!manifestoLines || !manifestoVideoWrap || !manifestoBody || !videoFrame) return;
+    videoFrame.style.width = '';
+
+    var prevLinesFlex = manifestoLines.style.flex;
+    var prevVideoFlex = manifestoVideoWrap.style.flex;
+    manifestoLines.style.flex = '0 0 auto';
+    manifestoVideoWrap.style.flex = '0 0 0px';
+    var naturalWidth = manifestoLines.getBoundingClientRect().width;
+    var naturalHeight = manifestoLines.getBoundingClientRect().height;
+    manifestoLines.style.flex = prevLinesFlex;
+    manifestoVideoWrap.style.flex = prevVideoFlex;
+    if (naturalHeight <= 0) return;
+
+    var rowWidth = manifestoBody.getBoundingClientRect().width;
+    var gapPx = parseFloat(getComputedStyle(manifestoBody).columnGap) || 0;
+    var availableForVideo = rowWidth - gapPx - naturalWidth;
+    var idealVideoWidth = naturalHeight * 16 / 9;
+    videoFrame.style.width = Math.max(0, Math.min(idealVideoWidth, availableForVideo)) + 'px';
+  }
+
+  function syncManifestoLayout() {
+    syncManifestoTitle();
+    syncManifestoVideoSize();
+  }
+
+  syncManifestoLayout();
+  window.addEventListener('resize', syncManifestoLayout);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(syncManifestoLayout);
+  }
+
   /* Scroll-triggered fade-ins */
   var fadeEls = document.querySelectorAll('.fade-in');
   if ('IntersectionObserver' in window) {
