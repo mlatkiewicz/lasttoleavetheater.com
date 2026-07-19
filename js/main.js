@@ -153,6 +153,58 @@
     document.fonts.ready.then(syncManifestoLayout);
   }
 
+  /* .debut-teaser__tape-text is centered over the tape PNG via
+     position:absolute;inset:0 -- but that means its own
+     getBoundingClientRect() always reports the IMAGE's box, never the
+     text's actual rendered width (same measurement trap as the
+     manifesto title before it got align-self:flex-start). The CSS
+     font-size clamp is tuned for common viewport widths, but the tape
+     image's width and the font-size's vw-based scaling don't move in
+     exact lockstep at every width, so at some sizes the longer of the
+     two lines ("Our debut production will be") can grow wider than the
+     tape graphic's safe, un-notched middle -- overflowing past the torn
+     edges or wrapping onto a third line. This caps (never grows) the
+     font-size so that line always fits inside 80% of the tape's width,
+     matching where the PNG's jagged corner notches stop encroaching
+     (checked by sampling the image's alpha channel): measure the text
+     unconstrained (drop the absolute positioning and force nowrap so a
+     hard <br> still breaks the two lines but neither line soft-wraps
+     further), and only shrink if it doesn't already fit. */
+  var debutTapeImg = document.querySelector('.debut-teaser__tape-img');
+  var debutTapeText = document.querySelector('.debut-teaser__tape-text');
+
+  function syncDebutTeaserTape() {
+    if (!debutTapeImg || !debutTapeText) return;
+    debutTapeText.style.fontSize = '';
+
+    var prevPosition = debutTapeText.style.position;
+    var prevInset = debutTapeText.style.inset;
+    var prevDisplay = debutTapeText.style.display;
+    var prevWhiteSpace = debutTapeText.style.whiteSpace;
+    debutTapeText.style.position = 'static';
+    debutTapeText.style.inset = 'auto';
+    debutTapeText.style.display = 'inline-block';
+    debutTapeText.style.whiteSpace = 'nowrap';
+    var naturalWidth = debutTapeText.getBoundingClientRect().width;
+    debutTapeText.style.position = prevPosition;
+    debutTapeText.style.inset = prevInset;
+    debutTapeText.style.display = prevDisplay;
+    debutTapeText.style.whiteSpace = prevWhiteSpace;
+    if (naturalWidth <= 0) return;
+
+    var maxWidth = debutTapeImg.getBoundingClientRect().width * 0.8;
+    if (naturalWidth <= maxWidth) return;
+
+    var naturalSize = parseFloat(getComputedStyle(debutTapeText).fontSize);
+    debutTapeText.style.fontSize = (naturalSize * (maxWidth / naturalWidth)) + 'px';
+  }
+
+  syncDebutTeaserTape();
+  window.addEventListener('resize', syncDebutTeaserTape);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(syncDebutTeaserTape);
+  }
+
   /* Manifesto video play/pause toggle */
   var video = document.getElementById('manifestoVideo');
   var playBtn = document.getElementById('videoPlayBtn');
