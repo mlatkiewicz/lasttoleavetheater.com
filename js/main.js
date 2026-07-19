@@ -1,18 +1,31 @@
 (function () {
   'use strict';
 
-  /* Manifesto sits sticky, pulled up by a negative margin exactly equal
-     to #flagPhrases' own rendered height -- so at rest it covers exactly
-     "this is a flag" / "planted in the real" and nothing more, matching
-     the client's reference screenshot regardless of viewport size or
-     font scaling. Re-measured on resize since that height is responsive. */
+  /* Manifesto sits sticky, pulled up by a negative margin so that at rest
+     it covers exactly "this is a flag" / "planted in the real" and nothing
+     more, matching the client's reference screenshot.
+
+     The pull-up distance is NOT simply #flagPhrases' own height -- that
+     only works if Hero's box ends exactly at flagPhrases' bottom edge with
+     zero slack. But .hero has min-height:100vh with justify-content:
+     flex-start, so on any viewport taller than Hero's actual content,
+     flex leaves empty space below flagPhrases before Hero's box (and thus
+     Manifesto's un-shifted flow position) actually ends. So instead we
+     measure the real gap directly: temporarily drop Manifesto back into
+     normal flow (position:static, no margin) to read its true un-stuck
+     position, diff that against flagPhrases' top, and pull up by exactly
+     that -- correct regardless of slack, viewport size, or font scaling.
+     Re-measured on resize since layout can change. */
   var flagPhrases = document.getElementById('flagPhrases');
   var manifesto = document.getElementById('manifesto');
 
   function syncManifestoOverlap() {
     if (!flagPhrases || !manifesto) return;
-    var overlap = flagPhrases.getBoundingClientRect().height;
-    manifesto.style.marginTop = '-' + overlap + 'px';
+    manifesto.style.position = 'static';
+    manifesto.style.marginTop = '0px';
+    var gap = manifesto.getBoundingClientRect().top - flagPhrases.getBoundingClientRect().top;
+    manifesto.style.position = '';
+    manifesto.style.marginTop = '-' + gap + 'px';
   }
 
   syncManifestoOverlap();
