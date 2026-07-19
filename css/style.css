@@ -488,7 +488,6 @@ h1, h2, h3, p, ul {
   aspect-ratio: 16 / 9;
   overflow: hidden;
   background: var(--black);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
 }
 
 .video-frame__media video,
@@ -544,7 +543,7 @@ h1, h2, h3, p, ul {
    individually-torn pieces of tape rather than 4 copies of one shape. */
 .video-frame .tape--tl { top: -1rem; left: -1.25rem; width: 4rem; transform: rotate(-40deg); }
 .video-frame .tape--tr { top: -1rem; right: -1.5rem; width: 5.5rem; transform: rotate(35deg); }
-.video-frame .tape--bl { bottom: -1rem; left: -1rem; width: 6rem; transform: rotate(50deg); }
+.video-frame .tape--bl { bottom: -1rem; left: -2.5rem; width: 6rem; transform: rotate(50deg); }
 .video-frame .tape--br { bottom: -1.2rem; right: -1.25rem; width: 4.5rem; transform: rotate(-30deg); }
 
 /* ==========================================================================
