@@ -23,6 +23,7 @@
   --white: #ffffff;
   --pink: #f11ac5;
   --grey-dark: #3c3c3c;
+  --grey-mid: #666666;
   --grey-hairline: #cccccc;
 
   --font-display: 'Glacial Indifference', sans-serif;
@@ -139,7 +140,7 @@ h1, h2, h3, p, ul {
   flex: 1;
   min-width: 0;
   padding: 0.9rem 1.25rem;
-  border-radius: 999px;
+  border-radius: 0;
   border: 1px solid var(--grey-hairline);
   background: var(--white);
   color: var(--black);
@@ -155,7 +156,7 @@ h1, h2, h3, p, ul {
   flex-shrink: 0;
   padding: 0.9rem 1.75rem;
   border: none;
-  border-radius: 6px;
+  border-radius: 0;
   background: var(--pink);
   color: var(--black);
   font-family: var(--font-body);
@@ -543,15 +544,26 @@ h1, h2, h3, p, ul {
   position: relative;
   background: var(--black);
   padding: clamp(2.5rem, 6vh, 4rem) var(--section-pad-x);
-  overflow: hidden;
 }
 
 .debut-teaser {
   padding-bottom: clamp(3rem, 10vh, 6rem);
+  overflow: hidden;
 }
 
 .debut-teaser__tape {
+  /* z-index keeps the tape graphic itself (not the whole section) stacked
+     above .conversion's FOLLOW ghost column, which is allowed to overflow
+     up into this section's space -- see .conversion's own comment. This is
+     deliberately scoped to just the tape, not .debut-teaser as a whole:
+     putting it on the section instead makes the section's own opaque black
+     background win the stacking battle too, everywhere in its box
+     (including the padding below the tape) -- which silently paints over
+     the ghost column there. Same black-on-black, so it's invisible in a
+     screenshot; only inspecting the ghost column's element (layout is
+     still correct) versus what's actually painted reveals it. */
   position: relative;
+  z-index: 2;
   max-width: 44rem;
   margin-inline: auto;
 }
@@ -577,42 +589,94 @@ h1, h2, h3, p, ul {
 }
 
 .debut-teaser__aside {
-  margin-top: clamp(3rem, 8vh, 5rem);
+  /* font-size overrides .mono-aside's shared clamp(1.1rem, 2.4vw, 1.5rem)
+     -- scoped here, not changed on .mono-aside itself, since that class is
+     reused by the flag-beat and lights-out asides too. Both this and
+     margin-top below are the original .mono-aside/margin-top values with
+     every clamp() argument scaled by the same factor (1.15x, 1.25x), so
+     the responsive curve keeps its shape at every viewport size instead of
+     just being right at one width. */
+  font-size: clamp(1.265rem, 2.76vw, 1.725rem);
+  margin-top: clamp(7.875rem, 22.4vh, 14rem);
   text-align: center;
   opacity: 0.85;
 }
 
 .conversion {
+  /* Deliberately no overflow:hidden here (unlike .debut-teaser above,
+     which still has it) -- the FOLLOW ghost column is bottom-anchored and
+     allowed to rise past this section's own top edge so it can pass
+     behind .debut-teaser's tape graphic. Each .ghost-column still clips
+     its own excess repeated words independently via its own
+     overflow:hidden, so this doesn't reintroduce spillover there. */
   padding-top: 0;
 }
 
 .ghost-column {
+  /* top/height/right are set per-instance by syncConversionGhostColumns()
+     in main.js -- each lane must hug a different heading's real
+     rendered position, which isn't a fixed value across breakpoints. */
   position: absolute;
-  top: 0;
-  left: clamp(1rem, 8vw, 6rem);
-  bottom: 0;
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: clamp(1rem, 2.4vw, 1.4rem);
-  color: var(--grey-dark);
+  line-height: 0.6;
   overflow: hidden;
   pointer-events: none;
   user-select: none;
   z-index: 0;
 }
 
+.ghost-column--follow {
+  color: var(--grey-dark);
+}
+
+.ghost-column--signup {
+  color: var(--grey-mid);
+}
+
+.ghost-column-ampersand {
+  /* left/top are set by syncConversionGhostColumns() in main.js, as the
+     midpoint of the gap between the two ghost columns on the line where
+     they meet -- transform centers the glyph itself on that point. */
+  position: absolute;
+  transform: translate(-50%, -50%);
+  color: var(--white);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1rem, 2.4vw, 1.4rem);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
 .conversion__inner {
+  /* Base position lines up with .debut-teaser__tape above: the tape is
+     centered via margin-inline:auto with a fixed 44rem max-width, and its
+     own section's horizontal padding is symmetric, so those padding terms
+     cancel out of the tape's left-edge position algebraically, leaving a
+     plain function of viewport width (tapeLeft = 50vw - 352px). On top of
+     that, +300px is a deliberate further nudge right (past the tape's own
+     left edge, roughly under "our" in its text) requested after seeing it
+     landed flush with the tape -- so the constant below is 352 - 300, not
+     the plain 352 the algebra alone would give. Matching this here (minus
+     this section's own padding, which is added back by the browser since
+     margin-left is relative to the padding edge) rigidly carries the whole
+     4B block -- and the ghost columns, which track these headings' real
+     position via main.js -- at any desktop width. Floored at 0 so it
+     doesn't go negative just above the mobile breakpoint. */
   position: relative;
   z-index: 1;
   max-width: 40rem;
-  margin-left: clamp(3rem, 14vw, 10rem);
+  margin-left: max(0px, calc(44vw - 152px));
 }
 
 .conversion__aside-img {
-  height: 2.2rem;
+  /* ~30% bigger, same as the headings/socials/form below it. */
+  height: 5.36rem;
   width: auto;
   margin-bottom: 0.5rem;
 }
@@ -620,8 +684,24 @@ h1, h2, h3, p, ul {
 .conversion__heading {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(2.75rem, 10vw, 6rem);
+  /* ~30% bigger than the original clamp(2.75rem, 10vw, 6rem). */
+  font-size: clamp(3.575rem, 13vw, 7.8rem);
   line-height: 0.95;
+}
+
+.conversion__signup .conversion__heading,
+.conversion__signup p,
+.conversion__signup .signup-form {
+  margin-left: clamp(1.5rem, 6vw, 4rem);
+}
+
+/* "for our newsletter" -- ~30% bigger, scoped to this section only since
+   the bare `p` selector would otherwise touch any future paragraph added
+   inside .conversion__signup. */
+.conversion__signup p {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #cccccc;
 }
 
 .conversion__socials {
@@ -631,8 +711,39 @@ h1, h2, h3, p, ul {
   gap: 0.9rem;
 }
 
+/* Socials icons + handle: ~30% bigger, but scoped to this section's own
+   .social-row/.social-handle instances -- both classes are shared with
+   the footer, which must not change. */
+.conversion__socials .social-row {
+  gap: 1.3rem;
+}
+
+.conversion__socials .social-row a {
+  width: 3.25rem;
+  height: 3.25rem;
+}
+
+.conversion__socials .social-handle {
+  font-size: 1.9rem;
+}
+
+/* SUBMIT button + its text: ~30% bigger, scoped so the Play Reading Club
+   form (section 6, which shares .signup-form__submit) is unaffected. The
+   email input is deliberately left untouched at its shared size. */
+.conversion__signup .signup-form__submit {
+  padding: .5rem 1.275rem;
+  font-size: 1.6rem;
+}
+
 .conversion__signup {
-  margin-top: clamp(2.5rem, 6vh, 4rem);
+  /* Shifted up by one ghost-column line's worth (line-height 13.44px +
+     gap 6.4px = 19.84px at this font-size) from the original
+     clamp(2.5rem, 6vh, 4rem), so the SIGN UP ghost lane's first line lands
+     on the same row as the FOLLOW lane's last line above. Subtracting a
+     flat px constant from every clamp() argument keeps the same shape at
+     any viewport height, just raised by that fixed amount everywhere. */
+  margin-top: clamp(calc(2.5rem - 19.84px), calc(6vh - 19.84px), calc(4rem - 19.84px));
+  margin-left: clamp(15px, calc(7vw - 25px), 55px);
 }
 
 /* ==========================================================================
@@ -885,11 +996,16 @@ h1, h2, h3, p, ul {
     gap: 3.5rem;
   }
 
-  .ghost-column {
+  .ghost-column,
+  .ghost-column-ampersand {
     display: none;
   }
 
   .conversion__inner {
+    margin-left: 0;
+  }
+
+  .conversion__signup {
     margin-left: 0;
   }
 

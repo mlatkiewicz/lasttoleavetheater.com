@@ -205,6 +205,93 @@
     document.fonts.ready.then(syncDebutTeaserTape);
   }
 
+  /* The two ghost-column lanes in the conversion section must hug the
+     "FOLLOW &" heading and the "SIGN UP" block exactly -- but those
+     "blocks" aren't wrapped in their own containers (the FOLLOW & heading
+     and the socials row are loose siblings, not one element), so there's
+     no CSS-only way to say "span from this heading's top to that other
+     block's top." Measure the real rendered edges instead: "seam" below is
+     wherever .conversion__signup begins, and the SIGN UP lane runs the
+     full height of .conversion__signup, top-anchored at that seam. The
+     FOLLOW lane is anchored from the OPPOSITE edge -- bottom-anchored one
+     line above that seam (LINE_STEP below), with top/height computed from
+     its own natural content height -- so its box sizes to however many
+     <span> repeats are in the markup and grows upward from that fixed
+     bottom. That's deliberate: it's what lets the lane's top rise past
+     this section's own top edge, up behind .debut-teaser's tape above,
+     just by adding more repeats to the HTML, with no positioning math
+     involved for how high it reaches. The +LINE_STEP offset (rather than
+     bottom-anchoring FOLLOW at the seam directly) is what makes the two
+     lanes overlap by one line instead of meeting exactly -- .conversion__
+     signup's own margin-top was pulled up by the same LINE_STEP in CSS, so
+     without this offset here FOLLOW would silently drift up by the same
+     amount too, since it's measured off that same seam. This way SIGN UP
+     moves and FOLLOW doesn't, even though both read off one shared
+     measurement. Horizontally, each lane's right edge is pinned just left
+     of its own heading's actual left edge -- the SIGN UP heading carries
+     its own extra margin-left from being offset from FOLLOW &, so it can't
+     reuse FOLLOW's measurement. Re-run on resize and once webfonts settle,
+     since both depend on rendered glyph metrics. */
+  var conversionSection = document.querySelector('.conversion');
+  var followHeading = document.querySelector('.conversion__heading');
+  var signupBlock = document.querySelector('.conversion__signup');
+  var signupHeading = signupBlock ? signupBlock.querySelector('.conversion__heading') : null;
+  var ghostFollow = document.querySelector('.ghost-column--follow');
+  var ghostSignup = document.querySelector('.ghost-column--signup');
+  var ghostAmpersand = document.querySelector('.ghost-column-ampersand');
+  var GHOST_LINE_STEP = 19.84; // one ghost-column line: 13.44px line-height + 6.4px gap
+
+  function syncConversionGhostColumns() {
+    if (!conversionSection || !followHeading || !signupBlock || !signupHeading || !ghostFollow || !ghostSignup) return;
+
+    var gap = 14;
+    var sectionRect = conversionSection.getBoundingClientRect();
+    var headingRect = followHeading.getBoundingClientRect();
+    var signupRect = signupBlock.getBoundingClientRect();
+    var signupHeadingRect = signupHeading.getBoundingClientRect();
+
+    var seam = signupRect.top - sectionRect.top;
+    var signupBottom = signupRect.bottom - sectionRect.top;
+    var followBottom = seam + GHOST_LINE_STEP;
+
+    /* Measure the FOLLOW lane's natural content height (however tall its
+       repeated <span>s render at the current font-size), then lock that in
+       as an explicit top+height rather than leaving it auto-sized off a
+       `bottom` anchor. Layout-wise the two are equivalent, but at least one
+       engine has been seen laying out an auto-sized, bottom-anchored box
+       correctly (right geometry, confirmed via devtools) while not fully
+       repainting the newly-exposed region above where the box used to end
+       -- explicit top+height is the same pattern the SIGN UP lane already
+       uses below without that problem. */
+    ghostFollow.style.height = 'auto';
+    var followContentHeight = ghostFollow.getBoundingClientRect().height;
+
+    ghostFollow.style.height = followContentHeight + 'px';
+    ghostFollow.style.top = (followBottom - followContentHeight) + 'px';
+    ghostFollow.style.right = (sectionRect.width - (headingRect.left - sectionRect.left) + gap) + 'px';
+
+    ghostSignup.style.top = seam + 'px';
+    ghostSignup.style.height = Math.max(0, signupBottom - seam) + 'px';
+    ghostSignup.style.right = (sectionRect.width - (signupHeadingRect.left - sectionRect.left) + gap) + 'px';
+
+    /* The "&" sits on the shared line the two lanes overlap on, centered
+       in the horizontal gap between them -- read off their FINAL rendered
+       boxes (post-assignment above) rather than re-deriving that gap from
+       the individual measurements that produced them. */
+    if (ghostAmpersand) {
+      var ghostFollowRect = ghostFollow.getBoundingClientRect();
+      var ghostSignupRect = ghostSignup.getBoundingClientRect();
+      ghostAmpersand.style.left = ((ghostFollowRect.right + ghostSignupRect.left) / 2 - sectionRect.left) + 'px';
+      ghostAmpersand.style.top = ((ghostSignupRect.top + ghostFollowRect.bottom) / 2 - sectionRect.top) + 'px';
+    }
+  }
+
+  syncConversionGhostColumns();
+  window.addEventListener('resize', syncConversionGhostColumns);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(syncConversionGhostColumns);
+  }
+
   /* Manifesto video play/pause toggle */
   var video = document.getElementById('manifestoVideo');
   var playBtn = document.getElementById('videoPlayBtn');
