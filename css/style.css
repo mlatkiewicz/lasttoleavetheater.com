@@ -355,10 +355,11 @@ h1, h2, h3, p, ul {
    .flag__line--planted's `top` is set to equal this same height, so its
    document position (hero-height + this) equals that release scrollY,
    landing it exactly at the bulb's line the moment it unsticks. Change
-   both numbers together. */
+   both numbers together (and .manifesto's margin-top, which is a
+   function of this same height). */
 .flag {
   position: relative;
-  min-height: 200vh;
+  min-height: 90vh;
   background: var(--black);
 }
 
@@ -366,12 +367,14 @@ h1, h2, h3, p, ul {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  text-align: center;
 }
 
 .flag__line--flag {
   position: absolute;
-  top: 50vh;
-  left: var(--section-pad-x);
+  top: 0;
+  left: 0;
+  width: 100%;
 }
 
 .flag__flag-rotate {
@@ -381,9 +384,9 @@ h1, h2, h3, p, ul {
 
 .flag__line--planted {
   position: absolute;
-  top: 200vh;
-  left: var(--section-pad-x);
-  max-width: 20rem;
+  top: 90vh;
+  left: 0;
+  width: 100%;
 }
 
 /* ==========================================================================
@@ -400,11 +403,13 @@ h1, h2, h3, p, ul {
   justify-content: center;
   gap: clamp(1.5rem, 4vh, 3rem);
   position: relative;
-  /* Pulled up to overlap the tail of the flag beat, with a z-index above
-     the shared bulb (10), so the pink block visually arrives over the
-     still-stuck bulb/text right before the release point, rather than
-     just appearing after it in plain document flow. */
-  margin-top: -15vh;
+  /* Pulled up to sit only ~70px below the hero (Flag is 90vh, so this
+     overlaps nearly all of it), with a z-index above the shared bulb
+     (10) and flag text, so pink arrives close behind "Los Angeles" and
+     covers flag content per the client's explicit direction -- flag
+     text is meant to read as sitting behind/under the pink, peeking out
+     at its edges rather than pink simply following flag in normal flow. */
+  margin-top: calc(70px - 90vh);
   z-index: 20;
 }
 
