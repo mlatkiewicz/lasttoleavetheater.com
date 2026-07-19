@@ -50,7 +50,11 @@ body {
   color: var(--white);
   font-family: var(--font-body);
   line-height: 1.5;
-  overflow-x: hidden;
+  /* clip, not hidden: hidden forces overflow-y to compute as "auto" per
+     the CSS overflow spec (pairing a non-visible x with a visible y),
+     which turns body into a scroll container and breaks position:sticky
+     for every descendant on the page. clip doesn't have that side effect. */
+  overflow-x: clip;
 }
 
 img {
@@ -104,16 +108,6 @@ h1, h2, h3, p, ul {
   opacity: 1;
 }
 
-/* Hero elements fade up on their own timer (synced to the bulb intro
-   finishing in main.js), not on scroll-into-view like .fade-in */
-.hero-reveal {
-  opacity: 0;
-  transition: opacity 1.8s ease;
-}
-
-.hero-reveal.is-visible {
-  opacity: 1;
-}
 
 /* Shared: tape strips -------------------------------------------------------
    Reusable hand-stuck tape treatment. Default pink; .tape--black for the
@@ -232,6 +226,10 @@ h1, h2, h3, p, ul {
    1 — Hero
    ========================================================================== */
 
+.hero-wrap {
+  position: relative;
+}
+
 .hero {
   --wordmark-w: min(60vw, 34rem);
   min-height: 100vh;
@@ -241,7 +239,12 @@ h1, h2, h3, p, ul {
   justify-content: flex-start;
   padding: var(--section-pad-x);
   padding-top: 0;
+  /* No bottom padding: Manifesto's overlap math (js/main.js) assumes
+     Hero's rendered bottom edge coincides exactly with #flagPhrases'
+     own bottom edge. */
+  padding-bottom: 0;
   position: relative;
+  background: var(--black);
 }
 
 .hero__lockup {
@@ -307,44 +310,22 @@ h1, h2, h3, p, ul {
 
 .hero__la .word--angeles {
   display: inline-block;
-  /* 8% read as an 8% grade (rise/run), atan(0.08) ≈ 4.6deg */
-  transform: translateY(10px) rotate(4.6deg);
+  transform: translateY(20px) rotate(8deg);
 }
 
 /* ==========================================================================
-   2 — Flag beat
+   2 — Flag phrases (now part of Hero, not a separate scroll section --
+   see .manifesto for the sticky/overlap mechanic that covers these at
+   rest and reveals them as Hero scrolls up underneath it)
    ========================================================================== */
 
-.flag {
-  position: relative;
-  min-height: 140vh;
-  background: var(--black);
-}
-
-.flag__bulb-wrap {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  display: flex;
-  justify-content: flex-end;
-  pointer-events: none;
-}
-
-.flag__bulb {
-  width: clamp(3rem, 9vw, 5.5rem);
-  margin-right: clamp(1rem, 6vw, 5rem);
-  margin-top: 0;
-}
-
-.flag__text {
-  position: absolute;
-  inset: 0;
-  padding: var(--section-pad-x);
+.hero__flag-text {
+  margin-top: 70px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 14vh;
-  pointer-events: none;
+  align-items: center;
+  gap: 4rem;
+  text-align: center;
 }
 
 .flag__flag-rotate {
@@ -352,15 +333,21 @@ h1, h2, h3, p, ul {
   transform: rotate(-4deg);
 }
 
-.flag__line--planted {
-  max-width: 20rem;
-}
-
 /* ==========================================================================
    3 — Manifesto
    ========================================================================== */
 
 .manifesto {
+  /* A true CSS sticky mask can't do a partial reveal (it covers its full
+     height for its whole stuck duration, confirmed by testing, not just
+     reasoning), so the actual reveal is a JS scroll-linked opacity fade
+     instead: Manifesto starts opaque (covering "this is a flag" /
+     "planted in the real", matched via the negative margin below), fades
+     to transparent as the user scrolls, then back to opaque before its
+     own content needs to be legible. The scroll-runway for that fade is
+     .manifesto-reveal-spacer below, NOT extra height here -- padding
+     Manifesto's own min-height doesn't create a stuck window, since it
+     shifts the sticky release point by the same amount as activation. */
   min-height: 100vh;
   background: var(--pink);
   color: var(--black);
@@ -369,7 +356,23 @@ h1, h2, h3, p, ul {
   flex-direction: column;
   justify-content: center;
   gap: clamp(1.5rem, 4vh, 3rem);
-  position: relative;
+  /* Negative margin-top set in js/main.js, matched exactly to
+     #flagPhrases' rendered height, so it initially sits covering just
+     the two phrases. */
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* Genuine extra scroll-runway (not just extra height ON Manifesto, which
+   doesn't work -- see comment above) so Manifesto has 250px of stuck
+   time for the reveal fade to play out over, before it releases and
+   scrolls away normally. Pink so releasing into it reads as a seamless
+   continuation rather than a gap. REVEAL_BUFFER_PX in js/main.js must
+   match this height. */
+.manifesto-reveal-spacer {
+  height: 250px;
+  background: var(--pink);
 }
 
 .manifesto__title {
@@ -759,42 +762,6 @@ h1, h2, h3, p, ul {
 }
 
 /* ==========================================================================
-   Bulb intro overlay
-   ========================================================================== */
-
-.intro-overlay {
-  position: fixed;
-  inset: 0;
-  background: var(--black);
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-}
-
-.intro-overlay__bulb {
-  width: clamp(3rem, 10vw, 5rem);
-  opacity: 0;
-}
-
-.intro-overlay.is-playing .intro-overlay__bulb {
-  animation: bulb-appear 0.6s ease forwards;
-}
-
-.intro-overlay.is-done {
-  animation: overlay-fade 0.6s ease forwards;
-}
-
-@keyframes bulb-appear {
-  to { opacity: 1; }
-}
-
-@keyframes overlay-fade {
-  to { opacity: 0; visibility: hidden; }
-}
-
-/* ==========================================================================
    Responsive — mobile
    ========================================================================== */
 
@@ -804,32 +771,25 @@ h1, h2, h3, p, ul {
     margin-left: 0;
   }
 
-  .flag {
-    min-height: auto;
-    padding: clamp(3rem, 12vh, 5rem) 0;
-  }
-
-  .flag__bulb-wrap {
-    position: static;
-    height: auto;
-    justify-content: center;
-    margin-bottom: 2rem;
-  }
-
-  .flag__bulb {
-    width: 3.5rem;
-    margin-right: 0;
-    transform: rotate(8deg);
-  }
-
-  .flag__text {
-    position: static;
-    padding: 0 var(--section-pad-x);
+  .hero__flag-text {
     gap: 2.5rem;
   }
 
   .flag__flag-rotate {
     transform: none;
+  }
+
+  /* The sticky-overlap reveal is a desktop scroll effect; on mobile,
+     Manifesto just follows Hero normally, no overlap, sticking, or fade
+     -- the !important overrides js/main.js's inline opacity too. */
+  .manifesto {
+    position: static;
+    margin-top: 0 !important;
+    opacity: 1 !important;
+  }
+
+  .manifesto-reveal-spacer {
+    display: none;
   }
 
   .manifesto__body {

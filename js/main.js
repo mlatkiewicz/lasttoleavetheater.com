@@ -1,38 +1,49 @@
 (function () {
   'use strict';
 
-  /* Bulb intro — plays once per browser session, never blocks scroll.
-     Hero wordmark/tape/LA fade up on this same timeline (not on scroll). */
-  var INTRO_KEY = 'ltl-intro-seen';
-  var overlay = document.getElementById('introOverlay');
-  var heroEls = document.querySelectorAll('.hero-reveal');
+  /* Manifesto sits sticky, pulled up by a negative margin exactly equal
+     to #flagPhrases' own rendered height -- so at rest it covers exactly
+     "this is a flag" / "planted in the real" and nothing more, matching
+     the client's reference screenshot regardless of viewport size or
+     font scaling. Re-measured on resize since that height is responsive.
 
-  function revealHero() {
-    heroEls.forEach(function (el) {
-      el.classList.add('is-visible');
-    });
+     A true sticky mask can't partially reveal what's behind it (it
+     covers its full height for its whole stuck duration -- confirmed by
+     testing). So the reveal itself is this scroll-linked opacity fade:
+     over REVEAL_BUFFER_PX of scroll (matching the buffer added to
+     .manifesto's min-height in CSS), Manifesto fades 1 -> 0 -> 1, genuinely
+     showing the phrases underneath at the dip, then re-solidifying
+     before its own content needs to be read. */
+  var flagPhrases = document.getElementById('flagPhrases');
+  var manifesto = document.getElementById('manifesto');
+  var hero = document.getElementById('hero');
+  var REVEAL_BUFFER_PX = 250;
+  var activationScrollY = 0;
+
+  function syncManifestoOverlap() {
+    if (!flagPhrases || !manifesto || !hero) return;
+    var overlap = flagPhrases.getBoundingClientRect().height;
+    manifesto.style.marginTop = '-' + overlap + 'px';
+    // Derived from Hero (never sticky) so it's correct regardless of
+    // Manifesto's current stuck state or scroll position.
+    var heroBottomDoc = hero.getBoundingClientRect().bottom + window.scrollY;
+    activationScrollY = heroBottomDoc - overlap;
   }
 
-  if (overlay) {
-    if (sessionStorage.getItem(INTRO_KEY)) {
-      overlay.remove();
-      revealHero();
-    } else {
-      sessionStorage.setItem(INTRO_KEY, '1');
-      requestAnimationFrame(function () {
-        overlay.classList.add('is-playing');
-      });
-      setTimeout(function () {
-        overlay.classList.add('is-done');
-        revealHero();
-        setTimeout(function () {
-          overlay.remove();
-        }, 700);
-      }, 1600);
-    }
-  } else {
-    revealHero();
+  function updateManifestoFade() {
+    var progress = (window.scrollY - activationScrollY) / REVEAL_BUFFER_PX;
+    progress = Math.max(0, Math.min(1, progress));
+    var opacity = progress <= 0.5 ? 1 - progress / 0.5 : (progress - 0.5) / 0.5;
+    manifesto.style.opacity = opacity;
   }
+
+  syncManifestoOverlap();
+  updateManifestoFade();
+  window.addEventListener('scroll', updateManifestoFade, { passive: true });
+  window.addEventListener('resize', function () {
+    syncManifestoOverlap();
+    updateManifestoFade();
+  });
 
   /* Scroll-triggered fade-ins */
   var fadeEls = document.querySelectorAll('.fade-in');

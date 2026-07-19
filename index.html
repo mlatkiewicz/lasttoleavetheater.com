@@ -12,40 +12,34 @@
 </head>
 <body>
 
-<!-- Bulb intro overlay: plays once per session, never blocks scrolling -->
-<div class="intro-overlay" id="introOverlay" aria-hidden="true">
-  <img src="images/bulb.png" alt="" class="intro-overlay__bulb">
-</div>
-
 <!-- ==========================================================
-     1 — Hero
+     Hero + Flag now ONE section, no animations: wordmark through
+     both phrases load in immediately. Manifesto (next section) is
+     sticky with a JS-measured negative margin exactly matching
+     #flagPhrases' rendered height, so it initially sits covering
+     just the two phrases (see js/main.js), then stays put while
+     Hero scrolls up underneath it, before releasing to scroll
+     normally once Hero has cleared.
      ========================================================== -->
-<section class="hero" id="hero">
-  <img
-    class="hero__lockup hero-reveal"
-    src="images/wordmark-lockup.png"
-    alt="Last to Leave theater company"
-  >
-  <div class="hero__tape hero-reveal">
-    <span class="tape">
-      <span class="hero__tape-text"><span class="word--potent">POTENT</span><br><span class="word--theater">THEATER</span></span>
-    </span>
-  </div>
-  <p class="hero__la hero-reveal"><span class="word--los">Los</span> <span class="word--angeles">Angeles</span></p>
-</section>
+<div class="hero-wrap" id="heroWrap">
+  <section class="hero" id="hero">
+    <img
+      class="hero__lockup"
+      src="images/wordmark-lockup.png"
+      alt="Last to Leave theater company"
+    >
+    <div class="hero__tape">
+      <span class="tape">
+        <span class="hero__tape-text"><span class="word--potent">POTENT</span><br><span class="word--theater">THEATER</span></span>
+      </span>
+    </div>
+    <p class="hero__la"><span class="word--los">Los</span> <span class="word--angeles">Angeles</span></p>
 
-<!-- ==========================================================
-     2 — Flag beat
-     ========================================================== -->
-<section class="flag" id="flag">
-  <div class="flag__bulb-wrap">
-    <img src="images/bulb.png" alt="" class="flag__bulb">
-  </div>
-  <div class="flag__text">
-    <p class="mono-aside flag__line--flag fade-in"><span class="flag__flag-rotate">This is<br>a flag</span></p>
-    <p class="mono-aside flag__line--planted fade-in">planted in<br>the real</p>
-  </div>
-</section>
+    <div class="hero__flag-text" id="flagPhrases">
+      <p class="mono-aside flag__line--flag"><span class="flag__flag-rotate">This is<br>a flag</span></p>
+      <p class="mono-aside flag__line--planted">planted in<br>the real</p>
+    </div>
+  </section>
 
 <!-- ==========================================================
      3 — Manifesto
@@ -85,6 +79,8 @@
     </div>
   </div>
 </section>
+<div class="manifesto-reveal-spacer" aria-hidden="true"></div>
+</div><!-- /.hero-wrap -->
 
 <!-- ==========================================================
      4A — Debut teaser (REPLACEABLE — becomes the Assassins feature
