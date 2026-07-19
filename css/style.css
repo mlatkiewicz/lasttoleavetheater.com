@@ -527,14 +527,25 @@ h1, h2, h3, p, ul {
 
 .video-frame .tape {
   position: absolute;
-  width: 4.5rem;
   height: 2rem;
+  /* Solid piece, not the shared .tape class's jagged clip-path -- that
+     cut is sized for a wide banner (see .hero__tape .tape); on a small,
+     steeply-rotated rectangle like these corners it reads as a pointed
+     blade rather than a torn strip of tape. */
+  clip-path: none;
+  /* .video-frame__media comes after these spans in the DOM and is also
+     position:relative with no z-index of its own -- without this, plain
+     DOM-order stacking puts the video on top of the tape instead of the
+     tape appearing stuck down over it. */
+  z-index: 2;
 }
 
-.video-frame .tape--tl { top: -1rem; left: -1.25rem; transform: rotate(-40deg); }
-.video-frame .tape--tr { top: -1rem; right: -1.5rem; transform: rotate(35deg); }
-.video-frame .tape--bl { bottom: -1rem; left: -1rem; transform: rotate(50deg); }
-.video-frame .tape--br { bottom: -1.2rem; right: -1.25rem; transform: rotate(-30deg); }
+/* Different widths (lengths) per corner so these read as separate,
+   individually-torn pieces of tape rather than 4 copies of one shape. */
+.video-frame .tape--tl { top: -1rem; left: -1.25rem; width: 4rem; transform: rotate(-40deg); }
+.video-frame .tape--tr { top: -1rem; right: -1.5rem; width: 5.5rem; transform: rotate(35deg); }
+.video-frame .tape--bl { bottom: -1rem; left: -1rem; width: 6rem; transform: rotate(50deg); }
+.video-frame .tape--br { bottom: -1.2rem; right: -1.25rem; width: 4.5rem; transform: rotate(-30deg); }
 
 /* ==========================================================================
    4A / 4B — Debut teaser + Conversion
