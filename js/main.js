@@ -5,45 +5,18 @@
      to #flagPhrases' own rendered height -- so at rest it covers exactly
      "this is a flag" / "planted in the real" and nothing more, matching
      the client's reference screenshot regardless of viewport size or
-     font scaling. Re-measured on resize since that height is responsive.
-
-     A true sticky mask can't partially reveal what's behind it (it
-     covers its full height for its whole stuck duration -- confirmed by
-     testing). So the reveal itself is this scroll-linked opacity fade:
-     over REVEAL_BUFFER_PX of scroll (matching the buffer added to
-     .manifesto's min-height in CSS), Manifesto fades 1 -> 0 -> 1, genuinely
-     showing the phrases underneath at the dip, then re-solidifying
-     before its own content needs to be read. */
+     font scaling. Re-measured on resize since that height is responsive. */
   var flagPhrases = document.getElementById('flagPhrases');
   var manifesto = document.getElementById('manifesto');
-  var hero = document.getElementById('hero');
-  var REVEAL_BUFFER_PX = 250;
-  var activationScrollY = 0;
 
   function syncManifestoOverlap() {
-    if (!flagPhrases || !manifesto || !hero) return;
+    if (!flagPhrases || !manifesto) return;
     var overlap = flagPhrases.getBoundingClientRect().height;
     manifesto.style.marginTop = '-' + overlap + 'px';
-    // Derived from Hero (never sticky) so it's correct regardless of
-    // Manifesto's current stuck state or scroll position.
-    var heroBottomDoc = hero.getBoundingClientRect().bottom + window.scrollY;
-    activationScrollY = heroBottomDoc - overlap;
-  }
-
-  function updateManifestoFade() {
-    var progress = (window.scrollY - activationScrollY) / REVEAL_BUFFER_PX;
-    progress = Math.max(0, Math.min(1, progress));
-    var opacity = progress <= 0.5 ? 1 - progress / 0.5 : (progress - 0.5) / 0.5;
-    manifesto.style.opacity = opacity;
   }
 
   syncManifestoOverlap();
-  updateManifestoFade();
-  window.addEventListener('scroll', updateManifestoFade, { passive: true });
-  window.addEventListener('resize', function () {
-    syncManifestoOverlap();
-    updateManifestoFade();
-  });
+  window.addEventListener('resize', syncManifestoOverlap);
 
   /* Scroll-triggered fade-ins */
   var fadeEls = document.querySelectorAll('.fade-in');

@@ -338,29 +338,27 @@ h1, h2, h3, p, ul {
    ========================================================================== */
 
 .manifesto {
-  /* A true CSS sticky mask can't do a partial reveal (it covers its full
-     height for its whole stuck duration, confirmed by testing, not just
-     reasoning), so the actual reveal is a JS scroll-linked opacity fade
-     instead: Manifesto starts opaque (covering "this is a flag" /
-     "planted in the real", matched via the negative margin below), fades
-     to transparent as the user scrolls, then back to opaque before its
-     own content needs to be legible. The scroll-runway for that fade is
-     .manifesto-reveal-spacer below, NOT extra height here -- padding
-     Manifesto's own min-height doesn't create a stuck window, since it
-     shifts the sticky release point by the same amount as activation. */
-  min-height: 100vh;
+  /* No min-height: sized to its own content (~650px), not the viewport.
+     This matters: it means once stuck, Manifesto does NOT necessarily
+     cover the whole screen, which is what makes a real reveal possible
+     (see the sticky `top` offset below). */
   background: var(--pink);
   color: var(--black);
-  padding: clamp(3rem, 8vh, 5rem) var(--section-pad-x);
+  padding: clamp(2rem, 5vh, 3.5rem) var(--section-pad-x);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: clamp(1.5rem, 4vh, 3rem);
+  gap: clamp(1.25rem, 3vh, 2rem);
   /* Negative margin-top set in js/main.js, matched exactly to
      #flagPhrases' rendered height, so it initially sits covering just
-     the two phrases. */
+     the two phrases (screenshot B). Sticky `top` is a positive offset,
+     NOT 0 -- 0 would mean Manifesto's covering box starts at the very
+     top of the viewport with nothing ever above it to reveal. A
+     positive offset leaves that band permanently open, so Hero's
+     content (moving normally, up and off) passes visibly through it
+     before going off-screen -- that band is the actual reveal. */
   position: sticky;
-  top: 0;
+  top: 30vh;
   z-index: 10;
 }
 
