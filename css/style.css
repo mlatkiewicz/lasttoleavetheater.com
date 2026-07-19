@@ -97,18 +97,6 @@ h1, h2, h3, p, ul {
   }
 }
 
-/* Scroll-fade entrance (used across sections) ------------------------------ */
-
-.fade-in {
-  opacity: 0;
-  transition: opacity 1.6s ease;
-}
-
-.fade-in.is-visible {
-  opacity: 1;
-}
-
-
 /* Shared: tape strips -------------------------------------------------------
    Reusable hand-stuck tape treatment. Default pink; .tape--black for the
    manifesto video frame. Jagged edges via clip-path. */

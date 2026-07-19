@@ -153,29 +153,6 @@
     document.fonts.ready.then(syncManifestoLayout);
   }
 
-  /* Scroll-triggered fade-ins */
-  var fadeEls = document.querySelectorAll('.fade-in');
-  if ('IntersectionObserver' in window) {
-    var observer = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.15, rootMargin: '0px 0px -10% 0px' }
-    );
-    fadeEls.forEach(function (el) {
-      observer.observe(el);
-    });
-  } else {
-    fadeEls.forEach(function (el) {
-      el.classList.add('is-visible');
-    });
-  }
-
   /* Manifesto video play/pause toggle */
   var video = document.getElementById('manifestoVideo');
   var playBtn = document.getElementById('videoPlayBtn');
