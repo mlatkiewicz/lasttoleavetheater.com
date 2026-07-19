@@ -344,7 +344,7 @@ h1, h2, h3, p, ul {
      (see the sticky `top` offset below). */
   background: var(--pink);
   color: var(--black);
-  padding: clamp(2rem, 5vh, 3.5rem) var(--section-pad-x);
+  padding: 10px 20px 50px 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -376,9 +376,9 @@ h1, h2, h3, p, ul {
 .manifesto__title {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(3rem, 11vw, 8rem);
+  font-size: clamp(3rem, 14vw, 17rem);
   line-height: 0.95;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.06em;
 }
 
 .manifesto__body {
@@ -389,13 +389,14 @@ h1, h2, h3, p, ul {
 }
 
 .manifesto__lines {
-  flex: 1 1 20rem;
+  flex: 2 1 0;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: clamp(1.25rem, 4vh, 2.5rem);
   font-family: var(--font-body);
-  font-size: clamp(1.1rem, 2.6vw, 1.6rem);
-  font-weight: 700;
+  font-size: clamp(1.1rem, 3.7vw, 2.9rem);
+  font-weight: 300;
   letter-spacing: 0.02em;
   text-transform: uppercase;
   list-style: none;
@@ -403,15 +404,19 @@ h1, h2, h3, p, ul {
 }
 
 .manifesto__video-wrap {
-  flex: 0 1 26rem;
+  /* 1 share against .manifesto__lines' 2 shares, both flex-basis:0 -- so
+     this always takes exactly 1/3 of .manifesto__body's content width
+     (gap excluded first), growing and shrinking with the viewport instead
+     of sitting at a fixed rem size. */
+  flex: 1 1 0;
+  min-width: 0;
   align-self: center;
 }
 
 .video-frame {
   position: relative;
   transform: rotate(3deg);
-  max-width: 26rem;
-  margin-inline: auto;
+  width: 100%;
 }
 
 .video-frame__media {
