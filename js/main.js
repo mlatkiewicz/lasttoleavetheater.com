@@ -1,11 +1,10 @@
 (function () {
   'use strict';
 
-  /* Hero load sequence — plays once per browser session:
-     1. Bulb is always visible immediately (it's just always in the DOM).
-     2. After 0.75s, wordmark/tape/LA fade up alongside it.
-     On repeat visits within the same session, skip the delay entirely. */
+  /* Bulb intro — plays once per browser session, never blocks scroll.
+     Hero wordmark/tape/LA fade up on this same timeline (not on scroll). */
   var INTRO_KEY = 'ltl-intro-seen';
+  var overlay = document.getElementById('introOverlay');
   var heroEls = document.querySelectorAll('.hero-reveal');
 
   function revealHero() {
@@ -14,11 +13,25 @@
     });
   }
 
-  if (sessionStorage.getItem(INTRO_KEY)) {
-    revealHero();
+  if (overlay) {
+    if (sessionStorage.getItem(INTRO_KEY)) {
+      overlay.remove();
+      revealHero();
+    } else {
+      sessionStorage.setItem(INTRO_KEY, '1');
+      requestAnimationFrame(function () {
+        overlay.classList.add('is-playing');
+      });
+      setTimeout(function () {
+        overlay.classList.add('is-done');
+        revealHero();
+        setTimeout(function () {
+          overlay.remove();
+        }, 700);
+      }, 1600);
+    }
   } else {
-    sessionStorage.setItem(INTRO_KEY, '1');
-    setTimeout(revealHero, 750);
+    revealHero();
   }
 
   /* Scroll-triggered fade-ins */

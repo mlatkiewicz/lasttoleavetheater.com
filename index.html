@@ -12,41 +12,40 @@
 </head>
 <body>
 
-<!-- ==========================================================
-     1 — Hero  +  2 — Flag beat
-     One shared bulb spans both: it loads alone, stays sticky through
-     the wordmark fade-in and the whole flag scroll, then unsticks right
-     as "planted in the real" reaches its line (see js/main.js + CSS
-     comments on .hero-flag-group for the timing mechanism).
-     ========================================================== -->
-<div class="hero-flag-group" id="heroFlagGroup">
-
-  <div class="shared-bulb-wrap">
-    <img src="images/bulb.png" alt="" class="shared-bulb" id="sharedBulb">
-  </div>
-
-  <section class="hero" id="hero">
-    <img
-      class="hero__wordmark hero-reveal"
-      src="images/wordmark-only.png"
-      alt="Last to Leave theater company"
-    >
-    <div class="hero__tape hero-reveal">
-      <span class="tape">
-        <span class="hero__tape-text"><span class="word--potent">POTENT</span><br><span class="word--theater">THEATER</span></span>
-      </span>
-    </div>
-    <p class="hero__la hero-reveal"><span class="word--los">Los</span> <span class="word--angeles">Angeles</span></p>
-  </section>
-
-  <section class="flag" id="flag">
-    <div class="flag__text">
-      <p class="mono-aside flag__line--flag"><span class="flag__flag-rotate">This is<br>a flag</span></p>
-      <p class="mono-aside flag__line--planted" id="plantedLine">planted in<br>the real</p>
-    </div>
-  </section>
-
+<!-- Bulb intro overlay: plays once per session, never blocks scrolling -->
+<div class="intro-overlay" id="introOverlay" aria-hidden="true">
+  <img src="images/bulb.png" alt="" class="intro-overlay__bulb">
 </div>
+
+<!-- ==========================================================
+     1 — Hero
+     ========================================================== -->
+<section class="hero" id="hero">
+  <img
+    class="hero__lockup hero-reveal"
+    src="images/wordmark-lockup.png"
+    alt="Last to Leave theater company"
+  >
+  <div class="hero__tape hero-reveal">
+    <span class="tape">
+      <span class="hero__tape-text"><span class="word--potent">POTENT</span><br><span class="word--theater">THEATER</span></span>
+    </span>
+  </div>
+  <p class="hero__la hero-reveal"><span class="word--los">Los</span> <span class="word--angeles">Angeles</span></p>
+</section>
+
+<!-- ==========================================================
+     2 — Flag beat
+     ========================================================== -->
+<section class="flag" id="flag">
+  <div class="flag__bulb-wrap">
+    <img src="images/bulb.png" alt="" class="flag__bulb">
+  </div>
+  <div class="flag__text">
+    <p class="mono-aside flag__line--flag fade-in"><span class="flag__flag-rotate">This is<br>a flag</span></p>
+    <p class="mono-aside flag__line--planted fade-in">planted in<br>the real</p>
+  </div>
+</section>
 
 <!-- ==========================================================
      3 — Manifesto
