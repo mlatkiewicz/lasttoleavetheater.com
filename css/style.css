@@ -899,19 +899,12 @@ h1, h2, h3, p, ul {
   text-align: left;
 }
 
-.lights-out__row {
-  display: flex;
-  align-items: flex-start;
-  gap: clamp(1.5rem, 6vw, 4rem);
-  flex-wrap: wrap;
-}
-
-.lights-out__lockup {
-  width: min(70vw, 16rem);
-}
-
 .lights-out__text {
   margin-top: 1rem;
+}
+
+.wordmark-pin {
+  padding: clamp(2rem, 6vh, 4rem) var(--section-pad-x);
 }
 
 .footer {
