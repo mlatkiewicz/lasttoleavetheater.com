@@ -1075,6 +1075,11 @@ h1, h2, h3, p, ul {
     flex-direction: column;
   }
 
+  .manifesto__lines {
+    font-size: clamp(1.6rem, 7.5vw, 2.25rem);
+    line-height: 1.08;
+  }
+
   /* "Potent" / "Theater" split to their own stacked lines here, each
      fit independently to full width by syncManifestoTitle(). The words
      stay inline-block (see base rule) -- only the break between them
