@@ -1019,6 +1019,30 @@ h1, h2, h3, p, ul {
    Responsive — mobile
    ========================================================================== */
 
+@media (max-width: 900px) {
+  .footer {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  /* Desktop's grid-column: 1 / 3 (line ~1011) spans 2 of the 3 desktop
+     columns -- with only 1 explicit column here, that stray line-3
+     reference forces the browser to fabricate an implicit second
+     column to satisfy it, and .footer__brand (not .footer__copyright)
+     is the sibling that lands in it instead of stacking normally --
+     pushing it outside the viewport since there's nothing else to
+     shrink it back in. Resetting to auto lets this sit in the single
+     real column like everything else. */
+  .footer__copyright {
+    grid-column: auto;
+  }
+
+  .footer__brand,
+  .footer__meta {
+    align-items: center;
+  }
+}
+
 @media (max-width: 640px) {
   .hero__lockup {
     width: 85vw;
@@ -1087,27 +1111,5 @@ h1, h2, h3, p, ul {
 
   .signup-form__submit {
     align-self: flex-start;
-  }
-
-  .footer {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-
-  /* Desktop's grid-column: 1 / 3 (line ~1011) spans 2 of the 3 desktop
-     columns -- with only 1 explicit column here, that stray line-3
-     reference forces the browser to fabricate an implicit second
-     column to satisfy it, and .footer__brand (not .footer__copyright)
-     is the sibling that lands in it instead of stacking normally --
-     pushing it outside the viewport since there's nothing else to
-     shrink it back in. Resetting to auto lets this sit in the single
-     real column like everything else. */
-  .footer__copyright {
-    grid-column: auto;
-  }
-
-  .footer__brand,
-  .footer__meta {
-    align-items: center;
   }
 }
