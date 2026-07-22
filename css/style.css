@@ -1045,6 +1045,11 @@ h1, h2, h3, p, ul {
 }
 
 @media (max-width: 640px) {
+  .hero {
+    min-height: auto;
+    padding-bottom: 20rem;
+  }
+
   .hero__lockup {
     width: 85vw;
     margin-left: 0;
