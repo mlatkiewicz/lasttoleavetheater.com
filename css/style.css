@@ -923,6 +923,7 @@ h1, h2, h3, p, ul {
 
 .footer__lockup {
   width: min(60vw, 16rem);
+  margin: auto;
 }
 
 .footer__brand {
