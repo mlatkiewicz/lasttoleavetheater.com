@@ -1047,7 +1047,7 @@ h1, h2, h3, p, ul {
 @media (max-width: 640px) {
   .hero {
     min-height: auto;
-    padding-bottom: 20rem;
+    padding-bottom: 10rem;
   }
 
   .hero__lockup {
@@ -1057,6 +1057,7 @@ h1, h2, h3, p, ul {
 
   .hero__flag-text {
     gap: 2.5rem;
+    margin-top:230px;
   }
 
   .flag__flag-rotate {
