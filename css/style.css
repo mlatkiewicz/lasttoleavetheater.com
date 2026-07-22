@@ -1088,6 +1088,10 @@ h1, h2, h3, p, ul {
     display: inline;
   }
 
+  .video-frame__media {
+    margin-top:35px;
+  }
+
   .video-frame {
     width: 100% !important;
     max-width: 20rem;
