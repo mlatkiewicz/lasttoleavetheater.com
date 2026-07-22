@@ -163,7 +163,7 @@ h1, h2, h3, p, ul {
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  font-size: 0.9rem;
+  font-size: 1.5rem;
   cursor: pointer;
 }
 
@@ -1104,6 +1104,14 @@ h1, h2, h3, p, ul {
     transform: rotate(2deg);
   }
 
+  .debut-teaser {
+    padding-bottom: 0.5rem;
+  }
+
+  .conversion__aside-img {
+    height: 4.36rem;
+  }
+
   .who-we-are__people {
     grid-template-columns: 1fr;
     gap: 3.5rem;
@@ -1128,5 +1136,8 @@ h1, h2, h3, p, ul {
 
   .signup-form__submit {
     align-self: flex-start;
+  }
+  .footer__tape {
+    margin-top: 15px;
   }
 }
