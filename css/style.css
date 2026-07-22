@@ -1084,6 +1084,7 @@ h1, h2, h3, p, ul {
   }
 
   .video-frame {
+    width: 100% !important;
     max-width: 20rem;
     transform: rotate(2deg);
   }
