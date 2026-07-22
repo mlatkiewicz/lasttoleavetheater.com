@@ -903,71 +903,116 @@ h1, h2, h3, p, ul {
   margin-top: 1rem;
 }
 
-.wordmark-pin {
-  padding: clamp(2rem, 6vh, 4rem) var(--section-pad-x);
+.footer {
+  /* No top padding: the wordmark column sits flush against Play
+     Reading Club's bottom edge (the pull-cord should read as hanging
+     from it), so footer content starts right at the section's own top
+     edge instead of being pushed down. max-width/margin-inline (not
+     the section-gutter padding used elsewhere) is how #reading-club's
+     own content column is centered too (.reading-club__container,
+     also shared by .who-we-are__people) -- same value, so both line up
+     exactly instead of approximately. */
+  max-width: 76.5vw;
+  margin-inline: auto;
+  padding-bottom: clamp(2rem, 5vh, 3rem);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: start;
+  gap: 2rem 4rem;
 }
 
-.footer {
-  padding: clamp(3rem, 8vh, 5rem) var(--section-pad-x) clamp(2rem, 5vh, 3rem);
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 2rem 4rem;
+.footer__lockup {
+  width: min(60vw, 16rem);
 }
 
 .footer__brand {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-}
-
-.footer__lockup {
-  width: min(60vw, 13rem);
+  /* Opts out of the flex default (stretch), which would otherwise
+     stretch the pink tape span to the full column width instead of
+     hugging its own text. */
+  align-items: flex-start;
 }
 
 .footer__tape {
-  padding: 0.6rem 2rem 0.6rem 1.25rem;
+  /* Overrides .tape's shared CSS-drawn background/clip-path with the
+     PNG treatment instead, scoped to this class only (same pattern as
+     .hero__tape .tape) -- .tape itself, and every other element using
+     it, is untouched. aspect-ratio matches the PNG's own 500x178 pixel
+     size so background-size:100% 100% doesn't stretch/distort it. */
+  background-image: url('../images/tape-for-potent-theater.png');
+  background-size: 100% 100%;
+  background-color: transparent;
+  clip-path: none;
+  aspect-ratio: 447 / 177;
+  /* Symmetric (was 2rem/1.25rem left-right), doubled -- centers the
+     text on the tape and sizes the box, which sizes the image with it
+     via aspect-ratio, up together. */
+  padding: 1.2rem 3.25rem;
   display: inline-block;
-  transform: rotate(-2deg);
-  text-align: left;
+  transform: rotate(2deg);
+  text-align: center;
+  margin-top: 45px;
 }
 
 .footer__tape-text {
   font-family: var(--font-body);
   font-weight: 600;
   color: var(--black);
-  font-size: 1.1rem;
+  font-size: 1.9rem;
   line-height: 1.15;
   letter-spacing: 0.1em;
 }
 
 .footer__la {
-  margin-top: 0.75rem;
+  margin-top: .5rem;
+  margin-left: 1.2rem;
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.3rem;
+  font-weight: 600;
+  font-size: 2.2rem;
+}
+
+/* Same word-level treatment as .hero__la (see .word--los/.word--angeles
+   there). The rotation angles are unchanged (degrees don't need
+   scaling), but the offset is doubled along with the text size so
+   "Angeles" keeps the same proportional drop relative to "Los". */
+.footer__la .word--los {
+  display: inline-block;
+  transform: rotate(-1deg);
+}
+
+.footer__la .word--angeles {
+  display: inline-block;
+  transform: translateY(20px) rotate(8deg);
 }
 
 .footer__meta {
   display: flex;
   flex-direction: column;
   gap: 1.75rem;
+  margin-top: 45px;
 }
 
 .footer__meta h3 {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: 2.1rem;
   margin-bottom: 0.5rem;
 }
 
+.footer__email {
+  /* 75% larger than the 16px browser-default this was inheriting. */
+  font-size: 1.45rem;
+}
+
 .footer__copyright {
-  width: 100%;
+  /* Spans just the wordmark + middle columns (not the full 3-column
+     row), so it centers under those two only. */
+  grid-column: 1 / 3;
   text-align: center;
   color: #9a9a9a;
-  font-size: 0.85rem;
-  margin-top: 1rem;
+  font-size: 1.1rem;
+  transform: translateY(-10px) rotate(2.2deg);
 }
 
 /* ==========================================================================
@@ -1045,7 +1090,7 @@ h1, h2, h3, p, ul {
   }
 
   .footer {
-    justify-content: center;
+    grid-template-columns: 1fr;
     text-align: center;
   }
 
