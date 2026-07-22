@@ -4,6 +4,10 @@
 
 **Stack:** Static site, plain HTML/CSS/vanilla JS. No framework. Hosted on GitHub Pages. One page (long-scroll homepage). The Assassins page is Phase 2 (Aug 5) — not in this build.
 
+**STATUS — updated July 22, post-launch.** The site described below is BUILT AND LIVE at lasttoleavetheater.com (GitHub Pages; repo `mlatkiewicz/lasttoleavetheater.com`, branch `main`, folder root). Sections 1–7 are now a record of what shipped, not a spec to build against. Where the built site diverged from the original spec, this doc has been corrected to match what's live — the section 4 aside placement is the one such correction.
+
+Still open: Aug 5 Phase 2 — 4A replaced by the Assassins feature, 4B promoted to its own standalone section, the Assassins page itself, Ticket Tailor. Plus the MTI credit verification flagged below.
+
 **The page's job:** Two beats. (1) Last to Leave is a new LA theater company with a strong POV. (2) A debut production is announced Aug 5 — follow / sign up to catch it. Every section serves one of these. The whole page is a *held breath* — it withholds the show on purpose. Cold and assured up top, warmer and more handmade descending.
 
 ---
@@ -79,8 +83,6 @@ Building them fused = the Aug 5 change means cutting the block in half (surgery)
 
 **Block 4A — Teaser (replaceable):**
 - Pink tape, two lines: **"Our debut production will be announced Aug. 5"**
-- Closing muttered aside, monospace, floating alone low in the black: **"...or you find out late"** — NO illustration, no emoji, no face. The line alone.
-  - NOTE: this line is a *tease* — it only works while something's withheld. It RETIRES on Aug 5 along with 4A (post-announcement, nothing is being withheld, so the sneer is meaningless). It lives in 4B's markup (`#conversion`), not 4A's — "low in the black" only reads correctly once the full 4A+4B beat is on screen, and 4A's own box ends too early for it to land there. Keep it as its own tiny, distinctly-tagged, removable element within 4B (not entangled with the follow/sign-up content) so it can be deleted on Aug 5 without touching anything that survives into the promoted section.
 
 **Block 4B — Conversion (promotable / survives):**
 - (Also contains the retiring "...or you find out late" aside from 4A — see 4A's note above. Remove it here on Aug 5; don't let it ride along into the promoted section.)
@@ -90,6 +92,10 @@ Building them fused = the Aug 5 change means cutting the block in half (surgery)
 - "SIGN UP" huge white + "for our newsletter" + email field + SUBMIT button.
 - Ghost column of repeating "FOLLOW" / "SIGN UP" in dark grey behind the type (old-web/zine texture — real artifact, keep it).
 - SUBMIT button: pink or black/white with hard edges. NOT the grey default pill.
+- Closing muttered aside, monospace, floating alone low in the black — AFTER the sign-up block, as the last thing in 4B: **"...or you find out late"** — NO illustration, no emoji, no face. The line alone.
+  - PLACEMENT IS DELIBERATE, not a leftover from the teaser. The line lands after the ask, not before it: the aside undercuts the pitch rather than setting it up. Do not move it up into 4A.
+  - ITS AUG 5 FATE IS DELIBERATELY OPEN — the one open question in this doc. It may well survive. Post-announcement the line stops meaning "you missed the news" and starts meaning "you missed the run," which is a realer consequence and a more durable company posture than a one-time tease. Decided in August, not now.
+  - THEREFORE: build it as a discrete element with its own boundary at the bottom of 4B — not fused into the sign-up markup. Both fates have to stay cheap: deleting it, or carrying it along when 4B is promoted, should each be a one-line change.
 - Build this as a genuinely self-contained conversion unit so that on Aug 5 it can be lifted into its own section with minimal restyling (mainly: add whatever standalone heading it needs once it's no longer flowing out of the teaser).
 
 ### 5 — Who we are (max-width column, black)
