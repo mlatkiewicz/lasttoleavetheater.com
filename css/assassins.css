@@ -1,0 +1,214 @@
+/* ==========================================================================
+   ASSASSINS — Last to Leave Theater Company
+   Standalone page stylesheet for /assassins/. Shares nothing with style.css.
+   Palette: #232921 dark green, #FFDE00 yellow, #FFFFFF. No other colors
+   (the footer, when it lands, is company black + #F11AC5).
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Fonts — copied verbatim from css/style.css.
+   These src paths are RELATIVE on purpose. url() resolves against this file's
+   location (/css/), not against the page at /assassins/. Do not "fix" them to
+   root-relative; that is only correct for paths written in the HTML.
+   Inclusive Sans and IBM Plex Mono are not self-hosted — they arrive via the
+   Google Fonts <link> in the page head.
+   -------------------------------------------------------------------------- */
+@font-face {
+  font-family: 'Glacial Indifference';
+  src: url('../fonts/GlacialIndifference-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Glacial Indifference';
+  src: url('../fonts/GlacialIndifference-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --------------------------------------------------------------------------
+   Base
+   -------------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: #232921;
+  color: #FFFFFF;
+  font-family: 'Inclusive Sans', system-ui, sans-serif;
+}
+
+img { display: block; max-width: 100%; }
+
+/* --------------------------------------------------------------------------
+   Utilities
+   -------------------------------------------------------------------------- */
+
+/* Removed from view, kept for screen readers and search engines. Not
+   display:none — that would hide it from assistive tech too. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --------------------------------------------------------------------------
+   HERO
+
+   Deliberately NO min-height: 100vh. The section is exactly the image plus
+   --hero-pad top and bottom, so the top edge of whatever follows stays visible
+   at the bottom of the viewport.
+   -------------------------------------------------------------------------- */
+.hero {
+  --hero-cap: 88vh;   /* height cap for the image on landscape viewports */
+  --hero-pad: 3vh;    /* vertical breathing room; also sets the sliver below */
+  background: #232921;
+  padding: var(--hero-pad) 0;
+}
+
+/* The frame is exactly the rendered image box. It cannot get that size by
+   measuring its child: container-type: inline-size applies inline-size
+   containment, which computes the box as if it had no contents — an auto-width
+   shrink-to-fit frame would collapse to ZERO and the absolutely positioned
+   plate and logo would have nothing to position against. So the width is
+   derived arithmetically (ratio x height cap) and the image fills the frame.
+   Same rendered result, and the container-query context survives.
+
+   --hero-ar must match the aspect ratio of the hero file actually being served.
+   If the two drift, object-fit: contain protects the artwork — it will not
+   stretch or distort. The failure is positional instead: the image letterboxes
+   inside a frame of the wrong shape, and because the plate and logo are placed
+   in percentages of the FRAME, they detach from the artwork and land in the
+   wrong spot over it. */
+.hero__frame {
+  --hero-ar: 0.8;     /* 1080 / 1350 — hero-4x5 */
+  position: relative;
+  width: min(100%, calc(var(--hero-cap) * var(--hero-ar)));
+  aspect-ratio: var(--hero-ar);
+  margin-inline: auto;
+  container-type: inline-size;
+}
+
+.hero__picture { display: block; width: 100%; height: 100%; }
+
+.hero__image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;   /* never crop */
+}
+
+/* --------------------------------------------------------------------------
+   Hero logo — percentage size and position, so it tracks the image.
+   -------------------------------------------------------------------------- */
+.hero__logo {
+  position: absolute;
+  top: 2%;
+  left: 3.5%;
+  width: 12%;
+  display: block;
+}
+.hero__logo img { width: 100%; height: auto; }
+
+/* --------------------------------------------------------------------------
+   Date plate
+
+   Absolutely positioned, percentage-placed. Width is shrink-to-fit (left is
+   set, right is not), so the plate art STRETCHES TO THE TYPE via
+   background-size: 100% 100% — the text is live HTML, not burned into the PNG.
+
+   Font sizes are in container query units (cqw), never vw. cqw resolves
+   against .hero__frame, i.e. the rendered image width. On a wide, short window
+   the viewport is far wider than the letterboxed image, and vw would blow this
+   type straight out of the plate.
+   -------------------------------------------------------------------------- */
+.hero__plate {
+  position: absolute;
+  left: 6%;
+  top: 51%;
+  padding: 3.2cqw 5cqw 3.6cqw 4cqw;
+  background-image: url('../images/assassins/date-plate-desktop.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  color: #232921;
+  text-transform: uppercase;
+}
+
+.hero__plate p { margin: 0; }
+
+.hero__plate-dates {
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  font-size: 5cqw;
+  line-height: 1;
+}
+.hero__plate-times {
+  font-weight: 600;
+  font-size: 2.4cqw;
+  line-height: 1.2;
+  margin-top: 0.5cqw;
+}
+.hero__plate-venue {
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  font-size: 3.2cqw;
+  line-height: 1.05;
+  margin-top: 2.4cqw;
+}
+.hero__plate-city {
+  font-weight: 600;
+  font-size: 1.9cqw;
+  line-height: 1.2;
+  margin-top: 0.3cqw;
+}
+
+/* --------------------------------------------------------------------------
+   PORTRAIT / SQUARE VIEWPORTS
+
+   !! The condition below is duplicated in assassins/index.html on the
+   !! <source media="..."> attributes. THE TWO MUST STAY CHARACTER-IDENTICAL:
+   !!
+   !!     (max-aspect-ratio: 1/1)
+   !!
+   !! They are evaluated by different engines — <picture> chooses the image
+   !! file, this block lays it out. If they drift by so much as "1 / 1" vs
+   !! "1/1" in a browser that normalizes them differently, or if one threshold
+   !! is edited alone, the CSS will lay out for one hero file while <picture>
+   !! serves the other: the frame ratio won't match the image and the date
+   !! plate and logo will land in the wrong place.
+
+   Here the image goes edge to edge — no height cap, full viewport width — and
+   the section padding drops to zero.
+   -------------------------------------------------------------------------- */
+@media (max-aspect-ratio: 1/1) {
+
+  .hero { padding: 0; }
+
+  .hero__frame {
+    --hero-ar: 0.5625;   /* 1080 / 1920 — hero-9x16 */
+    width: 100%;
+  }
+
+  .hero__plate {
+    background-image: url('../images/assassins/date-plate-mobile.png');
+    left: 5%;
+    top: 54%;
+    padding: 2.6cqw 4.5cqw 3cqw 3.5cqw;
+  }
+  .hero__plate-dates { font-size: 5.6cqw; }
+  .hero__plate-times { font-size: 2.7cqw; }
+  .hero__plate-venue { font-size: 3.5cqw; margin-top: 2.2cqw; }
+  .hero__plate-city  { font-size: 2.1cqw; }
+
+  .hero__logo { top: 2.5%; left: 5%; width: 16%; }
+}
