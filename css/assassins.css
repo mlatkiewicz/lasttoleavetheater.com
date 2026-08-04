@@ -337,3 +337,94 @@ img { display: block; max-width: 100%; }
   .concept__inner { grid-template-columns: minmax(0, 1fr); }
   .concept__video { max-width: 300px; justify-self: start; }
 }
+
+/* --------------------------------------------------------------------------
+   2 — PRODUCTION TEAM
+   -------------------------------------------------------------------------- */
+.team {
+  padding-block: clamp(3rem, 8vw, 6rem);
+  background: #232921;
+}
+
+.team__heading {
+  margin: 0 0 clamp(1.5rem, 4vw, 2.5rem);
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.8rem, 3.6vw, 2.75rem);
+  line-height: 1.1;
+  color: #FFDE00;
+}
+
+.team__grid {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* No column-gap on purpose: the row rules below are per-cell borders, and a
+     gap would break each one into two floating dashes instead of a single
+     rule running the width of the row. Cells are separated by their own
+     padding instead. */
+  column-gap: 0;
+}
+
+.team__member {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.9rem, 2vw, 1.4rem);
+  padding: 1.15rem 2rem 1.15rem 0;
+  /* Hairline between rows — white at low alpha, not a new palette colour. */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+.team__member:nth-child(even) { padding-right: 0; padding-left: 2rem; }
+
+/* Last ROW carries no rule. Ten credits in two columns = five full rows, so
+   "last row" is the final two items. If the credit list ever changes length,
+   re-check this selector — an odd count leaves a stray rule under the orphan. */
+.team__member:nth-last-child(-n + 2) { border-bottom: none; }
+
+.team__photo {
+  flex: 0 0 auto;
+  width: clamp(64px, 8vw, 88px);
+  height: clamp(64px, 8vw, 88px);
+  /* Files are square, so this crops nothing — it is purely the circular mask. */
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.team__name {
+  margin: 0;
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  /* ---------------------------------------------------------------------
+     CONTRACTUAL BILLING REQUIREMENT — NOT A DESIGN CHOICE.
+     No name in this grid may render larger than 26.85px. The min() is what
+     enforces it: the rem term lets the name scale with a reader's font-size
+     preference, and the absolute px term is a hard ceiling that a large root
+     font-size cannot push through. A bare rem value would breach the cap for
+     any reader browsing at a default larger than 16px.
+     Do not raise 26px, and do not swap min() for a plain font-size.
+     (html { -webkit-text-size-adjust: 100% } in Base blocks the other route
+     past this — iOS text inflation.)
+     --------------------------------------------------------------------- */
+  font-size: min(1.5rem, 26px);
+  line-height: 1.2;
+  color: #FFFFFF;
+}
+
+.team__role {
+  margin: 0.2rem 0 0;
+  font-weight: 400;
+  font-size: clamp(0.9rem, 1.2vw, 1rem);
+  line-height: 1.3;
+  color: #FFFFFF;
+}
+
+@media (max-width: 860px) {
+  .team__grid { grid-template-columns: minmax(0, 1fr); }
+  .team__member,
+  .team__member:nth-child(even) { padding-inline: 0; }
+  /* Single column: every item but the true last one gets a rule. */
+  .team__member:nth-last-child(-n + 2) { border-bottom: 1px solid rgba(255, 255, 255, 0.2); }
+  .team__member:last-child { border-bottom: none; }
+}
