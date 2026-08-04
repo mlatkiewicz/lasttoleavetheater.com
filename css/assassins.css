@@ -490,6 +490,108 @@ img { display: block; max-width: 100%; }
 }
 
 /* --------------------------------------------------------------------------
+   5 — CREDITS / BILLING
+
+   ####################################################################
+   #  LEGAL COMPLIANCE ARTIFACT — NOT A DESIGN SURFACE.               #
+   #                                                                  #
+   #  no box, border, rule, outline, or background panel may surround #
+   #  the billing. The license explicitly prohibits a billing box.    #
+   #                                                                  #
+   #  Do not add one. Do not let a future refactor introduce one —    #
+   #  that includes "tidying" this block by giving it a card, a       #
+   #  panel, a divider above it, or a contrasting background to       #
+   #  "separate it from the footer."                                  #
+   ####################################################################
+
+   The seven mandated lines are four sizes, all expressed as ratios of the
+   53.7px title and ALL derived from --credit-scale. Never hard-code a size
+   here and never adjust one line on its own: change --credit-scale and all
+   seven move together, which is the only permitted way to resize this block.
+
+     title          100%   53.7px
+     author          50%   26.85px
+     note            35%   18.795px  (the brief rounds this to 18.8)
+     orchestration   25%   13.425px  (the brief rounds this to 13.43)
+
+   px on purpose — never rem, clamp, or viewport units. rem would let a
+   reader's root font-size rescale the block, and clamp/vw would let the
+   viewport do it; either can break the mandated ratios against each other.
+   -------------------------------------------------------------------------- */
+.credits {
+  --credit-scale: 53.7px;
+  padding-block: clamp(3rem, 8vw, 6rem);
+  /* The page field colour, matching .concept and .team. This is the section
+     background, NOT a panel behind the billing — see the banner above. */
+  background: #232921;
+  color: #FFFFFF;
+}
+
+.credits__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+}
+
+.credits__art img { width: 100%; height: auto; }
+
+/* Carries no background, border, outline, box-shadow or padding-with-fill,
+   and must never be given any. See the banner at the top of this section. */
+.credits__billing { max-width: 34em; }
+
+.credits__title {
+  margin: 0;
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  font-size: var(--credit-scale);
+  line-height: 1.15;
+}
+
+.credits__author {
+  margin: 0;
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  font-size: calc(var(--credit-scale) * 0.5);
+  line-height: 1.25;
+}
+
+.credits__note {
+  margin: 0;
+  font-size: calc(var(--credit-scale) * 0.35);
+  line-height: 1.35;
+}
+
+/* Blank line between mandated groups. em, so the gaps rescale with the type
+   they belong to rather than drifting when --credit-scale changes. */
+.credits__note--group { margin-top: 1.2em; }
+
+.credits__orchestration {
+  margin: 2.2em 0 0;
+  font-size: calc(var(--credit-scale) * 0.25);
+  line-height: 1.35;
+}
+
+.credits__mti {
+  margin: 3.4em 0 0;
+  font-size: calc(var(--credit-scale) * 0.25);
+  line-height: 1.5;
+}
+
+.credits__mti a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+@media (max-width: 860px) {
+  /* The ONLY sanctioned resize: one number, all seven lines scale by the same
+     factor, ratios preserved exactly. Do not add per-line overrides here. */
+  .credits { --credit-scale: 40px; }
+  .credits__inner { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* --------------------------------------------------------------------------
    4 — FOOTER
 
    The page's one deliberate break from the show palette: company black plus
