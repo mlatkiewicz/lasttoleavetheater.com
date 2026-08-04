@@ -428,3 +428,63 @@ img { display: block; max-width: 100%; }
   .team__member:nth-last-child(-n + 2) { border-bottom: 1px solid rgba(255, 255, 255, 0.2); }
   .team__member:last-child { border-bottom: none; }
 }
+
+/* --------------------------------------------------------------------------
+   3 — PLAN YOUR VISIT
+   The one section that inverts: #FFDE00 field, #232921 type. Full-bleed by
+   virtue of being a block-level section — the .shell inside holds the measure.
+   -------------------------------------------------------------------------- */
+.visit {
+  padding-block: clamp(3rem, 8vw, 6rem);
+  background: #FFDE00;
+  color: #232921;
+}
+
+.visit__heading {
+  margin: 0 0 clamp(1.5rem, 4vw, 2.5rem);
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.8rem, 3.6vw, 2.75rem);
+  line-height: 1.1;
+  color: #232921;
+}
+
+.visit__rows { margin: 0; }
+
+.visit__row {
+  display: grid;
+  grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
+  gap: clamp(0.35rem, 2vw, 2rem);
+  padding-block: clamp(0.85rem, 2vw, 1.2rem);
+}
+
+.visit__label {
+  margin: 0;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  line-height: 1.5;
+  /* Set in title case in the markup and uppercased here, so screen readers
+     get a normal word rather than a run of capitals. */
+  text-transform: uppercase;
+}
+
+.visit__content {
+  margin: 0;
+  max-width: 42em;
+  font-size: clamp(1rem, 1.4vw, 1.125rem);
+  line-height: 1.55;
+}
+
+.visit__content a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+.visit__content a:hover,
+.visit__content a:focus-visible { text-decoration-thickness: 2px; }
+
+/* Labels stack above their content. */
+@media (max-width: 860px) {
+  .visit__row { grid-template-columns: minmax(0, 1fr); }
+}
