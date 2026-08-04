@@ -32,12 +32,13 @@
 
   <div class="hero__frame">
 
-    <!-- Aspect-ratio-scoped sources first, format-only sources after.
-         The (max-aspect-ratio: 1/1) condition is mirrored in css/assassins.css
-         and the two must stay character-identical. -->
+    <!-- Media-scoped sources first, format-only sources after.
+         The (max-aspect-ratio: 1/1) and (max-width: 900px) condition is
+         mirrored in css/assassins.css and the two must stay
+         character-identical. -->
     <picture class="hero__picture">
-      <source media="(max-aspect-ratio: 1/1)" type="image/webp" srcset="/images/assassins/hero-9x16.webp">
-      <source media="(max-aspect-ratio: 1/1)" type="image/png" srcset="/images/assassins/hero-9x16.png">
+      <source media="(max-aspect-ratio: 1/1) and (max-width: 900px)" type="image/webp" srcset="/images/assassins/hero-9x16.webp">
+      <source media="(max-aspect-ratio: 1/1) and (max-width: 900px)" type="image/png" srcset="/images/assassins/hero-9x16.png">
       <source type="image/webp" srcset="/images/assassins/hero-4x5.webp">
       <img class="hero__image"
            src="/images/assassins/hero-4x5.png"
