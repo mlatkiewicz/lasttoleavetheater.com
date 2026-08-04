@@ -66,37 +66,33 @@ img { display: block; max-width: 100%; }
 /* --------------------------------------------------------------------------
    HERO
 
-   Deliberately NO min-height: 100vh. The section is exactly the image plus
-   --hero-pad top and bottom, so the top edge of whatever follows stays visible
-   at the bottom of the viewport.
+   Deliberately NO min-height: 100vh. On landscape the section is exactly
+   --hero-cap tall, so the top edge of whatever follows stays visible at the
+   bottom of the viewport.
    -------------------------------------------------------------------------- */
 .hero {
-  --hero-cap: 88vh;   /* height cap for the image on landscape viewports */
-  --hero-pad: 3vh;    /* vertical breathing room; also sets the sliver below */
+  --hero-cap: 88vh;   /* hero height on landscape viewports; sets the sliver below */
   background: #232921;
-  padding: var(--hero-pad) 0;
+  padding: 0;
 }
 
-/* The frame is exactly the rendered image box. It cannot get that size by
-   measuring its child: container-type: inline-size applies inline-size
-   containment, which computes the box as if it had no contents — an auto-width
-   shrink-to-fit frame would collapse to ZERO and the absolutely positioned
-   plate and logo would have nothing to position against. So the width is
-   derived arithmetically (ratio x height cap) and the image fills the frame.
-   Same rendered result, and the container-query context survives.
+/* The frame is the hero's sizing box and the container-query context.
 
-   --hero-ar must match the aspect ratio of the hero file actually being served.
-   If the two drift, object-fit: contain protects the artwork — it will not
-   stretch or distort. The failure is positional instead: the image letterboxes
-   inside a frame of the wrong shape, and because the plate and logo are placed
-   in percentages of the FRAME, they detach from the artwork and land in the
-   wrong spot over it. */
+   LANDSCAPE: full-bleed. Both dimensions are explicit — 100% wide, --hero-cap
+   tall — so the frame no longer derives its width from the image's ratio, and
+   there is no ratio to keep in sync with the file. The image crops to fit
+   instead (see object-fit below). container-type: inline-size is fine with an
+   explicit width; inline-size containment only collapses a box whose width
+   would have to come from measuring its contents.
+
+   PORTRAIT: the frame takes aspect-ratio: 9/16 to match the 9x16 file exactly,
+   so object-fit: cover has nothing to crop and the artwork is shown whole.
+   That ratio is the one that still has to match its image file — see the
+   media block at the bottom of this file. */
 .hero__frame {
-  --hero-ar: 0.8;     /* 1080 / 1350 — hero-4x5 */
   position: relative;
-  width: min(100%, calc(var(--hero-cap) * var(--hero-ar)));
-  aspect-ratio: var(--hero-ar);
-  margin-inline: auto;
+  width: 100%;
+  height: var(--hero-cap);
   container-type: inline-size;
 }
 
@@ -105,7 +101,9 @@ img { display: block; max-width: 100%; }
 .hero__image {
   width: 100%;
   height: 100%;
-  object-fit: contain;   /* never crop */
+  object-fit: cover;
+  /* Crop window: 0% shows the top of the artwork, 100% shows the bottom. */
+  object-position: 50% 20%;
 }
 
 /* --------------------------------------------------------------------------
@@ -135,12 +133,12 @@ img { display: block; max-width: 100%; }
 .hero__plate {
   position: absolute;
   left: 6%;
-  top: 51%;
+  bottom: 8%;
   padding: 3.2cqw 5cqw 3.6cqw 4cqw;
   background-image: url('../images/assassins/date-plate-desktop.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
-  color: #232921;
+  color: #FFDE00;
   text-transform: uppercase;
 }
 
@@ -184,25 +182,26 @@ img { display: block; max-width: 100%; }
    !! file, this block lays it out. If they drift by so much as "1 / 1" vs
    !! "1/1" in a browser that normalizes them differently, or if one threshold
    !! is edited alone, the CSS will lay out for one hero file while <picture>
-   !! serves the other: the frame ratio won't match the image and the date
-   !! plate and logo will land in the wrong place.
+   !! serves the other — the 4x5 file dropped into a 9/16 frame, where cover
+   !! crops away most of the artwork, with the plate and logo anchored to the
+   !! wrong edges of it.
 
-   Here the image goes edge to edge — no height cap, full viewport width — and
-   the section padding drops to zero.
+   Here the frame's height comes from the 9/16 ratio rather than --hero-cap, so
+   the whole 9x16 artwork is shown uncropped at full viewport width. The frame
+   and image ratios match, which makes object-fit: cover a no-op.
    -------------------------------------------------------------------------- */
 @media (max-aspect-ratio: 1/1) {
 
-  .hero { padding: 0; }
-
   .hero__frame {
-    --hero-ar: 0.5625;   /* 1080 / 1920 — hero-9x16 */
+    aspect-ratio: 9 / 16;   /* matches hero-9x16 exactly — do not crop */
+    height: auto;
     width: 100%;
   }
 
   .hero__plate {
     background-image: url('../images/assassins/date-plate-mobile.png');
     left: 5%;
-    top: 54%;
+    bottom: 8%;
     padding: 2.6cqw 4.5cqw 3cqw 3.5cqw;
   }
   .hero__plate-dates { font-size: 5.6cqw; }
