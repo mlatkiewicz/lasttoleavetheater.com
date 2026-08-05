@@ -488,6 +488,11 @@ img { display: block; max-width: 100%; }
   color: #FFFFFF;
 }
 
+.tt-widget {
+  background: #FFFFFF;
+  border-radius: 10px;
+}
+
 .tickets__heading {
   margin: 0 0 clamp(1.5rem, 4vw, 2.5rem);
   font-family: 'Glacial Indifference', sans-serif;
