@@ -334,12 +334,24 @@ img { display: block; max-width: 100%; }
   background: #232921;
 }
 
+/* Four children: headline, subhead, copy column, video column. The first two
+   span the full track set and sit above the two-column row. */
 .concept__inner {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 0.72fr);
-  gap: clamp(2rem, 5vw, 4.5rem);
+  /* Column gap only. The headline and subhead are now grid ROWS of their own,
+     and a row-gap would stack on top of their existing margins — the vertical
+     rhythm in this section is margin-driven and stays that way. */
+  column-gap: clamp(2rem, 5vw, 4.5rem);
+  row-gap: 0;
   align-items: start;
 }
+
+/* Full measure, above the copy/video row. Both stay INSIDE .concept__inner on
+   purpose — the section's padding and the .shell max-width live on that box,
+   and moving them out would take them out of the shell. */
+.concept__headline,
+.concept__subhead { grid-column: 1 / -1; }
 
 .concept__headline {
   margin: 0;
@@ -396,6 +408,15 @@ img { display: block; max-width: 100%; }
 @media (max-width: 860px) {
   .concept__inner { grid-template-columns: minmax(0, 1fr); }
   .concept__video { max-width: 300px; justify-self: start; }
+
+  /* Single column, so the copy and the video are stacked rows rather than
+     neighbouring columns — and .concept__inner sets row-gap: 0. Without this
+     the video butts straight against the last paragraph and its top tape,
+     which overhangs the frame by -0.85rem, lands on top of that text.
+     The value deliberately repeats .concept__inner's column-gap expression:
+     this is the same separation the old `gap` shorthand used to provide here,
+     restored on the one edge that still needs it. */
+  .concept__video { margin-top: clamp(2rem, 5vw, 4.5rem); }
 }
 
 /* --------------------------------------------------------------------------
