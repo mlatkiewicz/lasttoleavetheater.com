@@ -737,6 +737,7 @@ h1, h2, h3, p, ul {
   z-index: 1;
   max-width: 40rem;
   margin-left: max(0px, calc(44vw - 152px));
+  padding-top: 100px;
 }
 
 .conversion__aside-img {
