@@ -1152,7 +1152,7 @@ html { scroll-padding-top: calc(var(--nav-h) + 1rem); }
    this stylesheet. This bar is what it was loaded for. */
 .site-nav__link {
   font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-weight: 500;
+  font-weight: 200;
   font-size: 1rem;
   letter-spacing: 0.12em;
   line-height: 1;
@@ -1160,6 +1160,7 @@ html { scroll-padding-top: calc(var(--nav-h) + 1rem); }
   text-decoration: none;
   color: #FFFFFF;
   transition: color 0.2s ease;
+  padding-bottom: 10px;
 }
 
 .site-nav__link:hover,
@@ -1198,7 +1199,10 @@ html { scroll-padding-top: calc(var(--nav-h) + 1rem); }
   border-radius: 12px;
   /* Hard offset, no blur: the stuck-on-the-page language the tape strips and
      the tilts already speak, not a material-design float. */
-  box-shadow: 7px 7px 0 rgba(0, 0, 0, 0.35);
+  box-shadow: 
+    6px 6px 0 rgba(0, 0, 0, 0.75),
+    12px 12px 0 rgba(0, 0, 0, 0.35);
+    )
   text-decoration: none;
   text-align: center;
 }
@@ -1208,11 +1212,9 @@ html { scroll-padding-top: calc(var(--nav-h) + 1rem); }
   flex-direction: column;
   align-items: center;
   gap: 0.15rem;
-  font-family: 'Glacial Indifference', sans-serif;
-  font-weight: 700;
-  font-size: 1.15rem;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.5;
   text-transform: uppercase;
 }
 
@@ -1220,7 +1222,6 @@ html { scroll-padding-top: calc(var(--nav-h) + 1rem); }
   padding: var(--cta-action-pad) 1.15rem;
   background: #232921;
   color: #FFFFFF;
-  border-radius: 6px;
   font-family: 'Glacial Indifference', sans-serif;
   font-weight: 700;
   font-size: 1.05rem;
