@@ -41,3 +41,42 @@
     });
   }
 })();
+
+/* Persistent chrome — the sticky nav and the sticky ticket CTA.
+
+   ONE observer, ONE class, BOTH elements. They are a pair, and the cheapest
+   guarantee that they arrive together is that there is no second trigger to
+   drift out of step with the first. Do not split this into an observer per
+   element, and do not reach for a scroll listener — a scroll handler would run
+   on every frame of every scroll to answer a question the observer answers
+   once, at the moment the answer changes.
+
+   The trigger is the hero leaving the viewport outright: at threshold 0,
+   isIntersecting goes false only once the last pixel of .hero is above the
+   fold, which is exactly "the hero has scrolled past". */
+(function () {
+  'use strict';
+
+  var hero = document.querySelector('.hero');
+  var bars = [
+    document.getElementById('siteNav'),
+    document.getElementById('ticketCta')
+  ].filter(Boolean);
+
+  if (!bars.length) { return; }
+
+  function setVisible(on) {
+    bars.forEach(function (el) { el.classList.toggle('is-visible', on); });
+  }
+
+  /* Both elements are hidden in CSS, so every path that ends without an
+     observer has to end with them SHOWN — never stranded invisible. */
+  if (!hero || !('IntersectionObserver' in window)) {
+    setVisible(true);
+    return;
+  }
+
+  new IntersectionObserver(function (entries) {
+    setVisible(!entries[0].isIntersecting);
+  }, { threshold: 0 }).observe(hero);
+})();

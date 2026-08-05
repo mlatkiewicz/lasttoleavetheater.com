@@ -26,6 +26,33 @@
 </head>
 <body>
 
+<!-- ==========================================================
+     PERSISTENT CHROME — sticky nav + sticky ticket CTA
+     ONE UNIT. Both start hidden and are revealed by the same
+     class, from the single IntersectionObserver on .hero in
+     js/assassins.js. They are adjacent here on purpose: if one
+     moves, the other moves with it, or they arrive out of sync.
+     ========================================================== -->
+<nav class="site-nav" id="siteNav" aria-label="Primary">
+  <div class="shell site-nav__inner">
+    <!-- Decorative. The mark carries no information the two links
+         below don't already give, and it is drawn from
+         images/bulb.png as a CSS mask so it can take the page's
+         yellow — see css/assassins.css. -->
+    <span class="site-nav__bulb" aria-hidden="true"></span>
+    <a class="site-nav__link" href="/">Home</a>
+    <a class="site-nav__link site-nav__link--current" href="/assassins/" aria-current="page">Assassins</a>
+  </div>
+</nav>
+
+<a class="ticket-cta" id="ticketCta" href="#tickets">
+  <span class="ticket-cta__meta">
+    <span class="ticket-cta__dates">Nov 6&ndash;29</span>
+    <span class="ticket-cta__price">$40</span>
+  </span>
+  <span class="ticket-cta__action">Get Tickets</span>
+</a>
+
 <section class="hero">
 
   <h1 class="visually-hidden">ASSASSINS — Last to Leave Theater Company</h1>

@@ -397,6 +397,7 @@ img { display: block; max-width: 100%; }
   aspect-ratio: 9 / 16;
   overflow: hidden;
   background: #000000;
+  margin-top: 15%;
 }
 
 .video-frame__media video {
@@ -964,4 +965,274 @@ img { display: block; max-width: 100%; }
 
 @media (prefers-reduced-motion: reduce) {
   .social-row a { transition: none; }
+}
+
+/* --------------------------------------------------------------------------
+   PERSISTENT CHROME — sticky nav + sticky ticket CTA
+
+   Two fixed elements that behave as ONE unit: same hidden state, same reveal
+   class, one IntersectionObserver on .hero driving both (js/assassins.js).
+   They share this block for the same reason they share a trigger — nothing
+   about the arrival should be tunable on one of them alone.
+
+   STACKING. Both sit at --chrome-z: 100. That clears everything this
+   stylesheet paints (the only other z-index on this page is .tape, at 2) and
+   stays far below the 999999 that Ticket Tailor's checkout overlay uses, so
+   the overlay covers this chrome instead of fighting it. Do not raise this
+   into six figures.
+   -------------------------------------------------------------------------- */
+
+:root {
+  /* ------------------------------------------------------------------------
+     The chrome's two measurements, hoisted to the root because things OTHER
+     than the chrome reserve space against them: html's scroll-padding just
+     below, body's bottom padding in the 860px block, and .concept's
+     --nav-clearance — that last one is a separate, deliberately hand-tuned
+     number, so re-check it by hand if --nav-h ever changes.
+     ------------------------------------------------------------------------ */
+
+  /* The nav bar's rendered height, and the whole of it: .site-nav carries no
+     padding and no border, so this value IS what the bar measures. */
+  --nav-h: 64px;
+
+  /* The ticket CTA's rendered height as a bottom bar (max-width: 860px),
+     EXCLUDING the safe-area inset — every consumer adds env() itself, so the
+     bar's own padding and the space reserved for it grow together on a
+     notched device instead of one of them forgetting.
+
+     Composed, not measured: the bar's vertical padding twice, plus the action
+     button's height (its own padding twice, plus a 1rem line box — that
+     button sets line-height: 1 and is the tallest thing in the row). Comes to
+     3.6rem / 57.6px. If you re-pad .ticket-cta or .ticket-cta__action, change
+     the numbers HERE and both ends stay in agreement. */
+  --cta-bar-pad: 0.7rem;
+  --cta-action-pad: 0.6rem;
+  --cta-bar-h: calc((var(--cta-bar-pad) + var(--cta-action-pad)) * 2 + 1rem);
+}
+
+/* The nav is fixed, so an in-page jump — #tickets, from the CTA below — would
+   otherwise land the target's top edge underneath it. Derived from --nav-h and
+   never a literal: a hardcoded number here would go quietly wrong the day the
+   bar's height changes. The extra 1rem is breathing room, the same idea as the
+   "+ 3rem" .concept adds on top of its --nav-clearance. */
+html { scroll-padding-top: calc(var(--nav-h) + 1rem); }
+
+.site-nav,
+.ticket-cta {
+  --chrome-z: 100;
+  position: fixed;
+  z-index: var(--chrome-z);
+  /* Hidden state. visibility, not display: display:none cannot transition, and
+     the delayed visibility step is what keeps a hidden element out of the tab
+     order without cutting the fade short. */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0s linear 0.35s;
+}
+
+/* The one class js/assassins.js sets — on both elements, in the same call. */
+.site-nav.is-visible,
+.ticket-cta.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.35s ease, visibility 0s linear 0s;
+}
+
+/* --- Sticky nav ---------------------------------------------------------- */
+
+.site-nav {
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #232921;
+  /* Elevation is the whole edge treatment. No border, no rule — a hairline
+     here would read as a table edge against the hero art. box-shadow paints
+     outside the border box, so it adds nothing to the height below. */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  /* Crops the bulb's cord at the top edge. The graphic overflows upward on
+     purpose — see .site-nav__bulb. */
+  overflow: hidden;
+}
+
+/* .shell supplies the max-width and gutters, so the bar's contents line up with
+   the page content below it. The height lives here and nowhere else: with no
+   padding and no border on .site-nav, --nav-h is the bar's rendered height. */
+.site-nav__inner {
+  display: flex;
+  align-items: center;
+  height: var(--nav-h);
+  gap: clamp(1.5rem, 4vw, 2.75rem);
+}
+
+/* A fixed-width, full-height slot in the flex row. The graphic inside is
+   absolutely positioned so it can overflow the bar without adding height. */
+.site-nav__bulb {
+  --bulb-w: 34px;
+  --bulb-drop: 6px;   /* pull chain's tip to the bar's bottom edge */
+  position: relative;
+  flex: 0 0 var(--bulb-w);
+  align-self: stretch;
+}
+
+/* images/bulb.png is 348x2208 — a long diagonal cord with the bulb and its pull
+   chain in the bottom 470px. Anchoring the graphic's BOTTOM inside the bar
+   lands the bulb in the bar and sends the cord up through the top edge, where
+   .site-nav's overflow:hidden cuts it. At 34px wide the whole graphic renders
+   216px tall: bulb glass from 25px to 52px above the bar's floor, then ~12px of
+   cord before the crop.
+
+   The file is white line art on transparency, so it is used as a MASK and
+   coloured, not tinted through filters. The @supports guard means a browser
+   without mask support gets nothing here rather than a solid yellow slab.
+   url() is relative to THIS FILE's location (/css/) — see the Fonts note at the
+   top of the stylesheet. */
+@supports ((mask-image: url('../images/bulb.png')) or (-webkit-mask-image: url('../images/bulb.png'))) {
+  .site-nav__bulb::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: var(--bulb-drop);
+    width: var(--bulb-w);
+    /* The PNG's own ratio. The mask must not distort. */
+    aspect-ratio: 348 / 2208;
+    background-color: #FFDE00;
+    -webkit-mask-image: url('../images/bulb.png');
+            mask-image: url('../images/bulb.png');
+    -webkit-mask-size: 100% 100%;
+            mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+  }
+}
+
+/* IBM Plex Mono is already loaded by the page head and used nowhere else in
+   this stylesheet. This bar is what it was loaded for. */
+.site-nav__link {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-weight: 500;
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #FFFFFF;
+  transition: color 0.2s ease;
+}
+
+.site-nav__link:hover,
+.site-nav__link:focus-visible { color: #FFDE00; }
+
+/* Current page. White at reduced alpha rather than a new palette entry — the
+   technique .team__role and .tickets__policy use, at a third alpha on purpose.
+   It stays a real link, so its hover is neutralised too: a hover response would
+   promise a destination it doesn't have. aria-current says out loud what the
+   grey says visually. */
+.site-nav__link--current,
+.site-nav__link--current:hover,
+.site-nav__link--current:focus-visible { color: rgba(255, 255, 255, 0.45); }
+
+/* --- Sticky ticket CTA ---------------------------------------------------
+   ONE element, two shapes: corner pill on desktop, full-width bottom bar on
+   phones. Not two elements toggled with display:none — the markup is identical
+   at both sizes and only the CSS changes, so there is one thing to keep in sync
+   with the #tickets section it points at, not two.
+
+   Desktop is the base and 860px is the override, matching this file's
+   desktop-first ordering and reusing the same 860px content breakpoint as
+   .concept, .team, .visit and .credits.
+   -------------------------------------------------------------------------- */
+
+.ticket-cta {
+  right: clamp(1rem, 2.5vw, 2rem);
+  bottom: clamp(1rem, 2.5vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 1.1rem 1.5rem 1.2rem;
+  background: #FFDE00;
+  color: #232921;
+  border-radius: 12px;
+  /* Hard offset, no blur: the stuck-on-the-page language the tape strips and
+     the tilts already speak, not a material-design float. */
+  box-shadow: 7px 7px 0 rgba(0, 0, 0, 0.35);
+  text-decoration: none;
+  text-align: center;
+}
+
+.ticket-cta__meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.ticket-cta__action {
+  padding: var(--cta-action-pad) 1.15rem;
+  background: #232921;
+  color: #FFFFFF;
+  border-radius: 6px;
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  /* Part of the --cta-bar-h arithmetic at the top of this block. */
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@media (max-width: 860px) {
+  .ticket-cta {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1rem;
+    border-radius: 0;
+    padding: var(--cta-bar-pad) clamp(1.25rem, 5vw, 2rem);
+    /* Clears the iPhone home indicator; resolves to the plain value on
+       hardware that has none. body's reservation below adds the same inset. */
+    padding-bottom: calc(var(--cta-bar-pad) + env(safe-area-inset-bottom, 0px));
+    /* The nav's elevation, pointed the other way. */
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  /* One line, price first: "$40 · NOV 6–29". The desktop pill stacks the same
+     two spans in the other order — reordered, not duplicated. */
+  .ticket-cta__meta { flex-direction: row; align-items: baseline; gap: 0.45rem; }
+  .ticket-cta__price { order: -1; }
+  .ticket-cta__dates::before { content: "\00b7\00a0"; }
+
+  /* 1rem/1 is the line box --cta-bar-h assumes. Changing it changes the bar's
+     height, and therefore the reservation below. */
+  .ticket-cta__action { padding: var(--cta-action-pad) 1rem; font-size: 1rem; }
+
+  /* The bar is fixed and stays fixed all the way down — it is meant to be
+     reachable on the last screen, not to park above the footer. So the
+     document has to end early by exactly the bar's height, or the bar sits on
+     the footer's final line.
+
+     On body rather than .footer because the footer is not this block's to
+     touch — and body is the better place anyway: the strip this opens is the
+     last thing in the document, which is precisely where the fixed bar is once
+     you have scrolled to the bottom, so the bar covers its own reservation
+     instead of leaving a visible gap. (The strip paints the canvas colour,
+     #232921, under the black footer; it is never on screen uncovered.) */
+  body { padding-bottom: calc(var(--cta-bar-h) + env(safe-area-inset-bottom, 0px)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-nav,
+  .ticket-cta,
+  .site-nav.is-visible,
+  .ticket-cta.is-visible,
+  .site-nav__link { transition: none; }
 }
