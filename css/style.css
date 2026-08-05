@@ -600,16 +600,16 @@ h1, h2, h3, p, ul {
   margin: 0;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(3rem, 6.5vw, 5.5rem);
+  font-size: clamp(4.5rem, 9.75vw, 8.25rem);
   line-height: 0.95;
   color: #FFDE00;
 }
 
 .assassins-feature__tagline {
   margin: 0.6rem 0 0;
-  font-family: var(--font-body);
+  font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(1.2rem, 2.2vw, 1.65rem);
+  font-size: clamp(1.98rem, 3.63vw, 2.7225rem);
   line-height: 1.2;
 }
 
@@ -617,7 +617,7 @@ h1, h2, h3, p, ul {
   margin: clamp(1.25rem, 3vw, 2rem) 0 0;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(1.45rem, 2.9vw, 2.15rem);
+  font-size: clamp(2.32rem, 4.64vw, 3.44rem);
   line-height: 1.1;
   color: #FFDE00;
 }
@@ -626,7 +626,7 @@ h1, h2, h3, p, ul {
   margin: 0.35rem 0 0;
   font-family: var(--font-body);
   font-weight: 700;
-  font-size: clamp(1rem, 1.8vw, 1.3rem);
+  font-size: clamp(1.5rem, 2.7vw, 1.95rem);
 }
 
 .assassins-feature__cta {
