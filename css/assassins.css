@@ -404,6 +404,44 @@ img { display: block; max-width: 100%; }
   object-fit: cover;
 }
 
+/* Custom play affordance. The <video> carries no `controls` attribute, so this
+   button plus a click on the frame are the entire interface — see
+   js/assassins.js. Ported from css/style.css's .video-frame__play; that file
+   is neither linked from this page nor edited. Sizes and colours are the
+   homepage's, unchanged: the point is that the two players read as one
+   control, so do not "scale this to the frame" — a 9:16 frame is taller, not
+   a reason for a bigger button. */
+.video-frame__play {
+  position: absolute;
+  /* inset + auto margins centre the button without a transform. That matters
+     here: .video-frame already carries rotate(-2.5deg), and a translate-based
+     centring would compose with it. */
+  inset: 0;
+  margin: auto;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.video-frame__play svg {
+  width: 1.6rem;
+  height: 1.6rem;
+  /* #FFFFFF, not var(--white) — this stylesheet declares no palette custom
+     properties and shares nothing with style.css. */
+  fill: #FFFFFF;
+  /* Nudges the triangle's optical centre onto the circle's real centre. */
+  margin-left: 4px;
+}
+
+.video-frame__play.is-hidden { display: none; }
+
 /* Stack: video falls below the copy, which is already its DOM order. */
 @media (max-width: 860px) {
   .concept__inner { grid-template-columns: minmax(0, 1fr); }

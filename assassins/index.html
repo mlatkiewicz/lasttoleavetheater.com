@@ -87,13 +87,20 @@
         <span class="tape tape--bl" aria-hidden="true"></span>
         <span class="tape tape--br" aria-hidden="true"></span>
         <div class="video-frame__media">
+          <!-- No `controls` on purpose. The play button below and a click on
+               the frame are the whole interface, matching the homepage
+               player. `muted` is undone by js/assassins.js on the press. -->
           <video
-            controls
+            id="conceptVideo"
             playsinline
+            muted
             preload="none"
             poster="/images/assassins/assassins-teaser-poster.jpg">
             <source src="/images/assassins/assassins-teaser-web.mp4" type="video/mp4">
           </video>
+          <button class="video-frame__play" id="conceptPlayBtn" aria-label="Play video">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
         </div>
       </div>
     </div>
@@ -352,6 +359,8 @@
 
   </div>
 </footer>
+
+<script src="/js/assassins.js"></script>
 
 </body>
 </html>
