@@ -460,6 +460,74 @@ img { display: block; max-width: 100%; }
 }
 
 /* --------------------------------------------------------------------------
+   6 — TICKETS
+   Numbered 6 because 1–5 are taken; positionally it falls between 1 and 2.
+
+   Section shell only, with ONE exception, noted at the bottom of this block.
+   Nothing here targets .tt-widget, .tt-widget-inline, .tt-widget-powered, or
+   the iframe Ticket Tailor swaps in, and nothing new should. The widget
+   arrives with its own stylesheet — widget.js appends widget.css to <head> at
+   runtime, after this file, so it wins equal-specificity ties anyway — and
+   the calendar itself lives in a cross-origin iframe no CSS here can reach.
+
+   Their stylesheet does the sizing: the iframe is width 100%, min 280px,
+   capped at 950px for an all-tickets-calendar URL, and centred by
+   text-align: center on the wrapper. So .tickets must stay a plain block —
+   no width, no max-width, no flex, no grid. A flex or grid parent in
+   particular would take the centring away from text-align and drop the
+   widget hard left.
+
+   .shell contributes the page gutter and nothing else. Above roughly 1050px
+   of viewport the shell's content box is wider than the widget's 950px cap,
+   so the widget sits inset from the copy below it. That inset is Ticket
+   Tailor's; closing it would mean overriding their CSS.
+   -------------------------------------------------------------------------- */
+.tickets {
+  padding-block: clamp(3rem, 8vw, 6rem);
+  background: #232921;
+  color: #FFFFFF;
+}
+
+.tickets__heading {
+  margin: 0 0 clamp(1.5rem, 4vw, 2.5rem);
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  font-size: clamp(3.24rem, 6.48vw, 4.95rem);
+  line-height: 1.1;
+  color: #FFDE00;
+}
+
+/* Subordinate copy, not a lead paragraph: 0.85x .visit__content, which is the
+   page's running-text scale. The three terms are that clamp's three terms
+   multiplied through, rounded to three places. Deliberately smaller than
+   .concept__para — a refund policy should not out-shout the section copy.
+
+   The colour is .team__role's technique (white at reduced alpha rather than a
+   new palette entry) at a different alpha. 0.8 here, 0.7 there, both on
+   purpose — do not "reconcile" them. */
+.tickets__policy {
+  margin: clamp(2rem, 5vw, 3rem) 0 0;
+  max-width: 38em;
+  font-size: clamp(1.084rem, 1.517vw, 1.219rem);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* No 860px block for this section: it is a single column at every width, and
+   the clamps above already do the resizing. */
+
+/* THE ONE EXCEPTION to the hands-off rule at the top of this block — and it is
+   not a restyle of the widget. .tt-widget-fallback is Ticket Tailor's own no-JS
+   fallback, which their stylesheet sets to display:none. It is visible only
+   when their script is blocked, and then widget.css is blocked along with it,
+   so there is no Ticket Tailor styling here to override. Without this rule the
+   one remaining buy-tickets link renders UA-default blue on #232921, because
+   this file declares no global `a` colour and styles links per section instead.
+   It cannot collide with widget.css: whenever that file loads, this element is
+   display:none. */
+.tt-widget-fallback a { color: #FFDE00; }
+
+/* --------------------------------------------------------------------------
    2 — PRODUCTION TEAM
    -------------------------------------------------------------------------- */
 .team {
