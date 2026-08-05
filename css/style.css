@@ -536,58 +536,123 @@ h1, h2, h3, p, ul {
 .video-frame .tape--br { bottom: -1.2rem; right: -1.25rem; width: 4.5rem; transform: rotate(-30deg); }
 
 /* ==========================================================================
-   4A / 4B — Debut teaser + Conversion
+   4A / 4B — Assassins feature + Conversion
    ========================================================================== */
 
-.debut-teaser,
 .conversion {
   position: relative;
   background: var(--black);
   padding: clamp(2.5rem, 6vh, 4rem) var(--section-pad-x);
 }
 
-.debut-teaser {
-  padding-bottom: clamp(3rem, 10vh, 6rem);
-  overflow: hidden;
+.assassins-feature {
+  /* z-index on the SECTION is load-bearing here, and it deliberately
+     reverses what the old debut teaser did in this spot. 4B's FOLLOW ghost
+     lane is bottom-anchored and rises past .conversion's own top edge into
+     this section's box. Under the old teaser that was wanted: the lane
+     stayed visible against the shared black and tucked behind the tape
+     graphic alone, so z-index lived on the tape and the section itself was
+     left at auto -- putting it on the section would have let the section's
+     opaque black paint over the lane everywhere in its box, invisibly,
+     black-on-black.
+     That is now the goal, not the bug. This section is a different surface
+     -- an opaque #232921 field belonging to the show -- and a grey FOLLOW
+     lane bleeding up into it reads as a rendering fault, not texture. So
+     the whole section, background included, sits above the lane's z-index:0
+     and masks it; the lane still paints normally inside 4B below, where it
+     belongs. Keep this on the section: moving it to an inner element is
+     precisely what would let the lane show through again. */
+  position: relative;
+  z-index: 1;
+  background: #232921;
+  padding: clamp(2.5rem, 6vh, 4rem) var(--section-pad-x);
 }
 
-.debut-teaser__tape {
-  /* z-index keeps the tape graphic itself (not the whole section) stacked
-     above .conversion's FOLLOW ghost column, which is allowed to overflow
-     up into this section's space -- see .conversion's own comment. This is
-     deliberately scoped to just the tape, not .debut-teaser as a whole:
-     putting it on the section instead makes the section's own opaque black
-     background win the stacking battle too, everywhere in its box
-     (including the padding below the tape) -- which silently paints over
-     the ghost column there. Same black-on-black, so it's invisible in a
-     screenshot; only inspecting the ghost column's element (layout is
-     still correct) versus what's actually painted reveals it. */
-  position: relative;
-  z-index: 2;
-  max-width: 44rem;
+.assassins-feature__aside-img {
+  /* Same handwriting device as 4B's .conversion__aside-img and deliberately
+     the same 5.36rem height, so the two Madelyn asides read as one system.
+     Height-sized with width:auto, same as that rule -- each PNG keeps its
+     own aspect. Centered rather than left-aligned: this section is
+     symmetrical, 4B is not. See the mobile block for why the height, not
+     the width, is what gets overridden below 640px. */
+  display: block;
+  height: 5.36rem;
+  width: auto;
+  margin: 0 auto clamp(2rem, 5vw, 3rem);
+}
+
+.assassins-feature__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 18rem) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 3.5rem);
+  align-items: center;
+  max-width: 58rem;
   margin-inline: auto;
 }
 
-.debut-teaser__tape-img {
+.assassins-feature__art img {
   display: block;
   width: 100%;
   height: auto;
 }
 
-.debut-teaser__tape-text {
-  position: absolute;
-  inset: 15px 0 0 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+.assassins-feature__title {
+  margin: 0;
   font-family: var(--font-display);
   font-weight: 700;
-  color: var(--black);
-  font-size: clamp(1.495rem, 4.6vw, 2.415rem);
-  line-height: 1.25;
+  font-size: clamp(3rem, 6.5vw, 5.5rem);
+  line-height: 0.95;
+  color: #FFDE00;
 }
 
+.assassins-feature__tagline {
+  margin: 0.6rem 0 0;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: clamp(1.2rem, 2.2vw, 1.65rem);
+  line-height: 1.2;
+}
+
+.assassins-feature__dates {
+  margin: clamp(1.25rem, 3vw, 2rem) 0 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.45rem, 2.9vw, 2.15rem);
+  line-height: 1.1;
+  color: #FFDE00;
+}
+
+.assassins-feature__venue {
+  margin: 0.35rem 0 0;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: clamp(1rem, 1.8vw, 1.3rem);
+}
+
+.assassins-feature__cta {
+  /* Hard edges, uppercase, letter-spacing: the same house button treatment
+     as .signup-form__submit. Only the palette differs, because this button
+     belongs to the show. */
+  display: inline-block;
+  margin-top: clamp(1.5rem, 3.5vw, 2.25rem);
+  padding: 0.9rem 1.75rem;
+  background: #FFDE00;
+  color: #232921;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.assassins-feature__cta:hover,
+.assassins-feature__cta:focus-visible {
+  background: var(--white);
+}
+
+/* Still live: 4B's "...or you find out late" is commented out in the HTML,
+   not deleted, and this is the rule it comes back to. */
 .debut-teaser__aside {
   /* font-size overrides .mono-aside's shared clamp(1.1rem, 2.4vw, 1.5rem)
      -- scoped here, not changed on .mono-aside itself, since that class is
@@ -892,6 +957,23 @@ h1, h2, h3, p, ul {
   .reading-club__heading {
     font-size: clamp(3.25rem, calc(18.75vw - 8px), 7rem);
   }
+
+  /* Stacked here rather than at the 640px phone breakpoint the rest of the
+     page uses: between 640 and 768 the two-column grid is still nominally
+     valid but the text column has narrowed enough that "ASSASSINS" -- which
+     is scaling on vw at that point -- runs into the art column beside it.
+     Stacking before that zone is reached avoids a broken middle width. */
+  .assassins-feature__inner {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    text-align: center;
+    gap: 2rem;
+  }
+
+  .assassins-feature__art {
+    width: 100%;
+    max-width: 20rem;
+  }
 }
 
 .lights-out {
@@ -1104,8 +1186,16 @@ h1, h2, h3, p, ul {
     transform: rotate(2deg);
   }
 
-  .debut-teaser {
-    padding-bottom: 0.5rem;
+  /* The one place this aside can't mirror 4B's rule literally. Both are
+     height-sized, but this PNG is 500x100 (aspect 5.0) against 4B's 3.333,
+     so at a shared 5.36rem height it renders 428.8px wide -- wider than the
+     content box below a ~487px viewport, and capping width alone would
+     squash it, since height would stay pinned. Driving off width with
+     height:auto keeps the aspect and lands ~64px tall, within a hair of the
+     4.36rem (69.75px) 4B drops to here -- so the two still read as a pair. */
+  .assassins-feature__aside-img {
+    width: min(100%, 20rem);
+    height: auto;
   }
 
   .conversion__aside-img {
