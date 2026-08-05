@@ -308,16 +308,16 @@ img { display: block; max-width: 100%; }
    -------------------------------------------------------------------------- */
 .tape {
   position: absolute;
-  height: 1.75rem;
+  height: 2.4rem;
   background: #FFFFFF;
   /* .video-frame__media follows these spans in the DOM and is also positioned;
      without this it paints over them by plain source order and the tape stops
      looking stuck down on top of the video. */
   z-index: 2;
 }
-.tape--tl { top: -0.85rem;    left: -1.1rem;  width: 3.5rem;  transform: rotate(-40deg); }
-.tape--tr { top: -0.85rem;    right: -1.2rem; width: 4.5rem;  transform: rotate(35deg); }
-.tape--bl { bottom: -0.85rem; left: -1.5rem;  width: 5rem;    transform: rotate(50deg); }
+.tape--tl { top: -0.85rem;    left: -1.6rem;  width: 5.5rem;  transform: rotate(-40deg); }
+.tape--tr { top: -0.95rem;    right: -1.3rem; width: 4.9rem;  transform: rotate(35deg); }
+.tape--bl { bottom: -0.85rem; left: -1.5rem;  width: 5rem;    transform: rotate(40deg); }
 .tape--br { bottom: -1rem;    right: -1.1rem; width: 3.75rem; transform: rotate(-30deg); }
 
 /* --------------------------------------------------------------------------
@@ -328,7 +328,7 @@ img { display: block; max-width: 100%; }
      space for it; the breathing room is added ON TOP of that reservation, not
      carved out of it, so the headline can never end up underneath the bar.
      Do not collapse these two values into one number. */
-  --nav-clearance: 120px;
+  --nav-clearance: 80px;
   padding-top: calc(var(--nav-clearance) + 3rem);
   padding-bottom: clamp(3rem, 8vw, 6rem);
   background: #232921;
@@ -357,22 +357,24 @@ img { display: block; max-width: 100%; }
   margin: 0;
   font-family: 'Glacial Indifference', sans-serif;
   font-weight: 700;
-  font-size: clamp(1.9rem, 4vw, 3.1rem);
+  font-size: clamp(3.04rem, 6.4vw, 4.96rem);
   line-height: 1.08;
   color: #FFDE00;
 }
 
 .concept__subhead {
+  font-family: 'Glacial Indifference', sans-serif;
   margin: 1.1rem 0 0;
   font-weight: 600;
-  font-size: clamp(1.05rem, 1.9vw, 1.35rem);
+  font-size: clamp(3.25rem, 4.1vw, 3.55rem);
   color: #FFFFFF;
 }
 
 .concept__para {
   margin: 1.4rem 0 0;
   max-width: 38em;
-  font-size: clamp(1rem, 1.4vw, 1.125rem);
+  font-weight: 100;
+  font-size: clamp(1.5rem, 2.1vw, 1.6875rem);
   line-height: 1.6;
   color: #FFFFFF;
 }
@@ -387,7 +389,7 @@ img { display: block; max-width: 100%; }
 
 .video-frame {
   position: relative;
-  transform: rotate(-2.5deg);
+  transform: rotate(-1.9deg);
 }
 
 .video-frame__media {
@@ -454,7 +456,7 @@ img { display: block; max-width: 100%; }
      The value deliberately repeats .concept__inner's column-gap expression:
      this is the same separation the old `gap` shorthand used to provide here,
      restored on the one edge that still needs it. */
-  .concept__video { margin-top: clamp(2rem, 5vw, 4.5rem); }
+  .concept__video { margin-top: clamp(2rem, 5vw, 4.5rem); margin-left: 7%; }
 }
 
 /* --------------------------------------------------------------------------
@@ -469,7 +471,7 @@ img { display: block; max-width: 100%; }
   margin: 0 0 clamp(1.5rem, 4vw, 2.5rem);
   font-family: 'Glacial Indifference', sans-serif;
   font-weight: 700;
-  font-size: clamp(1.8rem, 3.6vw, 2.75rem);
+  font-size: clamp(3.24rem, 6.48vw, 4.95rem);
   line-height: 1.1;
   color: #FFDE00;
 }
@@ -513,8 +515,7 @@ img { display: block; max-width: 100%; }
 
 .team__name {
   margin: 0;
-  font-family: 'Glacial Indifference', sans-serif;
-  font-weight: 700;
+  font-weight: 400;
   /* ---------------------------------------------------------------------
      CONTRACTUAL BILLING REQUIREMENT — NOT A DESIGN CHOICE.
      No name in this grid may render larger than 26.85px. The min() is what
@@ -526,7 +527,7 @@ img { display: block; max-width: 100%; }
      (html { -webkit-text-size-adjust: 100% } in Base blocks the other route
      past this — iOS text inflation.)
      --------------------------------------------------------------------- */
-  font-size: min(1.5rem, 26px);
+  font-size: min(1.32rem, 22.88px);
   line-height: 1.2;
   color: #FFFFFF;
 }
@@ -536,7 +537,7 @@ img { display: block; max-width: 100%; }
   font-weight: 400;
   font-size: clamp(0.9rem, 1.2vw, 1rem);
   line-height: 1.3;
-  color: #FFFFFF;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 @media (max-width: 860px) {
@@ -563,7 +564,7 @@ img { display: block; max-width: 100%; }
   margin: 0 0 clamp(1.5rem, 4vw, 2.5rem);
   font-family: 'Glacial Indifference', sans-serif;
   font-weight: 700;
-  font-size: clamp(1.8rem, 3.6vw, 2.75rem);
+  font-size: clamp(3.24rem, 6.48vw, 4.95rem);
   line-height: 1.1;
   color: #232921;
 }
@@ -579,10 +580,11 @@ img { display: block; max-width: 100%; }
 
 .visit__label {
   margin: 0;
+  font-family: 'Glacial Indifference', sans-serif;
   font-weight: 700;
-  font-size: 0.8125rem;
-  letter-spacing: 0.08em;
-  line-height: 1.5;
+  font-size: 1.55rem;
+  letter-spacing: -0.04em;
+  line-height: 1.3;
   /* Set in title case in the markup and uppercased here, so screen readers
      get a normal word rather than a run of capitals. */
   text-transform: uppercase;
@@ -590,8 +592,8 @@ img { display: block; max-width: 100%; }
 
 .visit__content {
   margin: 0;
-  max-width: 42em;
-  font-size: clamp(1rem, 1.4vw, 1.125rem);
+  max-width: 32em;
+  font-size: clamp(1.275rem, 1.785vw, 1.434375rem);
   line-height: 1.55;
 }
 
@@ -648,12 +650,12 @@ img { display: block; max-width: 100%; }
 
 .credits__inner {
   display: grid;
-  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 0.55fr) minmax(0, 1fr);
   gap: clamp(2rem, 5vw, 4rem);
   align-items: start;
 }
 
-.credits__art img { width: 100%; height: auto; }
+.credits__art img { width: 100%; height: auto; margin-top: 10px; }
 
 /* Carries no background, border, outline, box-shadow or padding-with-fill,
    and must never be given any. See the banner at the top of this section. */
@@ -665,12 +667,12 @@ img { display: block; max-width: 100%; }
   font-weight: 700;
   font-size: var(--credit-scale);
   line-height: 1.15;
+  letter-spacing: -0.06em;
 }
 
 .credits__author {
   margin: 0;
-  font-family: 'Glacial Indifference', sans-serif;
-  font-weight: 700;
+  font-weight: 400;
   font-size: calc(var(--credit-scale) * 0.5);
   line-height: 1.25;
 }
