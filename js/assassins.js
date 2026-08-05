@@ -83,7 +83,7 @@
      distance on purpose: it fires the reveal slightly before the hero has
      fully cleared, and it behaves identically at every viewport height, which
      the percentage it replaced did not. */
-  var TRIGGER_ABOVE_FOLD = 200;
+  var TRIGGER_ABOVE_FOLD = 450;
 
   new IntersectionObserver(function (entries) {
     var entry = entries[0];
