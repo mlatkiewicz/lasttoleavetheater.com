@@ -502,6 +502,24 @@ img { display: block; max-width: 100%; }
      restored on the one edge that still needs it. */
   .video-frame { transform: none; }
   .concept__video { margin-top: clamp(2rem, 5vw, 4.5rem); margin: auto; }
+
+  /* Type down 5% for phones, where the desktop sizes wrap badly at ~375px.
+
+     Every term of each clamp is the desktop value multiplied by 0.95 and
+     rounded to three places — the technique .tickets__policy documents. ALL
+     THREE TERMS, not just the one that happens to be live at any given width:
+     scaling the whole curve is what keeps the three sizes in the same
+     relationship to each other, and keeps the widths where each clamp changes
+     hands where they were. So do not retune one line here on its own, and do
+     not rewrite these as fresh round numbers — multiply the rules above
+     through by a factor, the way these were derived.
+
+     At 375px it is the FIRST term of all three that renders: the vw terms stay
+     below their floors until roughly 760px. So on a small phone this reads
+     46.2 / 49.4 / 22.8px where it read 48.6 / 52 / 24. */
+  .concept__headline { font-size: clamp(2.888rem, 6.08vw, 4.712rem); }
+  .concept__subhead  { font-size: clamp(3.088rem, 3.895vw, 3.373rem); }
+  .concept__para     { font-size: clamp(1.425rem, 1.995vw, 1.603rem); }
 }
 
 /* --------------------------------------------------------------------------
