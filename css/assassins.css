@@ -500,7 +500,8 @@ img { display: block; max-width: 100%; }
      The value deliberately repeats .concept__inner's column-gap expression:
      this is the same separation the old `gap` shorthand used to provide here,
      restored on the one edge that still needs it. */
-  .concept__video { margin-top: clamp(2rem, 5vw, 4.5rem); margin-left: 7%; }
+  .video-frame { transform: none; }
+  .concept__video { margin-top: clamp(2rem, 5vw, 4.5rem); margin: auto; }
 }
 
 /* --------------------------------------------------------------------------
