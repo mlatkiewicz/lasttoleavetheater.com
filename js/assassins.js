@@ -51,9 +51,8 @@
    on every frame of every scroll to answer a question the observer answers
    once, at the moment the answer changes.
 
-   The trigger is the hero leaving the viewport outright: at threshold 0,
-   isIntersecting goes false only once the last pixel of .hero is above the
-   fold, which is exactly "the hero has scrolled past". */
+   The trigger is the hero's bottom edge crossing the fold — see the rootMargin
+   note on the observer below. */
 (function () {
   'use strict';
 
@@ -78,5 +77,20 @@
 
   new IntersectionObserver(function (entries) {
     setVisible(!entries[0].isIntersecting);
-  }, { threshold: 0 }).observe(hero);
+  }, {
+    threshold: 0,
+    /* Order is top right bottom left, so this adjusts the top edge only.
+
+       -100% pulls the observation area's TOP edge down to the viewport's
+       BOTTOM edge, collapsing it to a line across the fold. The hero counts as
+       intersecting only while it still reaches that line — only while it still
+       fills the screen — so isIntersecting goes false the moment the hero's
+       bottom edge rises above the fold and the section below starts to show.
+
+       In scroll terms the reveal moves from (hero height) to (hero height -
+       viewport height): one viewport earlier, at any window size. The
+       percentage resolves against the root's height, so it tracks the window
+       instead of assuming anything about how tall the hero is. */
+    rootMargin: '-100% 0px 0px 0px'
+  }).observe(hero);
 })();

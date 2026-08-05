@@ -130,6 +130,49 @@ img { display: block; max-width: 100%; }
 }
 .hero__logo img { width: 100%; height: auto; }
 
+/* Hover/focus affordance: the wordmark is a link home and nothing else on it
+   says so. The pink plate is a BACKGROUND on a pseudo-element rather than a
+   second <img> or a JS src swap, so the hero's markup is untouched and every
+   layout value above still decides the wordmark's size and position — a
+   pseudo-element with inset: 0 has no flow of its own and cannot move it.
+
+   inset: 0 pins it to .hero__logo's box, which IS the image's box: the img is
+   display:block (Base) and width:100%, so the anchor takes its exact height.
+   The two plates therefore register on top of each other.
+
+   background-size: 100% 100% is safe only because the two files are both
+   1080x950. Re-export the pink one at a different size and this has to become
+   `contain`.
+
+   NO FLASH ON FIRST HOVER: this rule paints from page load and only its
+   opacity changes, so the PNG is fetched with the rest of the page. Declaring
+   the ::after inside the :hover rule instead would put the fetch on the first
+   hover, which is the flash being avoided here. */
+.hero__logo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url('../images/assassins/ltl-logo-pink.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* Guarded, because a tap on a touch device can leave :hover asserted and
+   strand the wordmark pink. :focus-visible is deliberately OUTSIDE the guard —
+   keyboard users get the affordance on any device. */
+@media (hover: hover) {
+  .hero__logo:hover::after { opacity: 1; }
+}
+
+.hero__logo:focus-visible::after { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  /* The swap still happens — it just stops being a cross-fade. */
+  .hero__logo::after { transition: none; }
+}
+
 /* --------------------------------------------------------------------------
    Date plate
 
