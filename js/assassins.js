@@ -51,12 +51,15 @@
    on every frame of every scroll to answer a question the observer answers
    once, at the moment the answer changes.
 
-   The trigger is the hero's bottom edge crossing the fold — see the rootMargin
-   note on the observer below. */
+   The observed target is NOT the hero. It is #chromeSentinel, a zero-height
+   element sitting on the hero's bottom edge — see .chrome-sentinel in
+   css/assassins.css. Observing the hero itself made the trigger depend on
+   whether the hero was taller than the viewport, which is true on desktop and
+   false on phones, so the chrome arrived on load at phone sizes. */
 (function () {
   'use strict';
 
-  var hero = document.querySelector('.hero');
+  var sentinel = document.getElementById('chromeSentinel');
   var bars = [
     document.getElementById('siteNav'),
     document.getElementById('ticketCta')
@@ -70,27 +73,34 @@
 
   /* Both elements are hidden in CSS, so every path that ends without an
      observer has to end with them SHOWN — never stranded invisible. */
-  if (!hero || !('IntersectionObserver' in window)) {
+  if (!sentinel || !('IntersectionObserver' in window)) {
     setVisible(true);
     return;
   }
 
+  /* How far ABOVE the viewport's top edge the sentinel — which is the hero's
+     bottom edge — has to travel before the chrome arrives. A fixed pixel
+     distance on purpose: it fires the reveal slightly before the hero has
+     fully cleared, and it behaves identically at every viewport height, which
+     the percentage it replaced did not. */
+  var TRIGGER_ABOVE_FOLD = 200;
+
   new IntersectionObserver(function (entries) {
-    setVisible(!entries[0].isIntersecting);
+    var entry = entries[0];
+    /* The sentinel is outside the observed band on BOTH sides of the scroll:
+       below the fold before you have scrolled, above the trigger line after.
+       Only the second means the hero has gone, so its position is what tells
+       the two apart — !isIntersecting on its own would show the chrome at
+       scroll 0 on any window the hero is taller than. */
+    setVisible(!entry.isIntersecting &&
+               entry.boundingClientRect.top < TRIGGER_ABOVE_FOLD);
   }, {
     threshold: 0,
-    /* Order is top right bottom left, so this adjusts the top edge only.
-
-       -100% pulls the observation area's TOP edge down to the viewport's
-       BOTTOM edge, collapsing it to a line across the fold. The hero counts as
-       intersecting only while it still reaches that line — only while it still
-       fills the screen — so isIntersecting goes false the moment the hero's
-       bottom edge rises above the fold and the section below starts to show.
-
-       In scroll terms the reveal moves from (hero height) to (hero height -
-       viewport height): one viewport earlier, at any window size. The
-       percentage resolves against the root's height, so it tracks the window
-       instead of assuming anything about how tall the hero is. */
-    rootMargin: '-100% 0px 0px 0px'
-  }).observe(hero);
+    /* Order is top right bottom left, so this moves the top edge only: the
+       observed band's top edge is pulled TRIGGER_ABOVE_FOLD px down from the
+       viewport's top, and the sentinel leaves the band that far before the
+       hero's bottom edge would actually clear the screen. Built from the
+       constant above so the two cannot drift apart. */
+    rootMargin: '-' + TRIGGER_ABOVE_FOLD + 'px 0px 0px 0px'
+  }).observe(sentinel);
 })();

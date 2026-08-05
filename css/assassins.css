@@ -1060,6 +1060,27 @@ img { display: block; max-width: 100%; }
    "+ 3rem" .concept adds on top of its --nav-clearance. */
 html { scroll-padding-top: calc(var(--nav-h) + 1rem); }
 
+/* The reveal's trigger point, and nothing else. It is the last child of .hero,
+   so its own top edge IS the hero's bottom edge, and js/assassins.js observes
+   it instead of the hero.
+
+   WHY NOT OBSERVE .hero DIRECTLY: a full-height target's intersection with the
+   viewport depends on whether the hero is TALLER than the viewport, and it is
+   not at every breakpoint — on phones the hero is 75vh, shorter than the
+   screen; on desktop it is about 1.05x the window's width, taller. A trigger
+   built on the hero's own box therefore behaves differently at each end. A
+   zero-height target has no such dependency: there is one edge, and it has
+   either passed the trigger line or it has not, at every viewport height.
+
+   MUST NOT AFFECT LAYOUT. .hero takes its height from .hero__frame; this adds
+   a zero-height block box after it and nothing more. Do not give it content,
+   padding, margin, a border, or a height. */
+.chrome-sentinel {
+  display: block;
+  height: 0;
+  margin: 0;
+}
+
 .site-nav,
 .ticket-cta {
   --chrome-z: 100;
