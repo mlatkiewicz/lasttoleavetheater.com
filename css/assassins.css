@@ -1,0 +1,1322 @@
+/* ==========================================================================
+   ASSASSINS — Last to Leave Theater Company
+   Standalone page stylesheet for /assassins/. Shares nothing with style.css.
+   Palette: #232921 dark green, #FFDE00 yellow, #FFFFFF. No other colors
+   (the footer, when it lands, is company black + #F11AC5).
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Fonts — copied verbatim from css/style.css.
+   These src paths are RELATIVE on purpose. url() resolves against this file's
+   location (/css/), not against the page at /assassins/. Do not "fix" them to
+   root-relative; that is only correct for paths written in the HTML.
+   Inclusive Sans and IBM Plex Mono are not self-hosted — they arrive via the
+   Google Fonts <link> in the page head.
+   -------------------------------------------------------------------------- */
+@font-face {
+  font-family: 'Glacial Indifference';
+  src: url('../fonts/GlacialIndifference-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Glacial Indifference';
+  src: url('../fonts/GlacialIndifference-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --------------------------------------------------------------------------
+   Base
+   -------------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: #232921;
+  color: #FFFFFF;
+  font-family: 'Inclusive Sans', system-ui, sans-serif;
+}
+
+img { display: block; max-width: 100%; }
+
+/* --------------------------------------------------------------------------
+   Utilities
+   -------------------------------------------------------------------------- */
+
+/* Removed from view, kept for screen readers and search engines. Not
+   display:none — that would hide it from assistive tech too. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --------------------------------------------------------------------------
+   HERO
+
+   Deliberately NO min-height: 100vh. On landscape the section is exactly
+   --hero-cap tall, so the top edge of whatever follows stays visible at the
+   bottom of the viewport.
+   -------------------------------------------------------------------------- */
+.hero {
+  --hero-cap: 88vh;   /* hero height on landscape viewports; sets the sliver below */
+  background: #232921;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* The frame is the hero's sizing box and the container-query context.
+
+   LANDSCAPE: full-bleed up to --hero-max, then capped. Both dimensions are
+   explicit — 100% wide, --hero-cap tall — so the frame no longer derives its
+   width from the image's ratio, and there is no ratio to keep in sync with the
+   file. The image crops to fit instead (see object-fit below).
+   container-type: inline-size is fine with an explicit width; inline-size
+   containment only collapses a box whose width would have to come from
+   measuring its contents.
+
+   The cap exists because the source art is only 1080px wide — past roughly
+   that point the upscale artifacts get loud. Beyond --hero-max the frame stops
+   growing and stays centred, and the leftover viewport becomes #232921 field
+   on both sides, reading as deliberate letterboxing rather than a short image.
+   It also pins cqw: plate type stops growing once the frame stops growing.
+
+   PORTRAIT: the frame takes aspect-ratio: 9/16 to match the 9x16 file exactly,
+   so object-fit: cover has nothing to crop and the artwork is shown whole.
+   That ratio is the one that still has to match its image file — see the
+   media block at the bottom of this file. */
+.hero__frame {
+  --hero-max: 1600px;
+  --frame-h: max(var(--hero-cap), calc(min(100vw, var(--hero-max)) * 1.05));
+  height: var(--frame-h);
+  position: relative;
+  width: 100%;
+  max-width: var(--hero-max);
+  margin-inline: auto;
+  container-type: inline-size;
+}
+
+.hero__picture { display: block; width: 100%; height: 100%; }
+
+.hero__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Crop window: 0% shows the top of the artwork, 100% shows the bottom. */
+  object-position: 50% 12%;
+}
+
+/* --------------------------------------------------------------------------
+   Hero logo — percentage size and position, so it tracks the image.
+   -------------------------------------------------------------------------- */
+.hero__logo {
+  position: absolute;
+  top: 0%;
+  left: 5.5%;
+  width: 18%;
+  display: block;
+}
+.hero__logo img { width: 100%; height: auto; }
+
+/* Hover/focus affordance: the wordmark is a link home and nothing else on it
+   says so. The pink plate is a BACKGROUND on a pseudo-element rather than a
+   second <img> or a JS src swap, so the hero's markup is untouched and every
+   layout value above still decides the wordmark's size and position — a
+   pseudo-element with inset: 0 has no flow of its own and cannot move it.
+
+   inset: 0 pins it to .hero__logo's box, which IS the image's box: the img is
+   display:block (Base) and width:100%, so the anchor takes its exact height.
+   The two plates therefore register on top of each other.
+
+   background-size: 100% 100% is safe only because the two files are both
+   1080x950. Re-export the pink one at a different size and this has to become
+   `contain`.
+
+   NO FLASH ON FIRST HOVER: this rule paints from page load and only its
+   opacity changes, so the PNG is fetched with the rest of the page. Declaring
+   the ::after inside the :hover rule instead would put the fetch on the first
+   hover, which is the flash being avoided here. */
+.hero__logo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url('../images/assassins/ltl-logo-pink.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* Guarded, because a tap on a touch device can leave :hover asserted and
+   strand the wordmark pink. :focus-visible is deliberately OUTSIDE the guard —
+   keyboard users get the affordance on any device. */
+@media (hover: hover) {
+  .hero__logo:hover::after { opacity: 1; }
+}
+
+.hero__logo:focus-visible::after { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  /* The swap still happens — it just stops being a cross-fade. */
+  .hero__logo::after { transition: none; }
+}
+
+/* --------------------------------------------------------------------------
+   Date plate
+
+   Absolutely positioned, percentage-placed. Width is shrink-to-fit (left is
+   set, right is not), so the plate art STRETCHES TO THE TYPE via
+   background-size: 100% 100% — the text is live HTML, not burned into the PNG.
+
+   Font sizes are in container query units (cqw), never vw. cqw resolves
+   against .hero__frame, so the type tracks the frame and stops growing when
+   the frame hits --hero-max. vw would keep scaling with the viewport and blow
+   this type straight out of the plate on a wide window.
+   -------------------------------------------------------------------------- */
+.hero__plate {
+  position: absolute;
+  left: 6%;
+  /* Anchor the plate to a point in the ARTWORK, not in the frame.
+  
+   The frame crops the image (object-fit: cover), so a plain percentage would
+   drift away from the chalkboard as the frame's shape changes. This formula
+   cancels the crop out.
+  
+   Three inputs, and each one has to stay in sync with something else:
+  
+     --img-h    The image's rendered height. Because cover scales the image
+                to the frame's width, this is always the frame's width times
+                the file's ratio. 100cqw is the frame's width (container-type
+                is on .hero__frame) and 1.25 is the 4:5 file's ratio (1350
+                divided by 1080). Change the hero file's aspect ratio and
+                this number changes with it.
+  
+     --crop-y   How much of the cropped-off excess comes off the TOP. This
+                MUST match the Y value in object-position on .hero__image
+                above. They are currently both 12%. Change one, change both.
+  
+     --anchor   The knob. Where in the artwork the plate's top edge sits, as
+                a fraction of the image's height. Higher moves it down.
+                This is the only value to touch when tuning placement.
+  
+   --frame-h comes from .hero__frame and inherits down, so this always
+   computes against the frame's real height at any viewport. Do not
+   substitute a hardcoded height here — the frame's height is a formula, and
+   a fixed number will be wrong at most sizes.
+  
+   The min() caps the result at 55% of the frame. On wide, short windows the
+   formula would otherwise push the plate past the section's bottom edge.
+   Below that ceiling the formula runs as designed; at extreme ratios the
+   ceiling takes over. */
+  --img-h: calc(100cqw * 1.25);
+  --crop-y: 0.12;
+  --anchor: 0.50;   /* fraction of image height where the plate's top sits */
+  
+  top: min(
+    calc(var(--anchor) * var(--img-h) - (var(--img-h) - var(--frame-h)) * var(--crop-y)),
+    55%
+  );
+  bottom: auto;
+  --plate-scale: 1.5;
+  padding: calc(1.9cqw * var(--plate-scale)) calc(3cqw * var(--plate-scale))
+           calc(2.2cqw * var(--plate-scale)) calc(2.4cqw * var(--plate-scale));
+  background-image: url('../images/assassins/date-plate-desktop.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  color: #FFDE00;
+}
+
+.hero__plate-dates,
+.hero__plate-times,
+.hero__plate-venue,
+.hero__plate-city { margin: 0; }
+
+.hero__plate-dates {
+  font-family: 'Glacial Indifference', sans-serif;
+  font-size: calc(3cqw * var(--plate-scale));
+  letter-spacing: -0.04em;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.hero__plate-times {
+  font-size: calc(1.6cqw * var(--plate-scale));
+  font-weight: 600;
+  line-height: 1.2;
+  margin-top: calc(0.3cqw * var(--plate-scale));
+}
+.hero__plate-venue {
+  font-family: 'Glacial Indifference', sans-serif;
+  font-size: calc(2.2cqw * var(--plate-scale));
+  letter-spacing: -0.04em;
+  font-weight: 700;
+  line-height: 1.05;
+  margin-top: calc(1.4cqw * var(--plate-scale));
+  text-transform: uppercase;
+}
+.hero__plate-city {
+  font-size: calc(1.4cqw * var(--plate-scale));
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.2;
+  margin-top: calc(0.2cqw * var(--plate-scale));
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   PHONES AND PORTRAIT TABLETS
+
+   !! The condition below is duplicated in assassins/index.html on the
+   !! <source media="..."> attributes. THE TWO MUST STAY CHARACTER-IDENTICAL:
+   !!
+   !!     (max-aspect-ratio: 1/1) and (max-width: 900px)
+   !!
+   !! They are evaluated by different engines — <picture> chooses the image
+   !! file, this block lays it out. If they drift by so much as "1 / 1" vs
+   !! "1/1" in a browser that normalizes them differently, or if one threshold
+   !! is edited alone, the CSS will lay out for one hero file while <picture>
+   !! serves the other — the 4x5 file dropped into a 9/16 frame, where cover
+   !! crops away most of the artwork, with the plate and logo anchored to the
+   !! wrong edges of it.
+
+   The max-width ceiling is what keeps this off desktop. Aspect ratio alone
+   also caught tall-but-wide desktop windows: a 1140px-wide window taller than
+   it is wide would take the 9/16 branch and render a 2027px hero. The 9/16
+   frame is only sane when the viewport is genuinely phone-width.
+
+   Here the frame's height comes from the 9/16 ratio rather than --hero-cap, so
+   the whole 9x16 artwork is shown uncropped at full viewport width. The frame
+   and image ratios match, which makes object-fit: cover a no-op.
+   -------------------------------------------------------------------------- */
+@media (max-aspect-ratio: 1/1) and (max-width: 900px) {
+
+  .hero__frame {
+    /* Frame is shorter than the 9:16 file on purpose. object-fit: cover
+       trims the excess, and object-position pins it to the top so the crop
+       comes off the bottom — the empty floor below the date plate. */
+    aspect-ratio: auto;
+    height: 75vh;
+    width: 100%;
+  }
+  .hero__art {
+    object-fit: cover;
+    object-position: 50% 0%;
+  }
+
+  .hero__plate {
+    background-image: url('../images/assassins/date-plate-desktop.png');
+    left: 5%;
+    top: auto;
+    bottom: 6%;
+    padding: 4.6cqw 4.5cqw 6.5cqw 5.5cqw;
+  }
+  .hero__plate-dates { font-size: 6.9cqw; }
+  .hero__plate-times { font-size: 4.0cqw; }
+  .hero__plate-venue { font-size: 5.8cqw; margin-top: 2.2cqw; }
+  .hero__plate-city  { font-size: 3.4cqw; margin-top: 0.7cqw; }
+
+  .hero__logo { top: 0%; left: 10%; width: 26%; }
+}
+
+/* --------------------------------------------------------------------------
+   Shared: content shell
+   One max-width + gutter box for every section below the hero. The hero is
+   deliberately NOT in here — it is full-bleed and sized by --hero-cap.
+   -------------------------------------------------------------------------- */
+.shell {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5vw, 4rem);
+}
+
+/* --------------------------------------------------------------------------
+   Shared: tape strips
+   Technique lifted from css/style.css (.video-frame .tape): a solid, UNclipped
+   rectangle, rotated, with a different length per corner so the four pieces
+   read as individually torn rather than four copies of one shape. White here
+   instead of the homepage's pink/black — this page is the show palette.
+   -------------------------------------------------------------------------- */
+.tape {
+  position: absolute;
+  height: 2.4rem;
+  background: #FFFFFF;
+  /* .video-frame__media follows these spans in the DOM and is also positioned;
+     without this it paints over them by plain source order and the tape stops
+     looking stuck down on top of the video. */
+  z-index: 2;
+}
+.tape--tl { top: -0.85rem;    left: -1.6rem;  width: 5.5rem;  transform: rotate(-40deg); }
+.tape--tr { top: -0.95rem;    right: -1.3rem; width: 4.9rem;  transform: rotate(35deg); }
+.tape--bl { bottom: -0.85rem; left: -1.5rem;  width: 5rem;    transform: rotate(40deg); }
+.tape--br { bottom: -1rem;    right: -1.1rem; width: 3.75rem; transform: rotate(-30deg); }
+
+/* --------------------------------------------------------------------------
+   1 — CONCEPT
+   -------------------------------------------------------------------------- */
+.concept {
+  /* A fixed nav bar arrives in a later session. --nav-clearance is reserved
+     space for it; the breathing room is added ON TOP of that reservation, not
+     carved out of it, so the headline can never end up underneath the bar.
+     Do not collapse these two values into one number. */
+  --nav-clearance: 10px;
+  padding-top: calc(var(--nav-clearance) + 3rem);
+  padding-bottom: clamp(3rem, 8vw, 6rem);
+  background: #232921;
+}
+
+/* Four children: headline, subhead, copy column, video column. The first two
+   span the full track set and sit above the two-column row. */
+.concept__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.72fr);
+  /* Column gap only. The headline and subhead are now grid ROWS of their own,
+     and a row-gap would stack on top of their existing margins — the vertical
+     rhythm in this section is margin-driven and stays that way. */
+  column-gap: clamp(2rem, 5vw, 4.5rem);
+  row-gap: 0;
+  align-items: start;
+}
+
+/* Full measure, above the copy/video row. Both stay INSIDE .concept__inner on
+   purpose — the section's padding and the .shell max-width live on that box,
+   and moving them out would take them out of the shell. */
+.concept__headline,
+.concept__subhead { grid-column: 1 / -1; }
+
+.concept__headline {
+  margin: 0;
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  font-size: clamp(3.04rem, 6.4vw, 4.96rem);
+  line-height: 1.08;
+  color: #FFDE00;
+}
+
+.concept__subhead {
+  font-family: 'Glacial Indifference', sans-serif;
+  margin: 1.1rem 0 0;
+  font-weight: 600;
+  font-size: clamp(3.25rem, 4.1vw, 3.55rem);
+  color: #FFFFFF;
+}
+
+.concept__para {
+  margin: 1.4rem 0 0;
+  max-width: 38em;
+  font-weight: 100;
+  font-size: clamp(1.5rem, 2.1vw, 1.6875rem);
+  line-height: 1.6;
+  color: #FFFFFF;
+}
+
+.concept__video {
+  /* 9:16 is tall — capped so the video balances the copy column instead of
+     setting the whole section's height. */
+  width: 100%;
+  max-width: 340px;
+  justify-self: center;
+}
+
+.video-frame {
+  position: relative;
+  transform: rotate(-1.9deg);
+}
+
+.video-frame__media {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  background: #000000;
+  margin-top: 15%;
+}
+
+.video-frame__media video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Custom play affordance. The <video> carries no `controls` attribute, so this
+   button plus a click on the frame are the entire interface — see
+   js/assassins.js. Ported from css/style.css's .video-frame__play; that file
+   is neither linked from this page nor edited. Sizes and colours are the
+   homepage's, unchanged: the point is that the two players read as one
+   control, so do not "scale this to the frame" — a 9:16 frame is taller, not
+   a reason for a bigger button. */
+.video-frame__play {
+  position: absolute;
+  /* inset + auto margins centre the button without a transform. That matters
+     here: .video-frame already carries rotate(-2.5deg), and a translate-based
+     centring would compose with it. */
+  inset: 0;
+  margin: auto;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.video-frame__play svg {
+  width: 1.6rem;
+  height: 1.6rem;
+  /* #FFFFFF, not var(--white) — this stylesheet declares no palette custom
+     properties and shares nothing with style.css. */
+  fill: #FFFFFF;
+  /* Nudges the triangle's optical centre onto the circle's real centre. */
+  margin-left: 4px;
+}
+
+.video-frame__play.is-hidden { display: none; }
+
+/* Stack: video falls below the copy, which is already its DOM order. */
+@media (max-width: 860px) {
+  .concept__inner { grid-template-columns: minmax(0, 1fr); }
+  .concept__video { max-width: 300px; justify-self: start; }
+
+  /* Single column, so the copy and the video are stacked rows rather than
+     neighbouring columns — and .concept__inner sets row-gap: 0. Without this
+     the video butts straight against the last paragraph and its top tape,
+     which overhangs the frame by -0.85rem, lands on top of that text.
+     The value deliberately repeats .concept__inner's column-gap expression:
+     this is the same separation the old `gap` shorthand used to provide here,
+     restored on the one edge that still needs it. */
+  .video-frame { transform: none; }
+  .concept__video { margin-top: clamp(2rem, 5vw, 4.5rem); margin-left: auto; margin-right: auto; }
+
+  /* Type down 5% for phones, where the desktop sizes wrap badly at ~375px.
+
+     Every term of each clamp is the desktop value multiplied by 0.95 and
+     rounded to three places — the technique .tickets__policy documents. ALL
+     THREE TERMS, not just the one that happens to be live at any given width:
+     scaling the whole curve is what keeps the three sizes in the same
+     relationship to each other, and keeps the widths where each clamp changes
+     hands where they were. So do not retune one line here on its own, and do
+     not rewrite these as fresh round numbers — multiply the rules above
+     through by a factor, the way these were derived.
+
+     At 375px it is the FIRST term of all three that renders: the vw terms stay
+     below their floors until roughly 760px. So on a small phone this reads
+     46.2 / 49.4 / 22.8px where it read 48.6 / 52 / 24. */
+  .concept__headline { font-size: clamp(2.888rem, 6.08vw, 4.712rem); }
+  .concept__subhead  { font-size: clamp(3.088rem, 3.895vw, 3.373rem); }
+  .concept__para     { font-size: clamp(1.425rem, 1.995vw, 1.603rem); }
+}
+
+/* --------------------------------------------------------------------------
+   6 — TICKETS
+   Numbered 6 because 1–5 are taken; positionally it falls between 1 and 2.
+
+   Section shell only, with ONE exception, noted at the bottom of this block.
+   Nothing here targets .tt-widget, .tt-widget-inline, .tt-widget-powered, or
+   the iframe Ticket Tailor swaps in, and nothing new should. The widget
+   arrives with its own stylesheet — widget.js appends widget.css to <head> at
+   runtime, after this file, so it wins equal-specificity ties anyway — and
+   the calendar itself lives in a cross-origin iframe no CSS here can reach.
+
+   Their stylesheet does the sizing: the iframe is width 100%, min 280px,
+   capped at 950px for an all-tickets-calendar URL, and centred by
+   text-align: center on the wrapper. So .tickets must stay a plain block —
+   no width, no max-width, no flex, no grid. A flex or grid parent in
+   particular would take the centring away from text-align and drop the
+   widget hard left.
+
+   .shell contributes the page gutter and nothing else. Above roughly 1050px
+   of viewport the shell's content box is wider than the widget's 950px cap,
+   so the widget sits inset from the copy below it. That inset is Ticket
+   Tailor's; closing it would mean overriding their CSS.
+   -------------------------------------------------------------------------- */
+.tickets {
+  padding-block: clamp(1.5rem, 4vw, 3rem);
+  background: #232921;
+  color: #FFFFFF;
+}
+
+.tt-widget {
+  background: #FFFFFF;
+  border-radius: 10px;
+}
+
+.tickets__heading {
+  margin: 0 0 clamp(1.5rem, 4vw, 2.5rem);
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  font-size: clamp(3.24rem, 6.48vw, 4.95rem);
+  line-height: 1.1;
+  color: #FFDE00;
+}
+
+/* Subordinate copy, not a lead paragraph: 0.85x .visit__content, which is the
+   page's running-text scale. The three terms are that clamp's three terms
+   multiplied through, rounded to three places. Deliberately smaller than
+   .concept__para — a refund policy should not out-shout the section copy.
+
+   The colour is .team__role's technique (white at reduced alpha rather than a
+   new palette entry) at a different alpha. 0.8 here, 0.7 there, both on
+   purpose — do not "reconcile" them. */
+.tickets__policy {
+  margin: clamp(2rem, 5vw, 3rem) 0 0;
+  max-width: 38em;
+  font-size: clamp(1.084rem, 1.517vw, 1.219rem);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* No 860px block for this section: it is a single column at every width, and
+   the clamps above already do the resizing. */
+
+/* THE ONE EXCEPTION to the hands-off rule at the top of this block — and it is
+   not a restyle of the widget. .tt-widget-fallback is Ticket Tailor's own no-JS
+   fallback, which their stylesheet sets to display:none. It is visible only
+   when their script is blocked, and then widget.css is blocked along with it,
+   so there is no Ticket Tailor styling here to override. Without this rule the
+   one remaining buy-tickets link renders UA-default blue on #232921, because
+   this file declares no global `a` colour and styles links per section instead.
+   It cannot collide with widget.css: whenever that file loads, this element is
+   display:none. */
+.tt-widget-fallback a { color: #FFDE00; }
+
+/* --------------------------------------------------------------------------
+   2 — PRODUCTION TEAM
+   -------------------------------------------------------------------------- */
+.team {
+  padding-block: clamp(1.5rem, 4vw, 3rem);
+  background: #232921;
+}
+
+.team__heading {
+  margin: 0 0 clamp(1.5rem, 4vw, 2.5rem);
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  font-size: clamp(3.24rem, 6.48vw, 4.95rem);
+  line-height: 1.1;
+  color: #FFDE00;
+}
+
+.team__grid {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* No column-gap on purpose: the row rules below are per-cell borders, and a
+     gap would break each one into two floating dashes instead of a single
+     rule running the width of the row. Cells are separated by their own
+     padding instead. */
+  column-gap: 0;
+}
+
+.team__member {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.9rem, 2vw, 1.4rem);
+  padding: 1.15rem 2rem 1.15rem 0;
+  /* Hairline between rows — white at low alpha, not a new palette colour. */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+.team__member:nth-child(even) { padding-right: 0; padding-left: 2rem; }
+
+/* Last ROW carries no rule. Ten credits in two columns = five full rows, so
+   "last row" is the final two items. If the credit list ever changes length,
+   re-check this selector — an odd count leaves a stray rule under the orphan. */
+.team__member:nth-last-child(-n + 2) { border-bottom: none; }
+
+.team__photo {
+  flex: 0 0 auto;
+  width: clamp(64px, 8vw, 88px);
+  height: clamp(64px, 8vw, 88px);
+  /* Files are square, so this crops nothing — it is purely the circular mask. */
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.team__name {
+  margin: 0;
+  font-weight: 400;
+  /* ---------------------------------------------------------------------
+     CONTRACTUAL BILLING REQUIREMENT — NOT A DESIGN CHOICE.
+     No name in this grid may render larger than 26.85px. The min() is what
+     enforces it: the rem term lets the name scale with a reader's font-size
+     preference, and the absolute px term is a hard ceiling that a large root
+     font-size cannot push through. A bare rem value would breach the cap for
+     any reader browsing at a default larger than 16px.
+     Do not raise 26px, and do not swap min() for a plain font-size.
+     (html { -webkit-text-size-adjust: 100% } in Base blocks the other route
+     past this — iOS text inflation.)
+     --------------------------------------------------------------------- */
+  font-size: min(1.32rem, 22.88px);
+  line-height: 1.2;
+  color: #FFFFFF;
+}
+
+.team__role {
+  margin: 0.2rem 0 0;
+  font-weight: 400;
+  font-size: clamp(0.9rem, 1.2vw, 1rem);
+  line-height: 1.3;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+@media (max-width: 860px) {
+  .team__grid { grid-template-columns: minmax(0, 1fr); }
+  .team__member,
+  .team__member:nth-child(even) { padding-inline: 0; }
+  /* Single column: every item but the true last one gets a rule. */
+  .team__member:nth-last-child(-n + 2) { border-bottom: 1px solid rgba(255, 255, 255, 0.2); }
+  .team__member:last-child { border-bottom: none; }
+}
+
+/* --------------------------------------------------------------------------
+   3 — PLAN YOUR VISIT
+   The one section that inverts: #FFDE00 field, #232921 type. Full-bleed by
+   virtue of being a block-level section — the .shell inside holds the measure.
+   -------------------------------------------------------------------------- */
+.visit {
+  padding-block: clamp(3rem, 8vw, 6rem);
+  background: #FFDE00;
+  color: #232921;
+}
+
+.visit__heading {
+  margin: 0 0 clamp(1.5rem, 4vw, 2.5rem);
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  font-size: clamp(3.24rem, 6.48vw, 4.95rem);
+  line-height: 1.1;
+  color: #232921;
+}
+
+.visit__rows { margin: 0; }
+
+.visit__row {
+  display: grid;
+  grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
+  gap: clamp(0.35rem, 2vw, 2rem);
+  padding-block: clamp(0.85rem, 2vw, 1.2rem);
+}
+
+.visit__label {
+  margin: 0;
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  font-size: 1.55rem;
+  letter-spacing: -0.04em;
+  line-height: 1.3;
+  /* Set in title case in the markup and uppercased here, so screen readers
+     get a normal word rather than a run of capitals. */
+  text-transform: uppercase;
+}
+
+.visit__content {
+  margin: 0;
+  max-width: 32em;
+  font-size: clamp(1.275rem, 1.785vw, 1.434375rem);
+  line-height: 1.55;
+}
+
+.visit__content a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+.visit__content a:hover,
+.visit__content a:focus-visible { text-decoration-thickness: 2px; }
+
+/* Labels stack above their content. */
+@media (max-width: 860px) {
+  .visit__row { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* --------------------------------------------------------------------------
+   5 — CREDITS / BILLING
+
+   ####################################################################
+   #  LEGAL COMPLIANCE ARTIFACT — NOT A DESIGN SURFACE.               #
+   #                                                                  #
+   #  no box, border, rule, outline, or background panel may surround #
+   #  the billing. The license explicitly prohibits a billing box.    #
+   #                                                                  #
+   #  Do not add one. Do not let a future refactor introduce one —    #
+   #  that includes "tidying" this block by giving it a card, a       #
+   #  panel, a divider above it, or a contrasting background to       #
+   #  "separate it from the footer."                                  #
+   ####################################################################
+
+   The seven mandated lines are four sizes, all expressed as ratios of the
+   53.7px title and ALL derived from --credit-scale. Never hard-code a size
+   here and never adjust one line on its own: change --credit-scale and all
+   seven move together, which is the only permitted way to resize this block.
+
+     title          100%   53.7px
+     author          50%   26.85px
+     note            35%   18.795px  (the brief rounds this to 18.8)
+     orchestration   25%   13.425px  (the brief rounds this to 13.43)
+
+   px on purpose — never rem, clamp, or viewport units. rem would let a
+   reader's root font-size rescale the block, and clamp/vw would let the
+   viewport do it; either can break the mandated ratios against each other.
+   -------------------------------------------------------------------------- */
+.credits {
+  --credit-scale: 53.7px;
+  padding-block: clamp(3rem, 8vw, 6rem);
+  /* The page field colour, matching .concept and .team. This is the section
+     background, NOT a panel behind the billing — see the banner above. */
+  background: #232921;
+  color: #FFFFFF;
+}
+
+.credits__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.55fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+}
+
+.credits__art img { width: 100%; height: auto; margin-top: 10px; }
+
+/* Carries no background, border, outline, box-shadow or padding-with-fill,
+   and must never be given any. See the banner at the top of this section. */
+.credits__billing { max-width: 34em; }
+
+.credits__title {
+  margin: 0;
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  font-size: var(--credit-scale);
+  line-height: 1.15;
+  letter-spacing: -0.06em;
+}
+
+.credits__author {
+  margin: 0;
+  font-weight: 400;
+  font-size: calc(var(--credit-scale) * 0.5);
+  line-height: 1.25;
+}
+
+.credits__note {
+  margin: 0;
+  font-size: calc(var(--credit-scale) * 0.35);
+  line-height: 1.35;
+}
+
+/* Blank line between mandated groups. em, so the gaps rescale with the type
+   they belong to rather than drifting when --credit-scale changes. */
+.credits__note--group { margin-top: 1.2em; }
+
+.credits__orchestration {
+  margin: 2.2em 0 0;
+  font-size: calc(var(--credit-scale) * 0.25);
+  line-height: 1.35;
+}
+
+.credits__mti {
+  margin: 3.4em 0 0;
+  font-size: calc(var(--credit-scale) * 0.25);
+  line-height: 1.5;
+}
+
+.credits__mti a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+@media (max-width: 860px) {
+  /* The ONLY sanctioned resize: one number, all seven lines scale by the same
+     factor, ratios preserved exactly. Do not add per-line overrides here. */
+  .credits { --credit-scale: 40px; }
+  .credits__inner { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* --------------------------------------------------------------------------
+   4 — FOOTER
+
+   The page's one deliberate break from the show palette: company black plus
+   #F11AC5. Rebuilt to match css/style.css's .footer* block, which is neither
+   linked from this page nor edited.
+
+   THREE THINGS DIFFER FROM THE HOMEPAGE ON PURPOSE:
+
+   1. .footer__tape is standalone. The homepage composes the treatment as
+      class="tape footer__tape". On THIS page .tape is the white corner-tape
+      for the concept video — position: absolute — so borrowing that
+      composition would rip the footer apart. Every property the tape
+      treatment needs is declared on .footer__tape directly.
+
+   2. The <footer> is full-bleed and paints its own black; the 76.5vw measure
+      moved inward to .footer__inner. On the homepage the footer element
+      itself carries max-width: 76.5vw and inherits black from body. Here body
+      is #232921, so that same structure would leave green bars down both
+      sides of the footer.
+
+   3. It has real top padding. The homepage footer deliberately has none — it
+      hangs flush off the Play Reading Club section so the pull-cord reads as
+      attached to it. There is no lights-out beat on this page; the footer
+      follows the yellow Plan Your Visit block, and black butted straight
+      against yellow reads as a rendering fault rather than a section change.
+
+   The 900px breakpoint below is the homepage's own, kept rather than matched
+   to this page's 860px: a 3-column grid has to break earlier than the 2-column
+   sections above it.
+   -------------------------------------------------------------------------- */
+.footer {
+  background: #000000;
+  color: #FFFFFF;
+  /* style.css sets line-height: 1.5 on body and the footer inherits it there.
+     This page's body doesn't, so it is set here to keep the spacing identical. */
+  line-height: 1.5;
+  padding-top: clamp(3rem, 7vw, 5rem);
+  padding-bottom: clamp(2rem, 5vh, 3rem);
+}
+
+.footer__inner {
+  max-width: 76.5vw;
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: start;
+  gap: 2rem 4rem;
+}
+
+.footer__lockup {
+  width: min(60vw, 16rem);
+  height: auto;
+  margin: auto;
+}
+
+.footer__brand {
+  display: flex;
+  flex-direction: column;
+  /* Opts out of the flex default (stretch), which would otherwise stretch the
+     tape span to the full column width instead of hugging its own text. */
+  align-items: flex-start;
+}
+
+.footer__tape {
+  display: inline-block;
+  background-image: url('../images/tape-for-potent-theater.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  /* Matches the PNG's own 500x178 proportions so background-size: 100% 100%
+     stretches the box to the type without distorting the artwork. */
+  aspect-ratio: 447 / 177;
+  padding: 1.2rem 3.25rem;
+  transform: rotate(2deg);
+  text-align: center;
+  margin-top: 45px;
+}
+
+.footer__tape-text {
+  font-family: 'Inclusive Sans', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 1.9rem;
+  line-height: 1.15;
+  letter-spacing: 0.1em;
+  color: #000000;
+}
+
+.footer__la {
+  margin: 0.5rem 0 0 1.2rem;
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 600;
+  font-size: 2.2rem;
+}
+
+/* Word-level treatment carried over from the homepage: "Angeles" drops and
+   kicks out from "Los" rather than sitting on the same baseline. */
+.footer__la .word--los {
+  display: inline-block;
+  transform: rotate(-1deg);
+}
+.footer__la .word--angeles {
+  display: inline-block;
+  transform: translateY(20px) rotate(8deg);
+}
+
+.footer__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  margin-top: 45px;
+}
+
+.footer__meta h3 {
+  margin: 0 0 0.5rem;
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  font-size: 2.1rem;
+}
+
+.footer__email {
+  font-size: 1.45rem;
+  color: inherit;
+}
+
+.footer__copyright {
+  /* Spans the wordmark + middle columns only (not all three), so it centers
+     under those two rather than under the whole row. */
+  grid-column: 1 / 3;
+  margin: 0;
+  text-align: center;
+  color: #9a9a9a;
+  font-size: 1.1rem;
+  transform: translateY(-10px) rotate(2.2deg);
+}
+
+.social-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.social-row a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  color: #FFFFFF;
+  transition: color 0.2s ease;
+}
+
+.social-row a:hover,
+.social-row a:focus-visible { color: #F11AC5; }
+
+.social-row svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+@media (max-width: 900px) {
+  .footer__inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  /* The desktop rule above spans 2 of 3 columns. With only one explicit column
+     here, that stray line-3 reference makes the browser fabricate an implicit
+     second column to satisfy it — and .footer__brand, not the copyright, is
+     the sibling that lands in it and gets pushed off-viewport. Resetting to
+     auto puts everything back in the single real column. */
+  .footer__copyright { grid-column: auto; }
+
+  .footer__brand,
+  .footer__meta { align-items: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .social-row a { transition: none; }
+}
+
+/* --------------------------------------------------------------------------
+   PERSISTENT CHROME — sticky nav + sticky ticket CTA
+
+   Two fixed elements that behave as ONE unit: same hidden state, same reveal
+   class, one IntersectionObserver on .hero driving both (js/assassins.js).
+   They share this block for the same reason they share a trigger — nothing
+   about the arrival should be tunable on one of them alone.
+
+   STACKING. Both sit at --chrome-z: 100. That clears everything this
+   stylesheet paints (the only other z-index on this page is .tape, at 2) and
+   stays far below the 999999 that Ticket Tailor's checkout overlay uses, so
+   the overlay covers this chrome instead of fighting it. Do not raise this
+   into six figures.
+   -------------------------------------------------------------------------- */
+
+:root {
+  /* ------------------------------------------------------------------------
+     The chrome's two measurements, hoisted to the root because things OTHER
+     than the chrome reserve space against them: html's scroll-padding just
+     below, body's bottom padding in the 860px block, and .concept's
+     --nav-clearance — that last one is a separate, deliberately hand-tuned
+     number, so re-check it by hand if --nav-h ever changes.
+     ------------------------------------------------------------------------ */
+
+  /* The nav bar's rendered height, and the whole of it: .site-nav carries no
+     padding and no border, so this value IS what the bar measures. */
+  --nav-h: 64px;
+
+  /* The ticket CTA's rendered height as a bottom bar (max-width: 860px),
+     EXCLUDING the safe-area inset — every consumer adds env() itself, so the
+     bar's own padding and the space reserved for it grow together on a
+     notched device instead of one of them forgetting.
+
+     Composed, not measured: the bar's vertical padding twice, plus the action
+     button's height (its own padding twice, plus a 1rem line box — that
+     button sets line-height: 1 and is the tallest thing in the row). Comes to
+     3.6rem / 57.6px. If you re-pad .ticket-cta or .ticket-cta__action, change
+     the numbers HERE and both ends stay in agreement. */
+  --cta-bar-pad: 0.7rem;
+  --cta-action-pad: 0.6rem;
+  --cta-bar-h: calc((var(--cta-bar-pad) + var(--cta-action-pad)) * 2 + 1rem);
+}
+
+/* The nav is fixed, so an in-page jump — #tickets, from the CTA below — would
+   otherwise land the target's top edge underneath it. Derived from --nav-h and
+   never a literal: a hardcoded number here would go quietly wrong the day the
+   bar's height changes. The extra 1rem is breathing room, the same idea as the
+   "+ 3rem" .concept adds on top of its --nav-clearance. */
+html { scroll-padding-top: calc(var(--nav-h) + 1rem); }
+
+/* The reveal's trigger point, and nothing else. It is the last child of .hero,
+   so its own top edge IS the hero's bottom edge, and js/assassins.js observes
+   it instead of the hero.
+
+   WHY NOT OBSERVE .hero DIRECTLY: a full-height target's intersection with the
+   viewport depends on whether the hero is TALLER than the viewport, and it is
+   not at every breakpoint — on phones the hero is 75vh, shorter than the
+   screen; on desktop it is about 1.05x the window's width, taller. A trigger
+   built on the hero's own box therefore behaves differently at each end. A
+   zero-height target has no such dependency: there is one edge, and it has
+   either passed the trigger line or it has not, at every viewport height.
+
+   MUST NOT AFFECT LAYOUT. .hero takes its height from .hero__frame; this adds
+   a zero-height block box after it and nothing more. Do not give it content,
+   padding, margin, a border, or a height. */
+.chrome-sentinel {
+  display: block;
+  height: 0;
+  margin: 0;
+}
+
+.site-nav,
+.ticket-cta {
+  --chrome-z: 100;
+  position: fixed;
+  z-index: var(--chrome-z);
+  /* Hidden state. visibility, not display: display:none cannot transition, and
+     the delayed visibility step is what keeps a hidden element out of the tab
+     order without cutting the fade short. */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0s linear 0.35s;
+}
+
+/* The one class js/assassins.js sets — on both elements, in the same call. */
+.site-nav.is-visible,
+.ticket-cta.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.35s ease, visibility 0s linear 0s;
+}
+
+/* --- Sticky nav ---------------------------------------------------------- */
+
+.site-nav {
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #232921;
+  /* Elevation is the whole edge treatment. No border, no rule — a hairline
+     here would read as a table edge against the hero art. box-shadow paints
+     outside the border box, so it adds nothing to the height below. */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  /* Crops the bulb's cord at the top edge. The graphic overflows upward on
+     purpose — see .site-nav__bulb. */
+  overflow: hidden;
+}
+
+/* .shell supplies the max-width and gutters, so the bar's contents line up with
+   the page content below it. The height lives here and nowhere else: with no
+   padding and no border on .site-nav, --nav-h is the bar's rendered height. */
+.site-nav__inner {
+  display: flex;
+  align-items: center;
+  height: var(--nav-h);
+  gap: clamp(1.5rem, 4vw, 2.75rem);
+}
+
+/* A fixed-width, full-height slot in the flex row. The graphic inside is
+   absolutely positioned so it can overflow the bar without adding height. */
+.site-nav__bulb {
+  --bulb-w: 34px;
+  --bulb-drop: 6px;   /* pull chain's tip to the bar's bottom edge */
+  position: relative;
+  flex: 0 0 var(--bulb-w);
+  align-self: stretch;
+}
+
+/* images/bulb.png is 348x2208 — a long diagonal cord with the bulb and its pull
+   chain in the bottom 470px. Anchoring the graphic's BOTTOM inside the bar
+   lands the bulb in the bar and sends the cord up through the top edge, where
+   .site-nav's overflow:hidden cuts it. At 34px wide the whole graphic renders
+   216px tall: bulb glass from 25px to 52px above the bar's floor, then ~12px of
+   cord before the crop.
+
+   The file is white line art on transparency, so it is used as a MASK and
+   coloured, not tinted through filters. The @supports guard means a browser
+   without mask support gets nothing here rather than a solid yellow slab.
+   url() is relative to THIS FILE's location (/css/) — see the Fonts note at the
+   top of the stylesheet. */
+@supports ((mask-image: url('../images/bulb.png')) or (-webkit-mask-image: url('../images/bulb.png'))) {
+  .site-nav__bulb::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: var(--bulb-drop);
+    width: var(--bulb-w);
+    /* The PNG's own ratio. The mask must not distort. */
+    aspect-ratio: 348 / 2208;
+    background-color: #FFDE00;
+    -webkit-mask-image: url('../images/bulb.png');
+            mask-image: url('../images/bulb.png');
+    -webkit-mask-size: 100% 100%;
+            mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+  }
+}
+
+/* IBM Plex Mono is already loaded by the page head and used nowhere else in
+   this stylesheet. This bar is what it was loaded for. */
+.site-nav__link {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-weight: 200;
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #FFFFFF;
+  transition: color 0.2s ease;
+  padding-bottom: 10px;
+}
+
+.site-nav__link:hover,
+.site-nav__link:focus-visible { color: #FFDE00; }
+
+/* Current page. White at reduced alpha rather than a new palette entry — the
+   technique .team__role and .tickets__policy use, at a third alpha on purpose.
+   It stays a real link, so its hover is neutralised too: a hover response would
+   promise a destination it doesn't have. aria-current says out loud what the
+   grey says visually. */
+.site-nav__link--current,
+.site-nav__link--current:hover,
+.site-nav__link--current:focus-visible { color: rgba(255, 255, 255, 0.45); }
+
+/* --- Sticky ticket CTA ---------------------------------------------------
+   ONE element, two shapes: corner pill on desktop, full-width bottom bar on
+   phones. Not two elements toggled with display:none — the markup is identical
+   at both sizes and only the CSS changes, so there is one thing to keep in sync
+   with the #tickets section it points at, not two.
+
+   Desktop is the base and 860px is the override, matching this file's
+   desktop-first ordering and reusing the same 860px content breakpoint as
+   .concept, .team, .visit and .credits.
+   -------------------------------------------------------------------------- */
+
+.ticket-cta {
+  right: clamp(1rem, 2.5vw, 2rem);
+  bottom: clamp(1rem, 2.5vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 1.1rem 1.5rem 1.2rem;
+  background: #FFDE00;
+  color: #232921;
+  border-radius: 12px;
+  /* Hard offset, no blur: the stuck-on-the-page language the tape strips and
+     the tilts already speak, not a material-design float. */
+  box-shadow: 
+    6px 6px 0 rgba(0, 0, 0, 0.75),
+    12px 12px 0 rgba(0, 0, 0, 0.35);
+    );
+  text-decoration: none;
+  text-align: center;
+}
+
+.ticket-cta__meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.ticket-cta__action {
+  padding: var(--cta-action-pad) 1.15rem;
+  background: #232921;
+  color: #FFFFFF;
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  /* Part of the --cta-bar-h arithmetic at the top of this block. */
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@media (max-width: 860px) {
+  .ticket-cta {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1rem;
+    border-radius: 0;
+    padding: var(--cta-bar-pad) clamp(1.25rem, 5vw, 2rem);
+    /* Clears the iPhone home indicator; resolves to the plain value on
+       hardware that has none. body's reservation below adds the same inset. */
+    padding-bottom: calc(var(--cta-bar-pad) + env(safe-area-inset-bottom, 0px));
+    /* The nav's elevation, pointed the other way. */
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  /* One line, price first: "$40 · NOV 6–29". The desktop pill stacks the same
+     two spans in the other order — reordered, not duplicated. */
+  .ticket-cta__meta { flex-direction: row; align-items: baseline; gap: 0.45rem; }
+  .ticket-cta__price { order: -1; }
+  .ticket-cta__dates::before { content: "\00b7\00a0"; }
+
+  /* 1rem/1 is the line box --cta-bar-h assumes. Changing it changes the bar's
+     height, and therefore the reservation below. */
+  .ticket-cta__action { padding: var(--cta-action-pad) 1rem; font-size: 1rem; }
+
+  /* The bar is fixed and stays fixed all the way down — it is meant to be
+     reachable on the last screen, not to park above the footer. So the
+     document has to end early by exactly the bar's height, or the bar sits on
+     the footer's final line.
+
+     On body rather than .footer because the footer is not this block's to
+     touch — and body is the better place anyway: the strip this opens is the
+     last thing in the document, which is precisely where the fixed bar is once
+     you have scrolled to the bottom, so the bar covers its own reservation
+     instead of leaving a visible gap. (The strip paints the canvas colour,
+     #232921, under the black footer; it is never on screen uncovered.) */
+  body { padding-bottom: calc(var(--cta-bar-h) + env(safe-area-inset-bottom, 0px)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-nav,
+  .ticket-cta,
+  .site-nav.is-visible,
+  .ticket-cta.is-visible,
+  .site-nav__link { transition: none; }
+}
