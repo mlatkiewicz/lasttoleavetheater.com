@@ -74,6 +74,7 @@ img { display: block; max-width: 100%; }
   --hero-cap: 88vh;   /* hero height on landscape viewports; sets the sliver below */
   background: #232921;
   padding: 0;
+  overflow: hidden;
 }
 
 /* The frame is the hero's sizing box and the container-query context.
@@ -98,10 +99,11 @@ img { display: block; max-width: 100%; }
    media block at the bottom of this file. */
 .hero__frame {
   --hero-max: 1600px;
+  --frame-h: max(var(--hero-cap), calc(min(100vw, var(--hero-max)) * 1.05));
+  height: var(--frame-h);
   position: relative;
   width: 100%;
   max-width: var(--hero-max);
-  height: var(--hero-cap);
   margin-inline: auto;
   container-type: inline-size;
 }
@@ -113,7 +115,7 @@ img { display: block; max-width: 100%; }
   height: 100%;
   object-fit: cover;
   /* Crop window: 0% shows the top of the artwork, 100% shows the bottom. */
-  object-position: 50% 32%;
+  object-position: 50% 12%;
 }
 
 /* --------------------------------------------------------------------------
@@ -121,8 +123,8 @@ img { display: block; max-width: 100%; }
    -------------------------------------------------------------------------- */
 .hero__logo {
   position: absolute;
-  top: 2%;
-  left: 3.5%;
+  top: 0%;
+  left: 5.5%;
   width: 18%;
   display: block;
 }
@@ -143,41 +145,91 @@ img { display: block; max-width: 100%; }
 .hero__plate {
   position: absolute;
   left: 6%;
-  bottom: 8%;
-  padding: 1.9cqw 3cqw 2.2cqw 2.4cqw;
+  /* Anchor the plate to a point in the ARTWORK, not in the frame.
+  
+   The frame crops the image (object-fit: cover), so a plain percentage would
+   drift away from the chalkboard as the frame's shape changes. This formula
+   cancels the crop out.
+  
+   Three inputs, and each one has to stay in sync with something else:
+  
+     --img-h    The image's rendered height. Because cover scales the image
+                to the frame's width, this is always the frame's width times
+                the file's ratio. 100cqw is the frame's width (container-type
+                is on .hero__frame) and 1.25 is the 4:5 file's ratio (1350
+                divided by 1080). Change the hero file's aspect ratio and
+                this number changes with it.
+  
+     --crop-y   How much of the cropped-off excess comes off the TOP. This
+                MUST match the Y value in object-position on .hero__image
+                above. They are currently both 12%. Change one, change both.
+  
+     --anchor   The knob. Where in the artwork the plate's top edge sits, as
+                a fraction of the image's height. Higher moves it down.
+                This is the only value to touch when tuning placement.
+  
+   --frame-h comes from .hero__frame and inherits down, so this always
+   computes against the frame's real height at any viewport. Do not
+   substitute a hardcoded height here — the frame's height is a formula, and
+   a fixed number will be wrong at most sizes.
+  
+   The min() caps the result at 55% of the frame. On wide, short windows the
+   formula would otherwise push the plate past the section's bottom edge.
+   Below that ceiling the formula runs as designed; at extreme ratios the
+   ceiling takes over. */
+  --img-h: calc(100cqw * 1.25);
+  --crop-y: 0.12;
+  --anchor: 0.50;   /* fraction of image height where the plate's top sits */
+  
+  top: min(
+    calc(var(--anchor) * var(--img-h) - (var(--img-h) - var(--frame-h)) * var(--crop-y)),
+    55%
+  );
+  bottom: auto;
+  --plate-scale: 1.5;
+  padding: calc(1.9cqw * var(--plate-scale)) calc(3cqw * var(--plate-scale))
+           calc(2.2cqw * var(--plate-scale)) calc(2.4cqw * var(--plate-scale));
   background-image: url('../images/assassins/date-plate-desktop.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
   color: #FFDE00;
-  text-transform: uppercase;
 }
 
-.hero__plate p { margin: 0; }
+.hero__plate-dates,
+.hero__plate-times,
+.hero__plate-venue,
+.hero__plate-city { margin: 0; }
 
 .hero__plate-dates {
   font-family: 'Glacial Indifference', sans-serif;
+  font-size: calc(3cqw * var(--plate-scale));
+  letter-spacing: -0.04em;
   font-weight: 700;
-  font-size: 3cqw;
   line-height: 1;
+  text-transform: uppercase;
 }
 .hero__plate-times {
+  font-size: calc(1.6cqw * var(--plate-scale));
   font-weight: 600;
-  font-size: 1.5cqw;
   line-height: 1.2;
-  margin-top: 0.3cqw;
+  margin-top: calc(0.3cqw * var(--plate-scale));
 }
 .hero__plate-venue {
   font-family: 'Glacial Indifference', sans-serif;
+  font-size: calc(2.2cqw * var(--plate-scale));
+  letter-spacing: -0.04em;
   font-weight: 700;
-  font-size: 2cqw;
   line-height: 1.05;
-  margin-top: 1.4cqw;
+  margin-top: calc(1.4cqw * var(--plate-scale));
+  text-transform: uppercase;
 }
 .hero__plate-city {
+  font-size: calc(1.4cqw * var(--plate-scale));
   font-weight: 600;
-  font-size: 1.2cqw;
+  letter-spacing: -0.04em;
   line-height: 1.2;
-  margin-top: 0.2cqw;
+  margin-top: calc(0.2cqw * var(--plate-scale));
+  text-transform: uppercase;
 }
 
 /* --------------------------------------------------------------------------
@@ -208,23 +260,31 @@ img { display: block; max-width: 100%; }
 @media (max-aspect-ratio: 1/1) and (max-width: 900px) {
 
   .hero__frame {
-    aspect-ratio: 9 / 16;   /* matches hero-9x16 exactly — do not crop */
-    height: auto;
+    /* Frame is shorter than the 9:16 file on purpose. object-fit: cover
+       trims the excess, and object-position pins it to the top so the crop
+       comes off the bottom — the empty floor below the date plate. */
+    aspect-ratio: auto;
+    height: 75vh;
     width: 100%;
+  }
+  .hero__art {
+    object-fit: cover;
+    object-position: 50% 0%;
   }
 
   .hero__plate {
-    background-image: url('../images/assassins/date-plate-mobile.png');
+    background-image: url('../images/assassins/date-plate-desktop.png');
     left: 5%;
-    bottom: 8%;
-    padding: 2.6cqw 4.5cqw 3cqw 3.5cqw;
+    top: auto;
+    bottom: 6%;
+    padding: 4.6cqw 4.5cqw 6.5cqw 5.5cqw;
   }
-  .hero__plate-dates { font-size: 5.6cqw; }
-  .hero__plate-times { font-size: 2.7cqw; }
-  .hero__plate-venue { font-size: 3.5cqw; margin-top: 2.2cqw; }
-  .hero__plate-city  { font-size: 2.1cqw; }
+  .hero__plate-dates { font-size: 6.9cqw; }
+  .hero__plate-times { font-size: 4.0cqw; }
+  .hero__plate-venue { font-size: 5.8cqw; margin-top: 2.2cqw; }
+  .hero__plate-city  { font-size: 3.4cqw; margin-top: 0.7cqw; }
 
-  .hero__logo { top: 2.5%; left: 5%; width: 16%; }
+  .hero__logo { top: 0%; left: 10%; width: 26%; }
 }
 
 /* --------------------------------------------------------------------------
