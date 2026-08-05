@@ -371,7 +371,7 @@ img { display: block; max-width: 100%; }
      space for it; the breathing room is added ON TOP of that reservation, not
      carved out of it, so the headline can never end up underneath the bar.
      Do not collapse these two values into one number. */
-  --nav-clearance: 0px;
+  --nav-clearance: 10px;
   padding-top: calc(var(--nav-clearance) + 3rem);
   padding-bottom: clamp(3rem, 8vw, 6rem);
   background: #232921;
@@ -1242,7 +1242,7 @@ html { scroll-padding-top: calc(var(--nav-h) + 1rem); }
   box-shadow: 
     6px 6px 0 rgba(0, 0, 0, 0.75),
     12px 12px 0 rgba(0, 0, 0, 0.35);
-    )
+    );
   text-decoration: none;
   text-align: center;
 }
