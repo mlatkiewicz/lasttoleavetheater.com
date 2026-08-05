@@ -371,7 +371,7 @@ img { display: block; max-width: 100%; }
      space for it; the breathing room is added ON TOP of that reservation, not
      carved out of it, so the headline can never end up underneath the bar.
      Do not collapse these two values into one number. */
-  --nav-clearance: 80px;
+  --nav-clearance: 0px;
   padding-top: calc(var(--nav-clearance) + 3rem);
   padding-bottom: clamp(3rem, 8vw, 6rem);
   background: #232921;
@@ -501,7 +501,7 @@ img { display: block; max-width: 100%; }
      this is the same separation the old `gap` shorthand used to provide here,
      restored on the one edge that still needs it. */
   .video-frame { transform: none; }
-  .concept__video { margin-top: clamp(2rem, 5vw, 4.5rem); margin: auto; }
+  .concept__video { margin-top: clamp(2rem, 5vw, 4.5rem); margin-left: auto; margin-right: auto; }
 
   /* Type down 5% for phones, where the desktop sizes wrap badly at ~375px.
 
@@ -546,7 +546,7 @@ img { display: block; max-width: 100%; }
    Tailor's; closing it would mean overriding their CSS.
    -------------------------------------------------------------------------- */
 .tickets {
-  padding-block: clamp(3rem, 8vw, 6rem);
+  padding-block: clamp(1.5rem, 4vw, 3rem);
   background: #232921;
   color: #FFFFFF;
 }
@@ -599,7 +599,7 @@ img { display: block; max-width: 100%; }
    2 — PRODUCTION TEAM
    -------------------------------------------------------------------------- */
 .team {
-  padding-block: clamp(3rem, 8vw, 6rem);
+  padding-block: clamp(1.5rem, 4vw, 3rem);
   background: #232921;
 }
 
