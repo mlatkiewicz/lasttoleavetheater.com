@@ -959,22 +959,6 @@ h1, h2, h3, p, ul {
     font-size: clamp(3.25rem, calc(18.75vw - 8px), 7rem);
   }
 
-  /* Stacked here rather than at the 640px phone breakpoint the rest of the
-     page uses: between 640 and 768 the two-column grid is still nominally
-     valid but the text column has narrowed enough that "ASSASSINS" -- which
-     is scaling on vw at that point -- runs into the art column beside it.
-     Stacking before that zone is reached avoids a broken middle width. */
-  .assassins-feature__inner {
-    grid-template-columns: minmax(0, 1fr);
-    justify-items: center;
-    text-align: center;
-    gap: 2rem;
-  }
-
-  .assassins-feature__art {
-    width: 100%;
-    max-width: 20rem;
-  }
 }
 
 .lights-out {
@@ -1124,6 +1108,40 @@ h1, h2, h3, p, ul {
   .footer__brand,
   .footer__meta {
     align-items: center;
+  }
+
+  /* 4A stacks at 900, not at the 768 it was first written for and not at
+     the 640 the rest of the page uses. "ASSASSINS" is one unbreakable word,
+     so its min-content width is simply its rendered width -- there is no
+     wrap point to relieve pressure. Below ~804px viewport that width ran
+     past the right edge of the screen entirely, so the two-column layout
+     has to be gone before that width is reached, not merely narrowed. */
+  .assassins-feature__inner {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    text-align: center;
+    gap: 2rem;
+  }
+
+  .assassins-feature__art {
+    width: 100%;
+    max-width: 20rem;
+  }
+
+  /* The base rule's 4.5rem floor is what broke phones, and it broke more
+     than the heading: justify-items:center shrink-wraps this grid item, so
+     the item can be no narrower than the title's min-content. At 4.5rem
+     that was 392.5px against a 327px content box at 375px wide, which
+     dragged the whole text block past BOTH viewport edges and took the
+     centered tagline and dates out with it -- they were never independently
+     too wide. Sizing the title to fit is therefore the entire fix.
+     14.5vw is measured, not guessed: this face renders "ASSASSINS" at
+     ~5.45x its font-size, so 14.5vw keeps the word inside the content box
+     (which is viewport minus 2x --section-pad-x) across the whole stacked
+     range, with the tightest margin ~19px at 320px. The 8.25rem ceiling is
+     the base rule's, kept so nothing shrinks on the wide side of stacked. */
+  .assassins-feature__title {
+    font-size: clamp(2.75rem, 14.5vw, 8.25rem);
   }
 }
 
