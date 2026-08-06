@@ -1241,7 +1241,6 @@ html { scroll-padding-top: calc(var(--nav-h) + 1rem); }
   box-shadow: 
     6px 6px 0 rgba(0, 0, 0, 0.75),
     12px 12px 0 rgba(0, 0, 0, 0.35);
-    );
   text-decoration: none;
   text-align: center;
 }
