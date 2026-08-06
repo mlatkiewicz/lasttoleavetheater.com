@@ -13,6 +13,27 @@
 <body>
 
 <!-- ==========================================================
+     PERSISTENT NAV
+     Unlike the show page's, this bar is NOT revealed on scroll:
+     it is here on load and stays at every scroll position, so a
+     visitor arriving at the top from social has the link to the
+     show immediately. No sentinel, no observer, no hidden state.
+     Current page is Home, so ASSASSINS is the live link here --
+     the inverse of /assassins/.
+     ========================================================== -->
+<nav class="site-nav" id="siteNav" aria-label="Primary">
+  <div class="site-nav__inner">
+    <!-- Decorative. It carries no information the two links don't already
+         give; it lights when the wordmark's own bulb passes under the bar.
+         Drawn from images/bulb.png as a CSS mask so it can be coloured -- see
+         css/style.css. -->
+    <span class="site-nav__bulb" aria-hidden="true"></span>
+    <a class="site-nav__link site-nav__link--current" href="/" aria-current="page">Home</a>
+    <a class="site-nav__link" href="/assassins/">Assassins</a>
+  </div>
+</nav>
+
+<!-- ==========================================================
      Hero + Flag now ONE section, no animations: wordmark through
      both phrases load in immediately. Manifesto (next section) is
      sticky with a JS-measured negative margin exactly matching
@@ -28,6 +49,12 @@
       src="images/wordmark-lockup.png"
       alt="Last to Leave theater company"
     >
+    <!-- Zero-height trigger for the nav bulb, and deliberately HERE rather
+         than at the end of .hero: its top edge is the lockup's bottom edge,
+         so the bar's bulb lights exactly as the wordmark's own bulb passes
+         underneath it. Never move it toward #flagPhrases or the manifesto --
+         that is a different line entirely. See js/main.js. -->
+    <div class="chrome-sentinel" id="chromeSentinel" aria-hidden="true"></div>
     <div class="hero__tape">
       <span class="tape">
         <span class="hero__tape-text"><span class="word--potent">POTENT</span><br><span class="word--theater">THEATER</span></span>

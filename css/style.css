@@ -25,6 +25,7 @@
   --grey-dark: #3c3c3c;
   --grey-mid: #666666;
   --grey-hairline: #cccccc;
+  --nav-black: #242424;
 
   --font-display: 'Glacial Indifference', sans-serif;
   --font-body: 'Inclusive Sans', sans-serif;
@@ -241,10 +242,14 @@ h1, h2, h3, p, ul {
   left: 0;
   right: 0;
   z-index: 100;
-  background: #232921;
+  background: var(--nav-black);
   /* Elevation is the whole edge treatment — no border, no rule. box-shadow
      paints outside the border box, so it adds nothing to the height below. */
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  /* Crops the bulb's cord at the top edge. The graphic overflows upward on
+     purpose — see .site-nav__bulb. */
+  overflow: hidden;
+  border-bottom: 1px white;
 }
 
 /* The height lives here and nowhere else: with no padding and no border on
@@ -258,6 +263,49 @@ h1, h2, h3, p, ul {
   padding-inline: var(--section-pad-x);
 }
 
+/* A fixed-width, full-height slot in the flex row. The graphic inside is
+   absolutely positioned so it can overflow the bar without adding height. */
+.site-nav__bulb {
+  --bulb-w: 34px;
+  --bulb-drop: 6px;
+  position: relative;
+  flex: 0 0 var(--bulb-w);
+  align-self: stretch;
+}
+
+/* images/bulb.png is 348x2208 — white line art on transparency, a long
+   diagonal cord with the bulb in the bottom portion. Anchoring the graphic's
+   BOTTOM inside the bar lands the bulb in the bar and sends the cord up
+   through the top edge, where .site-nav's overflow:hidden cuts it. Used as a
+   MASK and coloured, not tinted through a filter. The @supports guard means a
+   browser without mask support gets nothing rather than a solid slab.
+   url() is relative to THIS FILE's location (/css/). */
+@supports ((mask-image: url('../images/bulb.png')) or (-webkit-mask-image: url('../images/bulb.png'))) {
+  .site-nav__bulb::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: var(--bulb-drop);
+    width: var(--bulb-w);
+    /* The PNG's own ratio. The mask must not distort. */
+    aspect-ratio: 348 / 2208;
+    background-color: rgba(255, 255, 255, 0.18);
+    /* A switch, not a fade. Short and linear on purpose. */
+    transition: background-color 120ms linear;
+    -webkit-mask-image: url('../images/bulb.png');
+            mask-image: url('../images/bulb.png');
+    -webkit-mask-size: 100% 100%;
+            mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+  }
+
+  /* The one class js/main.js sets, and it sets it on the nav, not the bulb. */
+  .site-nav.is-lit .site-nav__bulb::before {
+    background-color: var(--white);
+  }
+}
+
 .site-nav__link {
   font-family: var(--font-mono);
   font-weight: 200;
@@ -268,10 +316,11 @@ h1, h2, h3, p, ul {
   text-decoration: none;
   color: #FFFFFF;
   transition: color 0.2s ease;
+  padding-bottom: 0.5em;
 }
 
 .site-nav__link:hover,
-.site-nav__link:focus-visible { color: #FFDE00; }
+.site-nav__link:focus-visible { color: var(--pink); }
 
 /* Current page. It stays a real link, so its hover is neutralised too: a hover
    response would promise a destination it doesn't have. aria-current says out
@@ -279,6 +328,20 @@ h1, h2, h3, p, ul {
 .site-nav__link--current,
 .site-nav__link--current:hover,
 .site-nav__link--current:focus-visible { color: rgba(255, 255, 255, 0.45); }
+
+/* The bulb's trigger point, and nothing else. It sits directly after
+   .hero__lockup in the markup, so its own top edge IS the lockup's bottom
+   edge, and js/main.js observes it rather than the image.
+
+   MUST NOT AFFECT LAYOUT. .hero is a flex column with no gap, so a
+   zero-height child contributes exactly zero. Do not give it content,
+   padding, margin, a border, or a height. */
+.chrome-sentinel {
+  display: block;
+  height: 0;
+  margin: 0;
+  align-self: stretch;
+}
 
 /* ==========================================================================
    1 — Hero

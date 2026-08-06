@@ -318,3 +318,66 @@
     });
   }
 })();
+
+/* Nav bulb — the ONLY thing on this page that reveals on scroll.
+
+   The bar itself is visible on load and stays visible; nothing here touches
+   that. All this toggles is the bulb's colour, via one class on .site-nav.
+
+   The observed target is #chromeSentinel, a zero-height element sitting
+   immediately after .hero__lockup, so its top edge IS the lockup's bottom
+   edge. Observing the image itself would make the trigger depend on whether
+   the lockup is taller than the observation band, which changes with the
+   wordmark's clamped width; a zero-height target has one edge that has either
+   crossed the line or has not, at every viewport size.
+
+   No scroll listener: a scroll handler would run on every frame of every
+   scroll to answer a question the observer answers once, when the answer
+   changes. */
+(function () {
+  'use strict';
+
+  var nav = document.getElementById('siteNav');
+  var sentinel = document.getElementById('chromeSentinel');
+
+  if (!nav) { return; }
+
+  function setLit(on) {
+    nav.classList.toggle('is-lit', on);
+  }
+
+  /* The trigger line is the bar's own bottom edge, read from --nav-h rather
+     than hardcoded so the two cannot drift apart if the bar's height changes.
+     The fallback matches the stylesheet's current value. */
+  const navH = parseInt(
+    getComputedStyle(document.documentElement).getPropertyValue('--nav-h'),
+    10
+  ) || 64;
+
+  /* The CSS default is unlit, so every path that ends without an observer has
+     to end LIT — an unlit bulb forever reads as broken, a lit one reads as
+     intended. */
+  if (!sentinel || !('IntersectionObserver' in window)) {
+    setLit(true);
+    return;
+  }
+
+  new IntersectionObserver(function (entries) {
+    var entry = entries[0];
+    /* The sentinel is outside the observed band on BOTH sides of the scroll:
+       below the fold before you have scrolled, above the bar's bottom edge
+       after. Only the second means the wordmark has gone under the bar, so its
+       position is what tells the two apart — !isIntersecting on its own would
+       light the bulb at scroll 0. Set from the comparison every time rather
+       than only adding the class, so it switches off again on the way back
+       up. */
+    setLit(entry.boundingClientRect.top < navH);
+  }, {
+    threshold: 0,
+    /* Order is top right bottom left, so this moves the top edge only: the
+       observed band's top edge is pulled down to sit exactly on the bar's
+       bottom edge. Built from the same constant as the comparison above so the
+       two cannot drift apart. */
+    rootMargin: `-${navH}px 0px 0px 0px`
+  }).observe(sentinel);
+})();
