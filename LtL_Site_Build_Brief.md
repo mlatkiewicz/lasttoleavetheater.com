@@ -1,150 +1,220 @@
-# Last to Leave — Website Build Brief (v1, July 22 launch)
+# Last to Leave — Site Architecture & Conventions (v2 Aug 5 launch)
 
-**Purpose:** Hand-off spec for the Claude Code build. Everything here is decided. Build against this, don't re-litigate.
+**What this document is.** A reference for anyone — human or Claude Code — about to change lasttoleavetheater.com. It describes what exists, how it is wired, which parts are load-bearing, and what has already been tried and abandoned. It is not a build spec. Nothing here is a to-do list; where something is unfinished it says so explicitly.
 
-**Stack:** Static site, plain HTML/CSS/vanilla JS. No framework. Hosted on GitHub Pages. One page (long-scroll homepage). The Assassins page is Phase 2 (Aug 5) — not in this build.
+**Status.** Both pages are live. The homepage launched July 22, 2026; the *Assassins* show page and the homepage's Assassins feature launched August 5, 2026.
 
-**STATUS — updated July 22, post-launch.** The site described below is BUILT AND LIVE at lasttoleavetheater.com (GitHub Pages; repo `mlatkiewicz/lasttoleavetheater.com`, branch `main`, folder root). Sections 1–7 are now a record of what shipped, not a spec to build against. Where the built site diverged from the original spec, this doc has been corrected to match what's live — the section 4 aside placement is the one such correction.
-
-Still open: Aug 5 Phase 2 — 4A replaced by the Assassins feature, 4B promoted to its own standalone section, the Assassins page itself, Ticket Tailor. Plus the MTI credit verification flagged below.
-
-**The page's job:** Two beats. (1) Last to Leave is a new LA theater company with a strong POV. (2) A debut production is announced Aug 5 — follow / sign up to catch it. Every section serves one of these. The whole page is a *held breath* — it withholds the show on purpose. Cold and assured up top, warmer and more handmade descending.
+**This file is public.** It sits in a public repository and is served at the domain root. Keep licensing terms, ticketing configuration, pricing under negotiation, and anything else contractual or private out of it. Where a constraint here originates in a contract, it is stated as a constraint, not quoted.
 
 ---
 
-## Global / system
+## Stack and infrastructure
 
-**Palette (company brand — this page is all company, no show):**
-- Black `#000000` (dominant background / material)
-- White `#FFFFFF`
-- Hot pink `#F11AC5` — strategic only. Used at full frame ONCE (manifesto) and as the tape treatment behind "POTENT THEATER" (hero + footer, deliberate bookend). Never a general accent.
-- Dark grey `#3C3C3C` — Play Reading Club background (gives the "will turn out the lights" beat somewhere to land; steps the gradient toward the black footer).
-- Light grey `#CCCCCC` — hairlines/rules only.
+Static site. Plain HTML, CSS, and vanilla JavaScript. No framework, no build step, no package manager, no preprocessor. What is in the repo is what the browser receives.
 
-**Type (all free/self-hostable for web EXCEPT as noted):**
-- Wordmark: **Knewave** — logo only, supplied as PNG, never live type.
-- Titles/headings: **Glacial Indifference** (self-host).
-- Subheads/body: **Inclusive Sans** (Google Fonts).
-- Monospace asides ("this is a flag…", "will turn out the lights", "…or you find out late"): confirm which mono is in the Canva file and self-host/Google-host it. These asides are a recurring voice element — same treatment every time.
-- Handwritten callout ("so, obviously"): **Madelyn Rough** — Canva-licensed, likely CANNOT be a webfont. TEST FIRST. If it doesn't embed cleanly + legally, ship "so, obviously" as a transparent PNG exported from Canva. This is the only instance on the page, so it's a contained test.
+Hosted on GitHub Pages from `mlatkiewicz/lasttoleavetheater.com`, branch `main`, folder root. Custom domain `lasttoleavetheater.com` with the CNAME file committed by GitHub, HTTPS enforced, `www` redirecting.
 
-**Motion rules (from brand doc — keep minimal for v1):**
-- Text enters by fade or by scroll. Never twirls/bounces/zooms.
-- No audio anywhere on the page (browsers block autoplay sound; silence is on-brand).
-- Bulb intro: on load, bulb appears alone in the dark, holds ~1–2 beats, then wordmark + "Potent theater" tape + "Los Angeles" fade up. Must NOT block scrolling — a visitor can scroll immediately. Consider running the full intro once per session (not every load) so repeat visitors don't re-watch it.
-- Bulb persists top-corner as a small mark through the scroll (connective tissue).
+**`main` is live.** Every push publishes immediately. There is no staging environment. Work that spans more than one commit belongs on a branch — the show page was built on `assassins-page` and merged in one move at launch.
 
-**STRUCTURAL FLAGS (one line each — don't forget, they're cheap now, expensive later):**
-1. Build the **debut-teaser area as TWO separate blocks (4A teaser + 4B conversion)** that flow as one on July 22. On Aug 5: 4A is replaced by the Assassins feature; 4B survives and is promoted to its own standalone secondary-CTA section. See section 4 for the full split. Don't entangle either with the hero above or manifesto below.
-2. **Leave room for a fixed-position pinned ticket CTA** that doesn't exist yet. Page should be structured so a `position: fixed` overlay button can be added later without reflowing anything. (Clean vertical section blocks already handle this.)
+Local working copy: `~/Sites/lasttoleavetheater.com`.
 
-**Responsive:** Most launch-day traffic is mobile (off Instagram). Every section needs a phone layout. The hard cases are the marginal/rotated zine elements — they have no gutter to live in at ~380px, so on mobile they become inline interruptions between blocks, not margin-floats. Mobile layouts roughed in Canva; match them.
+### Off limits
 
-**Pre-build verification (do before/at start of build — high stakes, five minutes):**
-- IG/social handle spelling exact-matches the real accounts. This is the launch-day conversion target. (Screenshots have shown "@lasttoleavetheater".)
-- All four social icons (IG, FB, TikTok, YouTube) link to real, live accounts. If YouTube doesn't exist yet, drop the icon rather than link a dead one.
-- The single unified handle "@lasttoleavetheater" is correct on ALL linked platforms; if any differs, that platform needs its own handle.
-- Email domain (`info@lasttoleavetheater.com`) matches the site's actual domain. Decide: custom domain `lasttoleavetheater.com` on GitHub Pages, or `*.github.io`? Email should match whatever the site is.
-- Life Plan bio link points to the existing Hollywood Fringe page and opens in a new tab.
+- **`mlatkiewicz.github.io`** is a different repository — Matthew's personal site at mattlat.com. It is never touched under any circumstances.
+- **`mlatkiewicz/lasttoleave`** is the abandoned V1 repository. Inactive, pending archival. Nothing in it is current.
 
 ---
 
-## Sections, top to bottom
+## The two pages
 
-### 1 — Hero (full-viewport, black)
-- Bulb intro sequence (see motion rules).
-- Wordmark (Knewave PNG), slightly off-center — weight pulled left, space falling right. Subtle tilt. NOT dead-center.
-- "POTENT THEATER" in pink tape treatment (tape = strips of pink behind text, hand-stuck look, from deck cover).
-- "Los Angeles" plain white below.
-- Tagline is "Potent theater. Los Angeles." — nothing longer.
+```
+index.html              css/style.css       js/main.js        ← homepage
+assassins/index.html    css/assassins.css   js/assassins.js   ← show page
+```
 
-### 2 — Flag beat (full-viewport black, transitional)
-- Bulb holds position from hero as page scrolls; this beat appears tethered to it.
-- Monospace, two blocks: "This is a flag" (vertical/rotated) crossing "planted in the real" (horizontal). Collision must land in whitespace — both words fully legible. (Already resolved in Canva.)
-- Then bulb + text scroll up together into the manifesto.
-- Mobile: rotated "This is a flag" becomes a simple inline horizontal aside; don't preserve the rotation if it cramps.
+**The two pages share no CSS and no JavaScript.** This is deliberate and should hold. `css/assassins.css` opens by saying so, and it re-declares the `@font-face` rules verbatim rather than importing them. The show page's video player is a fresh port of the homepage's, not a shared module. The duplication is the cost of being able to change either page without auditing the other; it is cheaper than the coupling.
 
-### 3 — Manifesto (full-viewport, PINK — the one full-frame detonation)
-- "POTENT THEATER" huge, black on pink (echoes deck slide 3).
-- Four descriptive lines (NOT imperative — this is audience-facing, defines what potent theater is):
-  - AIMS FOR THE NERVOUS SYSTEM
-  - DESIGNS FOR DEEP ATTENTION
-  - BUILDS ENVIRONMENTS, NOT SETS
-  - PUSHES BEYOND ENTERTAINMENT
-- Launch video still, taped in at a tilt (video-as-photo-stuck-to-page, NOT full-bleed background). Play button overlay. Confirmed still reads "potency" without music/context. **HOLD CHECK: confirm no frame of this video reveals Assassins (title/classroom/Sondheim). If it does, it cannot be on the July 22 site.**
-- Header "POTENT THEATER" must stay visually tethered to the four verb-lines (they're predicates hanging off it as subject).
+**One consequence worth knowing.** In both stylesheets the `@font-face` `src` paths are relative — `url('../fonts/…')` resolves against the stylesheet's own location at `/css/`, not against the page. On the show page at `/assassins/` this looks wrong and is correct. Do not "fix" these to root-relative. Root-relative is only right for paths written in HTML.
 
-### 4 — Debut teaser + conversion — BUILD AS TWO SEPARATE BLOCKS (critical for Aug 5)
-On July 22 these two blocks flow together as one seamless beat (teaser → CTA), matching the screenshot. But build them as two distinct, self-contained blocks, because on Aug 5 they have DIFFERENT fates:
-- **Block 4A (the teaser) gets REPLACED** by the Assassins feature (key art, title, dates, link to the Assassins page).
-- **Block 4B (the conversion) SURVIVES and gets PROMOTED** to its own standalone section — the secondary CTA (after "Buy tickets to Assassins"), big and bold, essentially the same follow/sign-up material restyled as a section.
-
-Building them fused = the Aug 5 change means cutting the block in half (surgery). Building them separate = Aug 5 is a clean drop-in.
-
-**Block 4A — Teaser (replaceable):**
-- Pink tape, two lines: **"Our debut production will be announced Aug. 5"**
-
-**Block 4B — Conversion (promotable / survives):**
-- (Also contains the retiring "...or you find out late" aside from 4A — see 4A's note above. Remove it here on Aug 5; don't let it ride along into the promoted section.)
-- "so, obviously" (Madelyn Rough / PNG) as handoff aside.
-- "FOLLOW &" huge white.
-- Social icon row (IG, FB, TikTok, YouTube) + "@lasttoleavetheater" (pink).
-- "SIGN UP" huge white + "for our newsletter" + email field + SUBMIT button.
-- Ghost column of repeating "FOLLOW" / "SIGN UP" in dark grey behind the type (old-web/zine texture — real artifact, keep it).
-- SUBMIT button: pink or black/white with hard edges. NOT the grey default pill.
-- Closing muttered aside, monospace, floating alone low in the black — AFTER the sign-up block, as the last thing in 4B: **"...or you find out late"** — NO illustration, no emoji, no face. The line alone.
-  - PLACEMENT IS DELIBERATE, not a leftover from the teaser. The line lands after the ask, not before it: the aside undercuts the pitch rather than setting it up. Do not move it up into 4A.
-  - ITS AUG 5 FATE IS DELIBERATELY OPEN — the one open question in this doc. It may well survive. Post-announcement the line stops meaning "you missed the news" and starts meaning "you missed the run," which is a realer consequence and a more durable company posture than a one-time tease. Decided in August, not now.
-  - THEREFORE: build it as a discrete element with its own boundary at the bottom of 4B — not fused into the sign-up markup. Both fates have to stay cheap: deleting it, or carrying it along when 4B is promoted, should each be a one-line change.
-- Build this as a genuinely self-contained conversion unit so that on Aug 5 it can be lifted into its own section with minimal restyling (mainly: add whatever standalone heading it needs once it's no longer flowing out of the teaser).
-
-### 5 — Who we are (max-width column, black)
-- Heading: "**Last to Leave** is a new Los Angeles theater company founded by co-artistic directors Matthew Latkiewicz and Paul Luoma" ("Last to Leave" in pink).
-- Two headshots, taped in with pink tape at tilts.
-- Bios (from deck, tightened). Matthew's bio ENDS with the demoted Life Plan line: "Matthew's last LA show, *Life Plan*, premiered at the 2019 Hollywood Fringe Festival." — show title linked to the Fringe page, new tab. Factual, one line, no "read more →" brochure phrasing.
-- Paul's bio as in deck.
-
-### 6 — Play Reading Club (max-width, DARK GREY background)
-- Eyebrow: "You are invited to LtL's"
-- Header "PLAY READING CLUB" stacked big.
-- Body (locked copy):
-  - "Once a month, we get on a call with theater friends from across the country and read a play out loud, top to bottom. Low stakes way to read new plays, meet new folks."
-  - "The group picks what we read. Everyone who wants a part gets one."
-  - "Some of the plays we've read: *The Dumb Waiter*, *The Pillowman*, and *The Aliens*"
-  - "Add your name to the newsletter. We'll send the invite."
-- SIGN UP field + SUBMIT (same styling as section 4; this is the same list — one newsletter, two reasons to join).
-- This is the ONE newsletter form on the page (the duplicate footer form was removed). Keep it here.
-- Slightly more "normal website" than the rest — acceptable for v1. Optional later: one tilted/marginal element to pull it into the zine family. Not a blocker.
-
-### 7 — Lights-out beat + footer (black)
-- Bulb + wordmark come up together with monospace "will turn out the lights" (full line reads "Last to Leave will turn out the lights" — wordmark IS the subject). Bookends the flag beat from the top; same mono treatment.
-- "will turn out the lights" scrolls up (into the dark-grey reading-club section above, which gives it somewhere to go), footer lands.
-- Footer contents:
-  - Wordmark (consider showing once across the lights-beat + footer pair — two wordmarks in ~300px is a lot; drop one).
-  - "POTENT THEATER" pink tape + "Los Angeles" (deliberate bookend of hero — this pink repeat is authorized because the same phrase returns).
-  - CONTACT: info@lasttoleavetheater.com
-  - FOLLOW: social icon row.
-  - "© 2026 Last to Leave Theater Company, LLC"
-- NO: address, phone, sitemap, "site by" credit, second newsletter form, quick-links column. Restraint is on-brand.
+Inclusive Sans and IBM Plex Mono arrive from Google Fonts via a `<link>` in each page head. Glacial Indifference is self-hosted from `/fonts/`.
 
 ---
 
-## Explicitly NOT in this build
-- No Assassins content of any kind (show is unnamed until Aug 5).
-- No ticket-selling (Ticket Tailor) — that's the Aug 5 Assassins page.
-- No fundraising / donate (tabled).
-- No standalone Life Plan page (linking to Fringe instead).
-- No nav bar / jump-links (Phase 2).
-- MTI + Actors' Equity credit lines: these attach to the *show*. Since the show isn't named on this page, they're not triggered here — they belong on the Assassins page/teaser once live. **Verify against the actual MTI contract language before Aug 5** in case referencing "a debut production" at all triggers a credit requirement; likely not, but check the contract, don't guess.
+## Homepage architecture
+
+Single long scroll, black-dominant, company brand.
+
+| Section | Element |
+|---|---|
+| Hero + flag beat (one section) | `#hero` inside `#heroWrap` |
+| Manifesto | `#manifesto` |
+| 4A — Assassins feature | `#assassins-feature` |
+| 4B — Conversion (follow / sign up) | `#conversion` |
+| Who we are | `#who-we-are` |
+| Play Reading Club | `#reading-club` |
+| Lights-out beat + footer | `#lights-out`, `#footer` |
+
+The page's concept: it opens cold and assured and grows warmer and more handmade as it descends. Zine and bricolage design language, authored rather than templated.
+
+### Load-bearing mechanisms
+
+**The sticky manifesto reveal.** The hero and manifesto sit together inside `.hero-wrap`. `.manifesto` is `position: sticky; top: 30vh; z-index: 10`, with a negative `margin-top` written by `syncManifestoOverlap()` in `js/main.js` to exactly match the rendered height of `#flagPhrases`. The result is that the manifesto initially covers just the two flag phrases, then holds while the hero scrolls up underneath it, then releases.
+
+Three things make this work and will break it if changed carelessly:
+
+- The sticky `top` is a *positive* offset, not `0`. At `0` the manifesto's covering box would start at the top of the viewport with nothing above it to reveal. The 30vh band is where the reveal actually happens.
+- `.hero` sets `padding-bottom: 0` because the overlap math assumes the hero's rendered bottom edge coincides with `#flagPhrases`' own bottom edge. Top padding is safe; bottom padding is not.
+- `body` uses `overflow-x: clip`, not `hidden`. Per the CSS overflow spec, a non-visible `overflow-x` paired with a visible `overflow-y` forces `overflow-y` to compute as `auto`, which turns `body` into a scroll container and breaks `position: sticky` for every descendant. `clip` has no such side effect.
+
+**JavaScript that runs at every viewport width.** `syncManifestoVideoSize()` and `syncManifestoOverlap()` have no `matchMedia` guard — they run on phones too, writing inline styles that only CSS can undo. This is why the `@media (max-width: 640px)` block sets `.manifesto { margin-top: 0 !important; opacity: 1 !important }`. Those `!important` declarations are a deliberate JS override scoped to mobile, not cruft. Removing them re-breaks the phone layout.
+
+**Function inventory in `js/main.js`:** `syncManifestoOverlap`, `syncManifestoTitle`, `syncManifestoVideoSize`, `syncManifestoLayout`, `syncConversionGhostColumns`, plus `contentWidth` and `fitFontToWidth` as helpers and the manifesto video handlers. `syncDebutTeaserTape()` is dead — the element it measured was deleted when 4A was replaced — and is pending removal along with its comment.
+
+**The custom video player, on both pages.** The `<video>` ships without a `controls` attribute and muted in the markup. Pressing the button unmutes and plays; clicking the frame pauses. Two gestures, no volume, no scrub, no fullscreen. Unmuting happens inside the click handler, which counts as a user gesture, so nothing can make noise before a deliberate press. Both players behave identically on purpose.
+
+**Intentional effects that look like bugs.** The doubled and offset "PLAY READING CLUB" heading is authored. The `.hero__tape` tilt is offset against the tape artwork's own baked-in angle. Neither is a rendering fault.
 
 ---
 
-## Asset checklist (export from Canva before build)
-- [ ] Wordmark PNG(s) — white-on-transparent (and any tilt variants used)
-- [ ] Bulb graphic (PNG or SVG) — for intro + persistent mark
-- [ ] "so, obviously" — PNG *if* Madelyn Rough can't be webfont
-- [ ] Launch video file (confirmed hold-safe) + poster still
-- [ ] Two headshots
-- [ ] Pink tape graphic elements (or recreate in CSS)
-- [ ] Any marginal/aside elements that are set in non-web fonts → PNG
-- [ ] Social icons (IG, FB, TikTok, YouTube)
+## Show page architecture
+
+`/assassins/`. Show palette throughout, company black and pink only in the footer.
+
+| Section | Element |
+|---|---|
+| Persistent chrome (nav + ticket CTA) | `#siteNav`, `#ticketCta` |
+| Hero | `.hero`, ending in `#chromeSentinel` |
+| Concept | `#concept` |
+| Tickets | `#tickets` |
+| Production team | `#team` |
+| Plan your visit | `#visit` |
+| Credits | `#credits` |
+| Footer | `#footer` |
+
+### The persistent chrome
+
+The sticky nav and the sticky ticket CTA are **one system**: one `IntersectionObserver`, one class (`is-visible`), both elements toggled in the same call. They are adjacent in the markup so that moving one moves the other. Do not split this into an observer per element, and do not replace it with a scroll listener — a scroll handler runs every frame to answer a question the observer answers once, when the answer changes.
+
+**The observed target is not the hero.** It is `.chrome-sentinel`, a zero-height block sitting as the hero's last child, so its top edge *is* the hero's bottom edge. This is a correction, not a preference: a full-height target's intersection with the viewport depends on whether it is taller than the viewport, which is true on desktop and false on phones, so an observer on the hero itself showed the chrome at scroll position zero on mobile. A zero-height target has one edge that has either passed the trigger line or has not, at every viewport height.
+
+`.chrome-sentinel` must not affect layout. No content, padding, margin, border, or height.
+
+`TRIGGER_ABOVE_FOLD` is `450` — a fixed pixel distance, replacing an earlier percentage `rootMargin` that behaved differently at different viewport heights. The constant feeds both the comparison and the `rootMargin` string so the two cannot drift apart. It is currently one value for phone and desktop and may want splitting per breakpoint; the reveal fires while a few hundred pixels of hero are still on screen.
+
+**Hidden state uses `visibility`, not `display`.** `display: none` cannot transition, and the delayed `visibility` step is what keeps a hidden element out of the tab order without cutting the fade short.
+
+**Every code path that ends without an observer must end with the chrome shown.** Both elements are hidden in CSS, so a browser without `IntersectionObserver`, or a missing sentinel, must fall through to visible — never stranded invisible.
+
+**Chrome `z-index` is 100.** High enough to clear everything the stylesheet paints (the only other value on the page is `.tape` at 2), low enough that the ticketing checkout overlay covers it instead of fighting it. Do not raise this into six figures.
+
+### Measurements that other things depend on
+
+`--nav-h: 64px` and the composed `--cta-bar-h` live in `:root`, not on the components, because `html` and `body` are the elements reserving space against them and neither can read a custom property declared on `.site-nav`.
+
+- `html { scroll-padding-top: calc(var(--nav-h) + 1rem) }` — so in-page jumps don't land under the bar. Derived, never a literal.
+- `--cta-bar-h` is composed from the CTA's own padding variables rather than measured, so the bar and the space reserved for it grow together. It deliberately excludes the safe-area inset; every consumer adds `env()` itself.
+- `.concept`'s `--nav-clearance` is **hand-tuned and not derived**. If `--nav-h` ever changes, re-check that number by hand.
+
+### The nav bulb
+
+`images/bulb.png` is white line art on transparency, 348×2208 — a long diagonal cord with the bulb and pull chain in the bottom portion. It is used as a **CSS mask and coloured**, not tinted through filters, which is what lets it take the page's yellow. Anchoring the graphic's bottom inside the bar puts the bulb in the bar and sends the cord up through the top edge, where `.site-nav`'s `overflow: hidden` crops it. An `@supports` guard means a browser without mask support gets nothing rather than a solid yellow slab.
+
+### The credits block
+
+**This is a compliance artifact, not a design element.** Its type sizes all derive from a single custom property. Never adjust one line independently — change the variable and the whole block re-proportions correctly. Never let a refactor introduce a box, border, rule, or background panel around the billing. `.team__name` carries a `min()` ceiling for the same reason. Do not use a possessive construction anywhere on the site that places the company's name in front of the show's title.
+
+### Hero and responsive conditions
+
+`.hero` deliberately has no `min-height: 100vh`; on landscape it is `--hero-cap: 88vh` so the top edge of the next section stays visible at the bottom of the viewport.
+
+The portrait crop condition — `(max-aspect-ratio: 1/1) and (max-width: 900px)` — appears in both the CSS `@media` block and the `<picture>` `source` `media` attributes. **These two must stay character-identical.** If they diverge, the CSS and the image selection disagree about which crop is showing.
+
+The date plate tracks the chalkboard through the crop as viewport aspect ratio changes. The single knob is `--anchor`. `--crop-y` must always match the Y value in `object-position` — a stale comment about this cost a full debugging cycle once already.
+
+---
+
+## Conventions established across both builds
+
+**Comments carry the reasoning, not the description.** The stylesheets explain *why* a value is what it is, what it is derived from, and what breaks if it changes. A comment that only restates the code is noise; a comment that records a rejected alternative is worth its lines. This is why dead code with a confident comment is worse than dead code without one — the comment describes a thing that no longer exists and reads as current.
+
+**Derive, don't repeat.** Where two numbers must agree, one is computed from the other. Where that is impossible, the comment says the number is hand-tuned and must be re-checked by hand.
+
+**Desktop-first ordering in `assassins.css`,** with `860px` as the content breakpoint reused by `.concept`, `.team`, `.visit` and `.credits`, and `900px` for the hero's portrait condition.
+
+**Cascade order in `style.css`:** broader breakpoints before narrower ones in source order, so phone rules downstream can override tablet rules. The current source order runs `768px`, then `900px`, then `640px`. The 768 and 900 blocks touch disjoint selectors, so nothing currently misbehaves, but the ordering is not the pattern — anything new that lands in both 768 and 900 needs checking.
+
+**Naming.** Block and element classes throughout (`.site-nav__link`, `.hero__frame`), with `--modifier` for variants. IDs only where JavaScript needs a handle.
+
+**One element, two shapes.** The ticket CTA is a corner pill on desktop and a full-width bar on phones — the same markup with different CSS, not two elements toggled with `display: none`. There is one thing to keep in sync with the section it points at, not two.
+
+**Accessibility as a default, not a pass.** `aria-current` on the current nav link, `aria-hidden` on decorative marks, `.visually-hidden` (not `display: none`) for the show page's `<h1>`, `alt` text written as description rather than keyword, `prefers-reduced-motion` blocks in both stylesheets.
+
+---
+
+## Brand system as it applies to the site
+
+**Company / homepage palette.** Black `#000000` dominant, white `#FFFFFF`, hot pink `#F11AC5` used strategically — once at full frame in the manifesto, and as the tape treatment behind "POTENT THEATER" in the hero and footer as a deliberate bookend. Never a general accent. Dark grey `#3C3C3C` for the Play Reading Club field. Light grey `#CCCCCC` for hairlines.
+
+***Assassins* / show palette.** Dark grey-green `#232921`, yellow `#FFDE00`, white `#FFFFFF`. Nothing else. The show page footer is the single authorized exception, carrying company black and pink.
+
+The homepage's 4A section uses `#232921` against the page's black. This is a deliberate palette break marking show territory on a company page, and it is the only place the two systems meet on the homepage.
+
+**Type.** Knewave for the wordmark, always as a PNG, never live type. Glacial Indifference for titles and headings. Inclusive Sans for subheads and body. IBM Plex Mono for the recurring monospace asides and for the nav links. Madelyn Rough is Canva-licensed and ships as PNG where it cannot be legally embedded.
+
+**Motion.** Text enters by fade or by scroll. Never twirls, bounces, or zooms. No audio plays without a deliberate press.
+
+---
+
+## Tried and abandoned
+
+Recorded so they are not retried without new information.
+
+**Footer scroll pinning.** A pinned-and-revealing footer was attempted repeatedly on launch night across several full mechanism rewrites. Each rewrite traded one failure for another — a positioning approach produced drift in the last ~150px; the drift fix produced a static footer; the revert reintroduced the layout problem. Abandoned and reverted to a clean static footer. Still open as a project, but any new attempt should be a targeted fix with a specific hypothesis, not a fourth ground-up rewrite.
+
+**The homepage bulb intro animation.** The original spec called for the bulb to appear alone in the dark, hold, then fade the wordmark up. It was built, then removed. The hero and flag beat are now one section with no animation — everything loads in immediately. This is settled; the code and comments relating to it are pending removal.
+
+**Percentage `rootMargin` for the chrome reveal.** Collapsed the observation band in a way that depended on the hero being taller than the viewport, so the chrome appeared at scroll zero on phones. Replaced by a zero-height sentinel plus a fixed pixel trigger. Do not reintroduce a percentage here.
+
+**Observing the hero element directly** for the chrome reveal. Same root cause. See the sentinel note above.
+
+**A second newsletter form in the footer.** Removed. One form on the homepage, in Play Reading Club. One list, two reasons to be on it.
+
+***Life Plan* as its own homepage section.** Cut for muddying the page's two-beat narrative. It survives as a single factual line with a link at the end of Matthew's bio.
+
+**Multi-viewport preview tools** render each frame with a non-standard user agent, which the ticketing widget's bot protection reads as automated traffic and answers with a challenge page that takes the whole document with it. Nothing in the markup causes this and real visitors never see it. Do responsive sweeps on the show page in Safari's responsive design mode or in Arc, resizing manually.
+
+---
+
+## Known issues, open
+
+**Horizontal scroll on the homepage on phones.** Something is breaking the viewport frame and producing a small horizontal joggle. Undiagnosed. Note that `body { overflow-x: clip }` is already in place, so the source is likely an element sized against the viewport rather than simple content overflow.
+
+**Horizontal overflow on the homepage on resize.** Distinct from the above: `syncManifestoTitle` does not shrink the title when the window narrows, and the headshot tape spans contribute. Does not reproduce on a fresh load at a given width — only while resizing.
+
+**The sticky ticket CTA on phones** scrolls to the bottom and sits over the footer. Currently handled by reserving bottom padding on `body` equal to the bar's composed height. Parking it above the footer would need a second observer and a `fixed`/`absolute` swap — the same class of problem as footer pinning, and deliberately deferred.
+
+**The chrome reveal trigger** uses one value at every breakpoint. May want splitting.
+
+**Key art resolution.** The 4:5 hero is below what the layout wants and is capped at a 1600px frame to limit artifact amplification. On a retina display that frame renders into roughly 3200 device pixels, so a future export should target about 3200px wide. The file carries visible generation artifacts that upscaling sharpens rather than removes, which argues for a fresh high-resolution generation over an upscale. A wide 16:9 outpainted version is unfinished; the working technique was structural guide blocks painted into the extension areas at low temperature in a fresh session, and the failure mode was geometry — a plausible different room rather than an extension of this one. Staging the extension through an intermediate ratio is the untried next step.
+
+**Pending cleanup.** `syncDebutTeaserTape()` and its comment in `js/main.js`. `images/tape-for-debut-production.png` and `images/so-obviously.png`, both unreferenced but still tracked. This file and `reference/4b-design.png` are served from the domain root; note that the repository is public, so moving them out of the served tree changes discoverability, not access.
+
+---
+
+## Working method
+
+Established over both builds and worth keeping.
+
+**One change at a time**, verified in the browser before moving on. **Commit at every working step** — clean fallbacks are what make an aggressive change safe.
+
+**Diagnosis before editing.** Read-only diagnostic prompts run first; fix prompts only once the mechanism is actually understood. A hypothesis gets tested, not assumed. A wrong guess costs a full cycle.
+
+**Fresh Claude Code session at each section boundary,** opening with an orientation prompt: read this file, plus an explicit list of what is off limits for that session. Deployment and merge sessions are the exception — skip the orientation prompt, which primes the wrong behavior, and scope tightly with an explicit "no edits unless instructed."
+
+**`.claude/settings.local.json`** carries deny rules protecting whichever page is not being edited, and requires explicit approval for `git push`, `git reset`, and `git checkout`. Those rules get re-pointed at the start of each session depending on what is in scope.
+
+**Both pages are live.** Push deliberately, never in a batch.
+
+**Fine-tuning happens by hand** in the editor with the browser inspector — spacing, sizing, and type scale are faster that way than through prompts. Claude Code is for structural changes.
+
+**On mobile, simplify rather than fight.** Dropping a decorative element at phone width is preferable to preserving a complex desktop composition through three layers of override.
