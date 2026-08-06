@@ -31,6 +31,13 @@
   --font-mono: 'IBM Plex Mono', monospace;
 
   --section-pad-x: clamp(1.5rem, 6vw, 6rem);
+
+  /* The nav bar's rendered height, and the whole of it: .site-nav carries no
+     padding and no border, so this value IS what the bar measures. Lives here
+     rather than on .site-nav because html's scroll-padding-top below and
+     .hero's top padding both reserve space against it, and neither can read a
+     custom property declared on the bar itself. */
+  --nav-h: 64px;
 }
 
 /* Reset ------------------------------------------------------------------ */
@@ -43,6 +50,11 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  /* The nav is fixed, so an in-page jump would otherwise land the target's top
+     edge underneath it. Derived from --nav-h and never a literal: a hardcoded
+     number here would go quietly wrong the day the bar's height changes. The
+     extra 1rem is breathing room. */
+  scroll-padding-top: calc(var(--nav-h) + 1rem);
 }
 
 body {
@@ -212,6 +224,63 @@ h1, h2, h3, p, ul {
 }
 
 /* ==========================================================================
+   Persistent nav
+
+   Fixed and always visible — no reveal, no hidden state. A visitor landing at
+   the top from social needs the link to the show right away, so there is
+   nothing here to trigger.
+
+   STACKING. z-index 100 because .manifesto is z-index 10 and position:sticky,
+   so it paints over anything below 10 as it travels; 100 clears it with room
+   to spare and matches the show page's chrome value.
+   ========================================================================== */
+
+.site-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: #232921;
+  /* Elevation is the whole edge treatment — no border, no rule. box-shadow
+     paints outside the border box, so it adds nothing to the height below. */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* The height lives here and nowhere else: with no padding and no border on
+   .site-nav, --nav-h is the bar's rendered height. The gutters reuse
+   --section-pad-x so the bar's contents line up with the page below it. */
+.site-nav__inner {
+  display: flex;
+  align-items: center;
+  height: var(--nav-h);
+  gap: clamp(1.5rem, 4vw, 2.75rem);
+  padding-inline: var(--section-pad-x);
+}
+
+.site-nav__link {
+  font-family: var(--font-mono);
+  font-weight: 200;
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #FFFFFF;
+  transition: color 0.2s ease;
+}
+
+.site-nav__link:hover,
+.site-nav__link:focus-visible { color: #FFDE00; }
+
+/* Current page. It stays a real link, so its hover is neutralised too: a hover
+   response would promise a destination it doesn't have. aria-current says out
+   loud what the grey says visually. */
+.site-nav__link--current,
+.site-nav__link--current:hover,
+.site-nav__link--current:focus-visible { color: rgba(255, 255, 255, 0.45); }
+
+/* ==========================================================================
    1 — Hero
    ========================================================================== */
 
@@ -227,7 +296,9 @@ h1, h2, h3, p, ul {
   align-items: center;
   justify-content: flex-start;
   padding: var(--section-pad-x);
-  padding-top: 0;
+  /* Clears the fixed nav, which is out of flow and reserves no space of its
+     own. Derived from --nav-h, never a literal. */
+  padding-top: calc(var(--nav-h));
   /* No bottom padding: Manifesto's overlap math (js/main.js) assumes
      Hero's rendered bottom edge coincides exactly with #flagPhrases'
      own bottom edge. */
