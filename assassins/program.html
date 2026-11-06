@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Program — ASSASSINS — Last to Leave Theater Co.</title>
+<meta name="description" content="The program for Stephen Sondheim and John Weidman's ASSASSINS, presented by Last to Leave Theater Company. November 6–29, 2026 at The Other Space, West Hollywood.">
+<!-- Matches the page field so Safari's toolbar and the overscroll area stay
+     dark green instead of flashing white in a dark house. -->
+<meta name="theme-color" content="#232921">
+<meta name="format-detection" content="telephone=no">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lasttoleavetheater.com/assassins/program.html">
+<meta property="og:title" content="Program — ASSASSINS — Last to Leave Theater Co.">
+<meta property="og:description" content="The program for Stephen Sondheim and John Weidman's ASSASSINS, presented by Last to Leave Theater Company.">
+<meta property="og:image" content="https://lasttoleavetheater.com/images/assassins/og-card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/program.css">
+</head>
+<body>
+
+<!-- ==========================================================
+     THE PROGRAM — /assassins/program.html
+     Reached by QR code from the seats, read on a phone in the
+     minutes before curtain. Standalone: shares no CSS or JS with
+     the homepage or the show page (css/program.css only, no JS).
+     Nothing on the site links here; the QR code is the way in.
+     ========================================================== -->
+
+<header class="cover">
+  <img class="cover__art" src="/images/assassins/hero-4x5.webp" width="1080" height="1350"
+       fetchpriority="high"
+       alt="ASSASSINS, SONDHEIM / WEIDMAN, chalked on the blackboard of a wrecked classroom: desks overturned, papers scattered across the floor, an American flag slumped across a chair, a row of presidential portraits and a clock along the back wall.">
+  <!-- The wordmark taped over the portraits, as on the printed cover.
+       The tape is a CSS pseudo-element (see .cover__logo::before), so
+       this stays one link and one image. -->
+  <a class="cover__logo" href="/">
+    <img src="/images/assassins/ltl-logo-yellow.png" width="1080" height="950"
+         alt="Last to Leave Theater Company — home">
+  </a>
+</header>
+
+<main>
+
+<!-- ==========================================================
+     TITLE PAGE + BILLING
+     LEGAL COMPLIANCE ARTIFACT. The billing text is ported
+     verbatim from the show page's #credits block and sized from
+     one variable, --credit-scale (see css/program.css). Do not
+     reword, re-order, or resize any single line. No box, border,
+     rule, outline, or background panel may surround the billing.
+     ========================================================== -->
+<section class="title shell" aria-labelledby="showTitle">
+  <p class="title__presenter">Last to Leave Theater Company presents</p>
+
+  <div class="billing">
+    <h1 class="billing__title" id="showTitle">ASSASSINS</h1>
+    <p class="billing__author">Music and Lyrics by STEPHEN&nbsp;SONDHEIM</p>
+    <p class="billing__author">Book by JOHN&nbsp;WEIDMAN</p>
+
+    <p class="billing__note billing__note--group">ASSASSINS is based on an idea by Charles&nbsp;Gilbert,&nbsp;Jr.</p>
+
+    <!-- &nbsp; inside a name only stops it splitting across lines on a phone;
+         the words are unchanged. &#8211; is an EN dash, mandated. Not an em dash, not a hyphen. -->
+    <p class="billing__note billing__note--group">Playwrights Horizons, Inc. &#8211; New York City</p>
+    <p class="billing__note">Produced ASSASSINS Off-Broadway in 1990</p>
+
+    <p class="billing__orchestration">Orchestrations by Michael Starobin</p>
+
+    <p class="billing__mti">
+      ASSASSINS<br>
+      is presented through special arrangement with Music Theatre International (MTI).<br>
+      All authorized performance materials are also supplied by MTI.<br>
+      <a href="https://www.mtishows.com" target="_blank" rel="noopener noreferrer">www.mtishows.com</a>
+    </p>
+  </div>
+
+  <p class="title__run">
+    <span class="title__dates">November 6–29, 2026</span>
+    The Actors Company—The Other Space<br>
+    West Hollywood
+  </p>
+  <p class="title__equity">Equity Approved Showcase</p>
+</section>
+
+<!-- Jump links. Sit under the billing, then stick to the top of the
+     screen once scrolled past (CSS only, position: sticky). No Who's Who
+     link: every name in the Cast and Team lists links to its own bio,
+     and this bar is the way back up. -->
+<nav class="jump shell" aria-label="Program sections">
+  <a href="#cast">Cast</a>
+  <a href="#songs">Songs</a>
+  <a href="#team">Team</a>
+  <a href="#thanks">Thanks</a>
+  <a href="#support">Support</a>
+</nav>
+
+<!-- ==========================================================
+     THE PRODUCTION — approved public copy, verbatim.
+     ========================================================== -->
+<section class="section shell" id="limbo" aria-labelledby="limboHeading">
+  <h2 class="section__heading" id="limboHeading">Welcome to American limbo</h2>
+  <p class="kicker">A school fair on grievance in America</p>
+  <br  />
+  <div class="prose">
+    <p>In observance of the nation’s semiquincentennial, Last to Leave Theater Company presents Stephen Sondheim and John Weidman’s <cite>Assassins</cite> as a school fair trapped in American limbo. This fair is offered as an exercise in national rehabilitation.</p>
+    <p>To learn more about the fair and how this production of <em>Assassins</em> will be staged, <strong>please read the paper program handed to you when you entered</strong>.</p>
+  </div>
+</section>
+
+<section class="section shell" id="before" aria-labelledby="beforeHeading">
+  <h2 class="section__heading" id="beforeHeading">Before we begin</h2>
+  <dl class="facts">
+    <div class="facts__row">
+      <dt>Runtime</dt>
+      <dd>About 115 minutes, with no intermission.</dd>
+    </div>
+    <div class="facts__row">
+      <dt>Content advisory</dt>
+      <dd><cite>Assassins</cite> is a show about American despair and violence. Our production contains prop firearms, simulated gunfire, depictions of suicide, school shootings, and racist language spoken by historical figures. Performers work in close proximity to the audience throughout.</dd>
+    </div>
+    <div class="facts__row">
+      <dt>Firearms</dt>
+      <dd>All firearms in this production are replicas, checked and rendered inoperable by a weapons specialist.</dd>
+    </div>
+    <div class="facts__row">
+      <dt>Recording</dt>
+      <dd>The use of any recording device, either audio or video, and the taking of photographs, either with or without flash, is strictly prohibited.</dd>
+    </div>
+  </dl>
+</section>
+
+<!-- ==========================================================
+     FROM THE FOUNDERS — Paul's note, cut to its story.
+     The company's name stays out of headings here: no name may
+     outrank the authors' credit (see --name-max in the CSS).
+     ========================================================== -->
+<section class="section shell" id="founders" aria-labelledby="foundersHeading">
+  <h2 class="section__heading" id="foundersHeading">From the founders</h2>
+  <div class="prose">
+    <p>Welcome to Last to Leave's debut production. We're excited to share this space with you. </p> 
+    <p>Nearly nine years ago, we met while working on another Sondheim show, <i>Into the Woods</i>. For years after, we talked about the theater company we might build someday. Then we met a core group of artists who shared that vision, and we stopped talking about starting a theater company and started one.</p>
+    <p>We started Last to Leave in order to make what we call <a href="/index.html">potent theater.</a> As more and more AI generated 'content' floods our world and fills our frames, we believe theater's in-the-moment realness can and will become a sanctuary. A sanctuary for our attention, our humanity, our sense of collective experience. That is the bet we are making on this medium, in this city, at this moment.</p>
+    <p>Thank you to every artist, collaborator and supporter who took this first leap with us, and to you, for being in the room.</p>
+    <p>This is only the beginning.</p>
+  </div>
+  <p class="signature">Matthew Latkiewicz &amp; Paul Luoma<br><span>Co-Founders and Co-Artistic Directors</span></p>
+</section>
+
+<!-- ==========================================================
+     CAST
+     Role names are the script's (Balladeer, Proprietor). Names
+     link to their Who's Who entries below.
+     ========================================================== -->
+<section class="section shell" id="cast" aria-labelledby="castHeading">
+  <h2 class="section__heading" id="castHeading">Cast</h2>
+  <dl class="roster">
+    <div class="roster__row"><dt>John Wilkes Booth</dt><dd><a href="#elias-wygodny">Elias Wygodny</a></dd></div>
+    <div class="roster__row"><dt>Charles Guiteau</dt><dd><a href="#paul-luoma">Paul Luoma</a>*</dd></div>
+    <div class="roster__row"><dt>Leon Czolgosz</dt><dd><a href="#darian-calderon">Darian Calderon</a></dd></div>
+    <div class="roster__row"><dt>Giuseppe Zangara</dt><dd><a href="#michael-colon">Michael Colon</a></dd></div>
+    <div class="roster__row"><dt>Lee Harvey Oswald</dt><dd><a href="#zach-hoffman">Zach Hoffman</a></dd></div>
+    <div class="roster__row"><dt>Samuel Byck</dt><dd><a href="#matthew-latkiewicz">Matthew Latkiewicz</a></dd></div>
+    <div class="roster__row"><dt>Lynette “Squeaky” Fromme</dt><dd><a href="#mary-delan">Mary DeLan</a></dd></div>
+    <div class="roster__row"><dt>Sara Jane Moore</dt><dd><a href="#annalise-marie-staudt">Annalise Marie Staudt</a></dd></div>
+    <div class="roster__row"><dt>John Hinckley</dt><dd><a href="#andrew-gillespie">Andrew Gillespie</a></dd></div>
+    <div class="roster__row"><dt>The Balladeer</dt><dd><a href="#nick-case">Nick Case</a></dd></div>
+    <div class="roster__row"><dt>The Proprietor</dt><dd><a href="#nora-elkind">Nora Elkind</a></dd></div>
+    <div class="roster__row"><dt>Swings</dt><dd><a href="#rory-gill-smith">Rory Gill-Smith</a>, <a href="#max-vaupen">Max Vaupen</a></dd></div>
+  </dl>
+  <p class="note">The company also plays Emma Goldman, David Herold, President James Garfield, James G. Blaine, President Gerald Ford, Billy, and assorted reporters, photographers, tourists and bystanders.</p>
+  <!-- Equity footnote: directly under the cast, never inside the billing. -->
+  <p class="footnote">*These actors are appearing courtesy of Actors’ Equity Association. Actors’ Equity Association (AEA) is the labor union representing professional actors and stage managers in the United States.</p>
+</section>
+
+<section class="section shell" id="songs" aria-labelledby="songsHeading">
+  <h2 class="section__heading" id="songsHeading">Musical numbers</h2>
+  <ol class="songs">
+    <li><span class="songs__title">“Everybody’s Got the Right”</span> <span class="songs__by">The Proprietor and the Assassins</span></li>
+    <li><span class="songs__title">“The Ballad of Booth”</span> <span class="songs__by">The Balladeer and John Wilkes Booth</span></li>
+    <li><span class="songs__title">“How I Saved Roosevelt”</span> <span class="songs__by">Giuseppe Zangara and Company</span></li>
+    <li><span class="songs__title">“Gun Song”</span> <span class="songs__by">Leon Czolgosz, John Wilkes Booth, Charles Guiteau and Sara Jane Moore</span></li>
+    <li><span class="songs__title">“The Ballad of Czolgosz”</span> <span class="songs__by">The Balladeer and Company</span></li>
+    <li><span class="songs__title">“Unworthy of Your Love”</span> <span class="songs__by">John Hinckley and Lynette “Squeaky” Fromme</span></li>
+    <li><span class="songs__title">“The Ballad of Guiteau”</span> <span class="songs__by">Charles Guiteau and the Balladeer</span></li>
+    <li><span class="songs__title">“Another National Anthem”</span> <span class="songs__by">The Proprietor, the Balladeer and the Assassins</span></li>
+    <li><span class="songs__title">“November 22, 1963”</span> <span class="songs__by">John Wilkes Booth, Lee Harvey Oswald and the Assassins</span></li>
+    <li><span class="songs__title">“Something Just Broke”</span> <span class="songs__by">Company</span></li>
+    <li><span class="songs__title">“Everybody’s Got the Right” (Reprise)</span> <span class="songs__by">The Assassins</span></li>
+  </ol>
+
+  <h3 class="section__subheading">Music Director & Musician</h3>
+  <dl class="roster">
+    <div class="roster__row"><dd><a href="#joshua-bartley">Joshua Bartley</a></dd><dt>Piano / Mandolin / Banjo / SFX </dt></div>
+  </dl>
+</section>
+
+<!-- ==========================================================
+     PRODUCTION TEAM — the at-a-glance list. Each name links to its
+     bio in Who's Who, as the cast list does. MTI: creative-team bios in the program require
+     the authors' bios and MTI's too; they sit together there.
+     Never ship one without the other.
+     ========================================================== -->
+<section class="section shell" id="team" aria-labelledby="teamHeading">
+  <h2 class="section__heading" id="teamHeading">Production team</h2>
+  <dl class="roster">
+    <div class="roster__row"><dt>Director</dt><dd><a href="#matthew-latkiewicz">Matthew Latkiewicz</a></dd></div>
+    <div class="roster__row"><dt>Producer</dt><dd><a href="#paul-luoma">Paul Luoma</a></dd></div>
+    <div class="roster__row"><dt>Associate Director</dt><dd><a href="#elias-wygodny">Elias Wygodny</a></dd></div>
+    <div class="roster__row"><dt>Music Director</dt><dd><a href="#joshua-bartley">Joshua Bartley</a></dd></div>
+    <div class="roster__row"><dt>Choreographer / Movement</dt><dd><a href="#toni-white">Toni White</a></dd></div>
+    <div class="roster__row"><dt>Associate Producer / Costume Lead</dt><dd><a href="#nora-elkind">Nora Elkind</a></dd></div>
+    <div class="roster__row"><dt>Associate Producer</dt><dd><a href="#mary-delan">Mary DeLan</a></dd></div>
+    <div class="roster__row"><dt>Props &amp; Set Dressing</dt><dd><a href="#david-callander">David Callander</a></dd></div>
+    <div class="roster__row"><dt>House &amp; Stage Manager</dt><dd><a href="#drew-mcwilliams">Drew McWilliams</a></dd></div>
+    <div class="roster__row"><dt>Associate House &amp; Stage Manager</dt><dd><a href="#sarah-clingenpeel">Sarah Clingenpeel</a></dd></div>
+    <div class="roster__row"><dt>Social Media</dt><dd><a href="#matt-bates">Matt Bates</a></dd></div>
+    <div class="roster__row"><dt>Intern</dt><dd><a href="#hanna-maria-antson">Hanna Maria Antson</a></dd></div>
+  </dl>
+</section>
+
+<!-- ==========================================================
+     WHO'S WHO — cast, then authors, then production team, then
+     MTI: the order a Broadway program runs. One bio per person;
+     anyone in both the cast and the team keeps their cast bio,
+     with both roles on the role line.
+     Tilts are assigned by hand, one per photo, never generated:
+     the skew is composed, not random. Keep within ±3deg.
+     ========================================================== -->
+<section class="section shell" id="whos-who" aria-labelledby="whosWhoHeading">
+  <h2 class="section__heading" id="whosWhoHeading">Who’s who</h2>
+
+  <h3 class="section__subheading section__subheading--first">Cast</h3>
+  <div class="bios">
+
+    <article class="bio" id="elias-wygodny">
+      <div class="bio__head">
+        <img class="bio__photo" style="--tilt: -2.5deg" src="/images/assassins/cast/elias-wygodny.webp" width="360" height="360" loading="lazy" decoding="async" alt="">
+        <div>
+          <h4 class="bio__name">Elias Wygodny</h4>
+          <p class="bio__role">John Wilkes Booth · Associate Director</p>
+        </div>
+      </div>
+      <p class="bio__text">Elias Wygodny is thrilled to be part of Last to Leave’s debut production. Favorite credits include <i>Sunday in the Park with George</i> (CCAE Theatricals), <i>Camelot</i> (Laguna Playhouse/North Coast Rep), <i>Passion</i> (Chromolume Theatre), <i>Assassins</i> (Studio Theatre Tierra Del Sol) and <i>A Midsummer Night’s Dream</i> (Theatricum Botanicum). He holds a BFA in Musical Theatre from the University of Michigan and is Head of Movement at the Stella Adler Art of Acting Studio. Love to his family, his fiancée Toni, and everyone in this new LtL community.</p>
+    </article>
+
+    <article class="bio" id="paul-luoma">
+      <div class="bio__head">
+        <img class="bio__photo" style="--tilt: 1.5deg" src="/images/assassins/cast/paul-luoma.webp" width="360" height="360" loading="lazy" decoding="async" alt="">
+        <div>
+          <h4 class="bio__name">Paul Luoma*</h4>
+          <p class="bio__role">Charles Guiteau · Producer</p>
+        </div>
+      </div>
+      <p class="bio__text">Paul Luoma has performed on professional stages in New York, Los Angeles and regionally across the U.S. Originally from Detroit, he earned a BFA in Musical Theatre Performance from Western Michigan University and later studied TV writing at NYU. Favorite roles include Giorgio in <i>Passion</i> (LA Theatre Bites Award, Best Actor in a Musical), Robert in <i>Company</i> (StageSceneLA Scenie, Best Actor in a Musical) and the Baker in <i>Into the Woods</i>. Offstage, he has worked in creative development at NBCUniversal, Netflix and Center Theatre Group, and currently at Endemol Shine North America. Proud AEA member.</p>
+    </article>
+
+    <article class="bio" id="darian-calderon">
+      <div class="bio__head">
+        <img class="bio__photo" style="--tilt: -1deg" src="/images/assassins/cast/darian-calderon.webp" width="360" height="360" loading="lazy" decoding="async" alt="">
+        <div>
+          <h4 class="bio__name">Darian Calderon</h4>
+          <p class="bio__role">Leon Czolgosz</p>
+        </div>
+      </div>
+      <p class="bio__text">Darian Calderon is thrilled to be part of Last to Leave’s first production, and grateful to be in such a tremendous cast. A proud CSUN alum, he was recently seen as Oxenby in <i>The Dresser</i> (The Tavern Brawlers), Brian in <i>Avenue Q</i> (Conejo Players), Rooster Hannigan in <i>Annie</i> (High Street Arts Center) and Leo Bloom in <i>The Producers</i> (Kentwood Players). Thanks to his family, his friends, and TH454 Scene Study, circa 2022.</p>
+    </article>
+
+    <article class="bio" id="michael-colon">
+      <div class="bio__head">
+        <img class="bio__photo" style="--tilt: 2.5deg" src="/images/assassins/cast/michael-colon.webp" width="360" height="360" loading="lazy" decoding="async" alt="">
+        <div>
+          <h4 class="bio__name">Michael Colon</h4>
+          <p class="bio__role">Giuseppe Zangara</p>
+        </div>
+      </div>
+      <p class="bio__text">Michael Colon has performed across California, from <i>The Great Comet of 1812</i> in Santa Barbara to <i>Beauty and the Beast</i> and <i>Wizard of Oz</i> in San Luis Obispo. This is his first production in Los Angeles. He has been acting for more than ten years, and for him it isn’t a hobby or a job; it’s a lifestyle. He thanks everyone who helped him get here, including those who are no longer with us. “If you fail, fail gloriously.” —Richard Gallegos</p>
+    </article>
+
+    <article class="bio" id="zach-hoffman">
+      <div class="bio__head">
+        <img class="bio__photo" style="--tilt: -2deg" src="/images/assassins/cast/zach-hoffman.webp" width="360" height="360" loading="lazy" decoding="async" alt="">
+        <div>
+          <h4 class="bio__name">Zach Hoffman</h4>
+          <p class="bio__role">Lee Harvey Oswald</p>
+        </div>
+      </div>
+      <p class="bio__text">Zach Hoffman is a SAG-AFTRA actor and a recent graduate of the UCLA Theater, Film and Television program. Recent musical credits: <i>Merrily We Roll Along</i> (Franklin Shepard), <i>Elegies: A Song Cycle</i> (Christian Borle track) and <i>Emma: No One But Herself</i> (Philip Elton). TV: <i>It’s Always Sunny in Philadelphia</i>, <i>Nobody Wants This</i>. Thanks to the cast and crew for bringing this Sondheim/Weidman masterpiece to life together. “They may not want to hear it, but they listen…” <a href="https://zachhoffmanactor.com" target="_blank" rel="noopener noreferrer">zachhoffmanactor.com</a></p>
+    </article>
+
+    <article class="bio" id="matthew-latkiewicz">
+      <div class="bio__head">
+        <img class="bio__photo" style="--tilt: 1deg" src="/images/assassins/cast/matthew-latkiewicz.webp" width="360" height="360" loading="lazy" decoding="async" alt="">
+        <div>
+          <h4 class="bio__name">Matthew Latkiewicz</h4>
+          <p class="bio__role">Samuel Byck · Director</p>
+        </div>
+      </div>
+      <p class="bio__text">Matthew Latkiewicz is a writer, actor and director whose latest play, <i>Life Plan</i>, was nominated for Best Immersive at the 2019 Hollywood Fringe Festival. He created and hosted truTV’s <i>You Can Do Better</i>, based on his book <i>You Suck at Drinking</i>. He won the 2018 Valley Theater Award for Best Actor in a Musical as Cinderella’s Prince in <i>Into the Woods</i>.</p>
+    </article>
+
+    <article class="bio" id="mary-delan">
+      <div class="bio__head">
+        <img class="bio__photo" style="--tilt: -1.5deg" src="/images/assassins/cast/mary-delan.webp" width="360" height="360" loading="lazy" decoding="async" alt="">
+        <div>
+          <h4 class="bio__name">Mary DeLan</h4>
+          <p class="bio__role">Lynette “Squeaky” Fromme · Associate Producer</p>
+        </div>
+      </div>
+      <p class="bio__text">Mary DeLan is honored to be part of Last to Leave’s debut, on both the production team and the cast. Originally from Fleetwood, Pennsylvania, she has fifteen years of performance experience, most recently as Clara in <i>Passion</i>, Maureen in <i>Rent</i> and Velma Von Tussle in <i>Hairspray</i>, and is currently playing Dorothy in <i>Oz!</i> at Assistance League Theatre in Hollywood. BFA in Musical Theatre, AMDA. Debut album: <i>Reborn</i>. She hopes you enjoy the psychological wild ride.</p>
+    </article>
+
+    <article class="bio" id="annalise-marie-staudt">
+      <div class="bio__head">
+        <img class="bio__photo" style="--tilt: 2deg" src="/images/assassins/cast/annalise-marie-staudt.webp" width="360" height="360" loading="lazy" decoding="async" alt="">
+        <div>
+          <h4 class="bio__name">Annalise Marie Staudt</h4>
+          <p class="bio__role">Sara Jane Moore</p>
+        </div>
+      </div>
+      <p class="bio__text">Annalise Marie Staudt is delighted to be part of Last to Leave’s debut. Off-Broadway: <i>Does Not Compute</i>, <i>Gunfight at the Not So OK Saloon</i>. TV: <i>Raven’s Home</i> (Disney+), <i>Stick</i> (Apple TV+), <i>History of the World, Part II</i> (Hulu). An international concert soloist, she has performed at Walt Disney Concert Hall and Beijing’s Forbidden City Concert Hall. MFA in Acting, UCLA; BM in Vocal Performance, University of Redlands. For her son, and for her partner and parents, whose love, support and willingness to babysit make it all possible.</p>
+    </article>
+
+    <article class="bio" id="andrew-gillespie">
+      <div class="bio__head">
+        <img class="bio__photo" style="--tilt: -2.5deg" src="/images/assassins/cast/andrew-gillespie.webp" width="360" height="360" loading="lazy" decoding="async" alt="">
+        <div>
+          <h4 class="bio__name">Andrew Gillespie</h4>
+          <p class="bio__role">John Hinckley</p>
+        </div>
+      </div>
+      <p class="bio__text">Andrew Gillespie made his LA theater debut this summer in William Finn’s <i>Elegies</i>, which premiered as part of the Hollywood Fringe Festival. His credits include <i>The Marvelous Mrs. Maisel</i> (Amazon), <i>Winning Time</i> (HBO) and <i>The Follower</i> (Tubi). He is represented by Stewart Talent and Citizen Skull Entertainment. <a href="https://www.instagram.com/andrewgillespieeats/" target="_blank" rel="noopener noreferrer">@andrewgillespieeats</a></p>
+    </article>
+
+    <article class="bio" id="nick-case">
+      <div class="bio__head">
+        <img class="bio__photo" style="--tilt: 1.5deg" src="/images/assassins/cast/nick-case.webp" width="360" height="360" loading="lazy" decoding="async" alt="">
+        <div>
+          <h4 class="bio__name">Nick Case</h4>
+          <p class="bio__role">The Balladeer</p>
+        </div>
+      </div>
+      <p class="bio__text">Nick Case makes his West Coast debut in Last to Leave’s first production. Regional: ACT of CT, Fulton Theatre, Maine State Music Theatre, Nevada Conservatory Theatre, New London Barn Playhouse, Utah Shakespeare Festival, Wagon Wheel Theatre, Weston Theatre Company. BFA in Musical Theatre, Penn State University. MFA in Acting, UNLV.</p>
+    </article>
+
+    <article class="bio" id="nora-elkind">
+      <div class="bio__head">
+        <img class="bio__photo" style="--tilt: -1deg" src="/images/assassins/cast/nora-elkind.webp" width="360" height="360" loading="lazy" decoding="async" alt="">
+        <div>
+          <h4 class="bio__name">Nora Elkind</h4>
+          <p class="bio__role">The Proprietor · Associate Producer / Costume Lead</p>
+        </div>
+      </div>
+      <p class="bio__text">Nora Elkind is an artist whose practice spans performance, production and design. She won the 2026 LA Theatre Bites Award for Best Actress in a Musical for her performance as Fosca in <i>Passion</i>, and has more than ten years of experience in arts organizations and nonprofit administration. She thanks the team for all their work on this project, and you, the audience, for your presence.</p>
+    </article>
+
+    <article class="bio" id="rory-gill-smith">
+      <div class="bio__head">
+        <img class="bio__photo" style="--tilt: 2deg" src="/images/assassins/cast/rory-gill-smith.webp" width="360" height="360" loading="lazy" decoding="async" alt="">
+        <div>
+          <h4 class="bio__name">Rory Gill-Smith</h4>
+          <p class="bio__role">Swing</p>
+        </div>
+      </div>
+      <p class="bio__text">Rory Gill-Smith is a performer and creative based in Los Angeles. They have the lethal combination of an Acting BFA and a Gender/Sexuality Studies minor from Cal State Long Beach. In addition to performing, Rory is a theater producer, dramaturg and dialect coach. Recent LA stage credits include <i>Godspell</i>, <i>Ragtime</i>, <i>HAIR</i>, <i>Legally Blonde</i> and <i>Off-White; or, the Arab House Party Play</i>.</p>
+    </article>
+
+    <article class="bio" id="max-vaupen">
+      <div class="bio__head">
+        <img class="bio__photo" style="--tilt: -1.5deg" src="/images/assassins/cast/max-vaupen.webp" width="360" height="360" loading="lazy" decoding="async" alt="">
+        <div>
+          <h4 class="bio__name">Max Vaupen</h4>
+          <p class="bio__role">Swing</p>
+        </div>
+      </div>
+      <p class="bio__text">Max Vaupen is an actor, writer and director based in Los Angeles, with a BFA in Drama from NYU Tisch. Recent credits include <i>V13</i> (dir. Richard Ledes, starring Alan Cumming), Alex Richards in <i>The Secret Life of Losers</i> at The Actors Company, and various roles in <i>And What of the Children</i> at The Broadwater. Directing: <i>Schizm</i> by Ryan Lissman (Hollywood Fringe) and <i>PLUTO</i> by Maximilliano Guillen, in development. In his spare time he plays piano, makes noises and plays an unhealthy amount of Smash Bros.</p>
+    </article>
+
+  </div>
+
+  <!-- AUTHORS — required by the MTI license whenever any team bio
+       appears in the program or on the website, together with MTI's
+       own bio (below). Text from the 2022 Off-Broadway revival's
+       program, with Sondheim's dates added and his tense corrected.
+       MTI's longer official versions: www.mtishows.com/bios -->
+  <h3 class="section__subheading">Authors</h3>
+  <div class="bios">
+
+    <article class="bio bio--text" id="stephen-sondheim">
+      <h4 class="bio__name">Stephen Sondheim</h4>
+      <p class="bio__role">Music and Lyrics</p>
+      <p class="bio__text">Stephen Sondheim (1930–2021) wrote the music and lyrics for <i>Saturday Night</i>, <i>A Funny Thing Happened on the Way to the Forum</i>, <i>Anyone Can Whistle</i>, <i>Company</i>, <i>Follies</i>, <i>A Little Night Music</i>, <i>The Frogs</i>, <i>Pacific Overtures</i>, <i>Sweeney Todd</i>, <i>Merrily We Roll Along</i>, <i>Sunday in the Park with George</i>, <i>Into the Woods</i>, <i>Assassins</i> and <i>Passion</i>, as well as the lyrics for <i>West Side Story</i>, <i>Gypsy</i> and <i>Do I Hear a Waltz?</i> For films, he composed music for <i>Stavisky</i> and songs for <i>Reds</i> and <i>Dick Tracy</i>. He was awarded eight Tonys, the Pulitzer Prize, the Presidential Medal of Freedom, the Kennedy Center Honors and an Academy Award. His collected lyrics with attendant essays have been published in two volumes: <i>Finishing the Hat</i> and <i>Look, I Made a Hat</i>. In 2010 the Broadway theater formerly known as Henry Miller’s Theatre was renamed in his honor.</p>
+    </article>
+
+    <article class="bio bio--text" id="john-weidman">
+      <h4 class="bio__name">John Weidman</h4>
+      <p class="bio__role">Book</p>
+      <p class="bio__text">John Weidman has written the books for a wide variety of musicals, among them <i>Pacific Overtures</i>, <i>Assassins</i> and <i>Road Show</i>, all with scores by Stephen Sondheim; <i>Contact</i>, co-created with director/choreographer Susan Stroman; <i>Happiness</i>, score by Scott Frankel and Michael Korie; <i>Take Flight</i> and <i>Big</i>, scores by Richard Maltby Jr. and David Shire; the new book, co-authored with Timothy Crouse, for the Lincoln Center Theater/Roundabout Theatre/National Theatre revivals of Cole Porter’s <i>Anything Goes</i>; and <i>Arrabal</i>, score by Gustavo Santaolalla, directed and co-choreographed by Sergio Trujillo. He is currently working on a musical adaptation of the movie <i>Norma Rae</i> with composer/lyricists Rosanne Cash and John Leventhal. When his children were preschoolers, Weidman began writing for <i>Sesame Street</i>, receiving more than a dozen Emmy Awards for Outstanding Writing for a Children’s Program. From 1999 to 2009, he served as President of the Dramatists Guild of America.</p>
+    </article>
+
+  </div>
+
+  <h3 class="section__subheading">Production team</h3>
+  <p class="note">Matthew Latkiewicz (Director), Paul Luoma (Producer), Elias Wygodny (Associate Director), Nora Elkind (Associate Producer / Costume Lead) and Mary DeLan (Associate Producer) appear with the cast above.</p>
+  <br  />
+  <br  />
+  <div class="bios">
+
+    <article class="bio" id="joshua-bartley">
+      <div class="bio__head">
+        <img class="bio__photo" style="--tilt: 2deg" src="/images/assassins/team/joshua-bartley.webp" width="360" height="360" loading="lazy" decoding="async" alt="">
+        <div>
+          <h4 class="bio__name">Joshua Bartley</h4>
+          <p class="bio__role">Music Director</p>
+        </div>
+      </div>
+      <p class="bio__text">Joshua Bartley is a multi-instrumentalist and music director in Los Angeles. He teaches music theory and composition at AMDA.</p>
+    </article>
+
+    <article class="bio" id="toni-white">
+      <div class="bio__head">
+        <img class="bio__photo" style="--tilt: -1.5deg" src="/images/assassins/team/toni-white.webp" width="360" height="360" loading="lazy" decoding="async" alt="">
+        <div>
+          <h4 class="bio__name">Toni White</h4>
+          <p class="bio__role">Choreographer / Movement</p>
+        </div>
+      </div>
+      <p class="bio__text">Toni White is a Los Angeles–based actor, singer and dancer with more than 30 years of professional performance experience.</p>
+    </article>
+
+    <article class="bio" id="david-callander">
+      <div class="bio__head">
+        <img class="bio__photo" style="--tilt: 1deg" src="/images/assassins/team/david-callander.webp" width="360" height="360" loading="lazy" decoding="async" alt="">
+        <div>
+          <h4 class="bio__name">David Callander</h4>
+          <p class="bio__role">Props &amp; Set Dressing</p>
+        </div>
+      </div>
+      <p class="bio__text">David Callander has worked in all aspects of theatrical production over the last forty years, including stage managing on Broadway and performing and designing costumes and props in Los Angeles.</p>
+    </article>
+
+    <article class="bio" id="drew-mcwilliams">
+      <div class="bio__head">
+        <img class="bio__photo" style="--tilt: -2.5deg" src="/images/assassins/team/drew-mcwilliams.webp" width="360" height="360" loading="lazy" decoding="async" alt="">
+        <div>
+          <h4 class="bio__name">Drew McWilliams</h4>
+          <p class="bio__role">House &amp; Stage Manager</p>
+        </div>
+      </div>
+      <p class="bio__text">Drew McWilliams is a multi-hyphenate in the nonprofit, television and theater worlds, with 20 years of experience as an actor, stage manager, director and playwright.</p>
+    </article>
+
+    <article class="bio" id="sarah-clingenpeel">
+      <div class="bio__head">
+        <img class="bio__photo" style="--tilt: 1.5deg" src="/images/assassins/team/sarah-clingenpeel.webp" width="360" height="360" loading="lazy" decoding="async" alt="">
+        <div>
+          <h4 class="bio__name">Sarah Clingenpeel</h4>
+          <p class="bio__role">Associate House &amp; Stage Manager</p>
+        </div>
+      </div>
+      <p class="bio__text">Sarah Clingenpeel was born and raised in New Orleans and began her training at the New Orleans Center for Creative Arts (NOCCA). She holds a BFA in Performing Arts (Acting) from AMDA. She wrote, produced and starred in her first feature, <i>Dry Spell</i>, in 2026, and stage-manages and performs in live theater all over Los Angeles.</p>
+    </article>
+
+    <article class="bio" id="matt-bates">
+      <div class="bio__head">
+        <img class="bio__photo" style="--tilt: -1deg" src="/images/assassins/team/matt-bates.webp" width="360" height="360" loading="lazy" decoding="async" alt="">
+        <div>
+          <h4 class="bio__name">Matt Bates</h4>
+          <p class="bio__role">Social Media</p>
+        </div>
+      </div>
+      <p class="bio__text">Matt Bates is a creative producer and short-form video strategist with more than ten years of experience bridging broadcast TV and digital content.</p>
+    </article>
+
+    <article class="bio" id="hanna-maria-antson">
+      <div class="bio__head">
+        <img class="bio__photo" style="--tilt: 2.5deg" src="/images/assassins/team/hanna-maria-antson.webp" width="360" height="360" loading="lazy" decoding="async" alt="">
+        <div>
+          <h4 class="bio__name">Hanna Maria Antson</h4>
+          <p class="bio__role">Intern</p>
+        </div>
+      </div>
+      <p class="bio__text">Hanna Maria Antson is an Estonian-born, LA-based actor and former professional athlete training at the Los Angeles Performing Arts Conservatory, most recently seen as Sonia in Christopher Durang’s <i>Vanya and Sonia and Masha and Spike</i>. <a href="https://www.instagram.com/hannamariaantson/" target="_blank" rel="noopener noreferrer">@hannamariaantson</a></p>
+    </article>
+
+  </div>
+
+  <!-- MTI — required with the author bios. The three paragraphs
+       MTI asks licensees to print, verbatim, from the top of
+       www.mtishows.com/about. One <p> per paragraph. -->
+  <h3 class="section__subheading">Music Theatre International</h3>
+  <div class="prose prose--small">
+    <p>Music Theatre International (MTI) is one of the world's leading theatrical licensing agencies, granting theatres from around the world the rights to perform the greatest selection of musicals from Broadway and beyond. Founded in 1952 by composer Frank Loesser and orchestrator Don Walker, MTI is a driving force in advancing musical theatre as a vibrant and engaging art form.</p>
+      
+    <p>MTI works directly with the composers, lyricists and book writers of these musicals to provide official scripts, musical materials and dynamic theatrical resources to over 100,000 professional, community and school theatres in the US and in over 150 countries worldwide.</p>
+      
+    <p>MTI is particularly dedicated to educational theatre, and has created special collections to meet the needs of various types of performers and audiences. MTI’s Broadway Junior® shows are 30- and 60-minute musicals for performance by elementary and middle school-aged performers, while MTI’s School Editions are musicals annotated for performance by high school students. Launched in May 2025, MTI's Broadway Senior™ musicals are geared and adapted for adult performers 55 and over. </p>
+  </div>
+</section>
+
+<!-- ==========================================================
+     THANK YOU — donor order is Paul's and is deliberate (it runs
+     by gift size, without labeling tiers). One name per line.
+     ========================================================== -->
+<section class="section shell" id="thanks" aria-labelledby="thanksHeading">
+  <h2 class="section__heading" id="thanksHeading">Thank you</h2>
+  <p class="kicker kicker--last">To our donors</p>
+  <ul class="donors">
+    <li>Paul &amp; Linda Luoma</li>
+    <li>Lila &amp; Ted Adamczyk</li>
+    <li>George Cheeks</li>
+    <li>The DeLan Family</li>
+    <li>Monica &amp; Chris Latkiewicz</li>
+    <li>Eric &amp; Diane Jarvis</li>
+    <li>Mary Kaye &amp; John Aukee</li>
+    <li>Anne Dehne</li>
+    <li>Rob &amp; Laura Baedeker</li>
+    <li>Ethan Kanat</li>
+    <li>Chris Wise &amp; Hannah Fuller-Boswell</li>
+    <li>Erik &amp; Liz Luoma</li>
+    <li>Ryan Harbron</li>
+    <li>Cheryl &amp; Gary Schmidt</li>
+    <li>Patrick Newton</li>
+    <li>Dmytro Berezin</li>
+    <li>Maggie Friedman</li>
+    <li>John Hodgman</li>
+    <li>Sean &amp; Chelsea Merriman</li>
+    <li>Steve &amp; Laila Greco-Aukee</li>
+    <li>Jon Cohrs &amp; Cynthia Lowen </li>
+    <li>Todd Waldman</li>
+    <li>Sharon Druingool</li>
+    <li>Donald &amp; Karen Baumhart</li>
+    <li>Imran Khan</li>
+    <li>Joanna Frankel</li>
+    <li>Yvette Zhuang</li>
+    <li>Frank Smith</li>
+  </ul>
+  <p class="prose prose--after">Thanks also to the Stella Adler Art of Acting Studio, for a place to rehearse, and to The Actors Company—The Other Space, for a place to perform.</p>
+</section>
+
+<section class="section shell" id="support" aria-labelledby="supportHeading">
+  <h2 class="section__heading" id="supportHeading">Support</h2>
+  <div class="prose">
+    <p>This production was made possible by the people above. The next one will be too.</p>
+  </div>
+  <p class="actions">
+    <a class="button" href="https://account.venmo.com/u/lasttoleavetheatercompany" target="_blank" rel="noopener noreferrer">Give on Venmo</a>
+  </p>
+  <div class="prose">
+    <p>For wires, checks or cash in a suitcase, write to <a href="mailto:info@lasttoleavetheater.com">info@lasttoleavetheater.com</a>.</p>
+    <p>Follow <a href="https://www.instagram.com/lasttoleavetheater/" target="_blank" rel="noopener noreferrer">@lasttoleavetheater</a> on Instagram, and sign up for news at <a href="/">lasttoleavetheater.com</a>.</p>
+    <p><cite>Assassins</cite> runs through November 29. Tickets for the rest of the run: <a href="/assassins/">lasttoleavetheater.com/assassins</a></p>
+  </div>
+</section>
+
+</main>
+
+<footer class="signoff">
+  <div class="shell">
+    <p class="signoff__line">Please silence your phone and put it away.</p>
+    <p class="signoff__sub">The fair is about to open.</p>
+    <a class="signoff__logo" href="/">
+      <img src="/images/assassins/ltl-logo-yellow.png" width="1080" height="950" loading="lazy"
+           alt="Last to Leave Theater Company — home">
+    </a>
+    <p class="signoff__legal">© 2026 Last to Leave Theater Company</p>
+  </div>
+</footer>
+
+</body>
+</html>

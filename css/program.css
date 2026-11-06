@@ -1,0 +1,604 @@
+/* ==========================================================================
+   ASSASSINS — THE PROGRAM
+   Standalone stylesheet for /assassins/program.html. Shares nothing with
+   style.css or assassins.css, by the same rule that keeps those two apart.
+   Palette: #232921 dark green, #FFDE00 yellow, #FFFFFF. No other colors.
+
+   PHONE-FIRST, unlike assassins.css. This page is read almost entirely on a
+   phone, from a seat, in the minutes before curtain. The base rules ARE the
+   phone layout; the one min-width block at the bottom only widens gutters
+   and headings. The column never exceeds --measure, so there is no desktop
+   composition to fight.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Fonts — copied verbatim from css/assassins.css.
+   These src paths are RELATIVE on purpose. url() resolves against this file's
+   location (/css/), not against the page at /assassins/. Do not "fix" them to
+   root-relative. Inclusive Sans and IBM Plex Mono arrive via the Google Fonts
+   <link> in the page head.
+   -------------------------------------------------------------------------- */
+@font-face {
+  font-family: 'Glacial Indifference';
+  src: url('../fonts/GlacialIndifference-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Glacial Indifference';
+  src: url('../fonts/GlacialIndifference-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --------------------------------------------------------------------------
+   Measurements other rules derive from
+   -------------------------------------------------------------------------- */
+:root {
+  /* BILLING SCALE — CONTRACTUAL. The title renders at this size; every other
+     billing line is a fixed fraction of it (50 / 35 / 25%). px on purpose,
+     never rem or vw: either would let something other than this one number
+     rescale the block. 40px is the show page's own phone value. One number,
+     one size at every width: the column is phone-narrow everywhere. */
+  --credit-scale: 40px;
+
+  /* NAME CEILING — CONTRACTUAL, DERIVED. No person's name on this page may
+     render larger than the authors' credit (50% of the title). Every name
+     style uses min(<rem size>, var(--name-max)): the rem term follows a
+     reader's font-size preference, the px term is a hard ceiling it cannot
+     push through. Derived, so it moves with --credit-scale automatically. */
+  --name-max: calc(var(--credit-scale) * 0.5);
+
+  --measure: 34rem;
+  --gutter: 20px;
+  --rule: 1px solid rgba(255, 255, 255, 0.2);
+
+  /* JUMP BAR HEIGHT — composed, not measured: link padding twice, one line
+     of type, and the two hairlines. html's scroll-padding reads it so a
+     tapped link lands below the stuck bar instead of under it. Assumes the
+     links fit on one line; the narrow-phone rule at the bottom keeps them
+     there down to a 320px screen. */
+  --jump-pad: 0.85rem;
+  --jump-line: 1.25rem;
+  --jump-h: calc(var(--jump-pad) * 2 + var(--jump-line) + 2px);
+}
+
+/* --------------------------------------------------------------------------
+   Base
+   -------------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* text-size-adjust also blocks iOS text inflation, the other route past the
+   name ceiling above. */
+html {
+  -webkit-text-size-adjust: 100%;
+  /* Derived from the sticky jump bar's height, never a literal. */
+  scroll-padding-top: calc(var(--jump-h) + 1rem);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+body {
+  margin: 0;
+  background: #232921;
+  color: #FFFFFF;
+  font-family: 'Inclusive Sans', system-ui, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+
+img { display: block; max-width: 100%; height: auto; }
+
+a {
+  color: #FFDE00;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+cite, i { font-style: italic; }
+
+.shell {
+  width: 100%;
+  max-width: calc(var(--measure) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: max(var(--gutter), env(safe-area-inset-left)) max(var(--gutter), env(safe-area-inset-right));
+}
+
+/* Unfilled content. Loud on purpose, so a blank can't ship unnoticed.
+   There should be no <mark class="todo"> left in the file when it goes live. */
+mark.todo {
+  padding: 0 0.3em;
+  background: #FFDE00;
+  color: #232921;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.8em;
+}
+
+/* --------------------------------------------------------------------------
+   Cover — the 4:5 key art, whole and unaltered, as the first screen.
+   -------------------------------------------------------------------------- */
+.cover {
+  position: relative;
+  max-width: calc(var(--measure) + var(--gutter) * 2);
+  margin-inline: auto;
+}
+
+.cover__art { width: 100%; }
+
+/* The wordmark, taped over the portrait row like the printed cover.
+   Percentages of the cover's width, so it tracks the art at any size.
+   top: 0 is deliberate: the PNG's top fifth is the bulb's cord alone, so
+   the cord runs up off the top edge of the art and the wordmark lands on
+   the portraits. Larger than the show page's 18% because this is read on
+   a phone, where 18% of the width is too small to read. */
+.cover__logo {
+  position: absolute;
+  top: 0;
+  left: 8%;
+  width: 22%;
+  display: block;
+}
+
+.cover__logo img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: auto;
+}
+
+/* The tape: the hero's own date-plate strip, reused, behind the lettering
+   only. Inset values are measured off the PNG: the lettering starts about
+   a fifth of the way down, and the bulb sits at the right edge. The plate
+   is stretched to fit (100% 100%) and turned slightly, so it reads as torn
+   and stuck on rather than as a box. */
+.cover__logo::before {
+  content: "";
+  position: absolute;
+  top: 19%;
+  right: -6%;
+  bottom: 1%;
+  left: -9%;
+  background: url('../images/assassins/date-plate-desktop.png') center / 100% 100% no-repeat;
+  transform: rotate(-2.5deg);
+}
+
+/* --------------------------------------------------------------------------
+   Title page + billing
+   LEGAL COMPLIANCE ARTIFACT. Ported from the show page's .credits block.
+   Every size derives from --credit-scale. Never adjust one line on its own.
+   .billing carries no background, border, outline, box-shadow or padding with
+   a fill, and must never be given any.
+   -------------------------------------------------------------------------- */
+.title {
+  padding-top: 2.25rem;
+  text-align: center;
+}
+
+.title__presenter {
+  margin: 0 0 1.1rem;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.billing__title {
+  margin: 0;
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  font-size: var(--credit-scale);
+  line-height: 1.15;
+  letter-spacing: -0.06em;
+  color: #FFDE00;
+}
+
+.billing__author {
+  margin: 0;
+  font-size: calc(var(--credit-scale) * 0.5);
+  line-height: 1.25;
+}
+
+.billing__note {
+  margin: 0;
+  font-size: calc(var(--credit-scale) * 0.35);
+  line-height: 1.35;
+}
+
+/* Blank line between mandated groups. em, so the gaps rescale with the type
+   they belong to. */
+.billing__note--group { margin-top: 1.2em; }
+
+.billing__orchestration {
+  margin: 2.2em 0 0;
+  font-size: calc(var(--credit-scale) * 0.25);
+  line-height: 1.35;
+}
+
+.billing__mti {
+  margin: 2.4em 0 0;
+  font-size: calc(var(--credit-scale) * 0.25);
+  line-height: 1.5;
+}
+
+.billing__mti a { color: inherit; }
+
+/* The run and venue. Not billing, so free to size — but nothing here may
+   outsize the authors' line either. */
+.title__run {
+  margin: 2.25rem 0 0;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.title__dates {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #FFDE00;
+}
+
+.title__equity {
+  margin: 1rem 0 0;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* --------------------------------------------------------------------------
+   Jump links — the page is long; most readers want the cast first.
+   Padding gives each link a thumb-sized target without a visible box.
+   -------------------------------------------------------------------------- */
+.jump {
+  /* Sticky, not fixed: it stays where it is under the billing until the
+     reader scrolls past it, then holds at the top of the screen to the
+     end of the page.
+     Needs its own background or the bios scroll through it, and a z-index
+     because each tilted photo (transform) paints in its own layer.
+     Breaks if any ancestor gets overflow: hidden or auto. Nothing here
+     sets one; keep it that way. */
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #232921;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: 1.25rem;
+  margin-top: 2.25rem;
+  border-block: var(--rule);
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.jump a {
+  padding-block: var(--jump-pad);
+  line-height: var(--jump-line);
+  text-decoration: none;
+}
+
+/* --------------------------------------------------------------------------
+   Sections
+   -------------------------------------------------------------------------- */
+.section { padding-top: 3.25rem; }
+
+.section__heading {
+  margin: 0 0 1.25rem;
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  font-size: 2rem;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: #FFDE00;
+}
+
+.section__subheading {
+  margin: 2.5rem 0 0.75rem;
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  font-size: 1.375rem;
+  line-height: 1.1;
+  text-transform: uppercase;
+  color: #FFDE00;
+}
+
+/* First group directly under a section heading: the heading's own margin
+   already does the spacing. */
+.section__subheading--first { margin-top: 0; }
+
+/* Groups inside Who's Who need more air than a subheading after a list. */
+.bios + .section__subheading,
+.note + .section__subheading { margin-top: 3.25rem; }
+.section__subheading + .bios { margin-top: 1rem; }
+
+/* The page's recurring monospace aside, as on the rest of the site. */
+.kicker {
+  margin: 0;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+}
+.kicker--last { margin-bottom: 1.25rem; }
+
+.prose p { margin: 0 0 1em; }
+.prose p:last-child { margin-bottom: 0; }
+.prose--after { margin: 1.5rem 0 0; }
+
+.note {
+  margin: 1.25rem 0 0;
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.footnote {
+  margin: 1rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Before we begin */
+.facts { margin: 0; }
+.facts__row { padding: 0.9rem 0; border-top: var(--rule); }
+.facts__row:last-child { border-bottom: var(--rule); }
+.facts dt,
+.roster dt,
+.bio__role {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #FFDE00;
+}
+.facts dd { margin: 0.3rem 0 0; }
+
+/* --------------------------------------------------------------------------
+   Rosters — cast, musicians, production team. Role above, name below:
+   the phone is too narrow for "Role ........ Name" without wrapping into
+   a mess, and stacked rows survive any name length.
+   -------------------------------------------------------------------------- */
+.roster { margin: 0; }
+
+.roster__row {
+  padding: 0.7rem 0;
+  border-bottom: var(--rule);
+}
+.roster__row:last-child { border-bottom: none; }
+
+.roster dd {
+  margin: 0.15rem 0 0;
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  /* NAME CEILING — see --name-max. */
+  font-size: min(1.25rem, var(--name-max));
+  line-height: 1.2;
+}
+
+/* Cast names link to their bios. White with a quiet dotted rule, so the
+   list reads as a list and the links are still findable. */
+.roster dd a {
+  color: #FFFFFF;
+  text-decoration: underline dotted rgba(255, 255, 255, 0.45);
+  text-underline-offset: 0.2em;
+}
+
+/* --------------------------------------------------------------------------
+   Musical numbers
+   -------------------------------------------------------------------------- */
+.songs {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: song;
+}
+
+.songs li {
+  position: relative;
+  padding: 0.7rem 0 0.7rem 2.4rem;
+  border-bottom: var(--rule);
+  counter-increment: song;
+}
+.songs li:last-child { border-bottom: none; }
+
+.songs li::before {
+  content: counter(song, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 0.95rem;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.78rem;
+  color: #FFDE00;
+}
+
+.songs__title {
+  display: block;
+  font-weight: 600;
+}
+
+.songs__by {
+  display: block;
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* --------------------------------------------------------------------------
+   Who's who
+   The photos lean, each by its own hand-set --tilt: the skew the cast
+   section was always meant to have. White border and a hard offset shadow,
+   no blur — a print pinned to a classroom board, not a floating card.
+   -------------------------------------------------------------------------- */
+.bios {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.bio__head {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+  margin-bottom: 1rem;
+}
+
+.bio__photo {
+  flex: 0 0 auto;
+  width: 104px;
+  height: 104px;
+  object-fit: cover;
+  border: 5px solid #FFFFFF;
+  background: #FFFFFF;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.35);
+  transform: rotate(var(--tilt, 0deg));
+}
+
+.bio__name {
+  margin: 0;
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  /* NAME CEILING — see --name-max. */
+  font-size: min(1.25rem, var(--name-max));
+  line-height: 1.15;
+}
+
+.bio__role { margin: 0.35rem 0 0; }
+
+.bio__text {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* Authors carry no photo: name and role sit directly over the text. */
+.bio--text .bio__role { margin-bottom: 0.75rem; }
+
+/* MTI's paragraphs: supplied boilerplate, set a step down from the bios. */
+.prose--small {
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* --------------------------------------------------------------------------
+   Founders + pillars
+   -------------------------------------------------------------------------- */
+.signature {
+  margin: 1.25rem 0 0;
+  font-weight: 600;
+}
+.signature span {
+  font-weight: 400;
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.pillars { margin: 0; }
+.pillars__row { padding: 0.75rem 0; border-bottom: var(--rule); }
+.pillars__row:last-child { border-bottom: none; }
+.pillars dt {
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  font-size: 1.0625rem;
+  text-transform: uppercase;
+  color: #FFDE00;
+}
+.pillars dd { margin: 0.15rem 0 0; }
+
+/* --------------------------------------------------------------------------
+   Donors — one name per line. A wrapped run with separators left dots
+   dangling at line ends on a phone; a plain column gives every donor the
+   same line and reads cleanly at any width.
+   -------------------------------------------------------------------------- */
+.donors {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  line-height: 1.75;
+}
+
+/* --------------------------------------------------------------------------
+   Support
+   -------------------------------------------------------------------------- */
+.actions { margin: 1.5rem 0; }
+
+/* The ticket CTA's language: yellow field, dark type, hard offset, no blur. */
+.button {
+  display: inline-block;
+  padding: 0.9rem 1.5rem;
+  background: #FFDE00;
+  color: #232921;
+  border-radius: 12px;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.35);
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  font-size: 1.125rem;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   Sign-off — the last thing on the phone before it goes away.
+   -------------------------------------------------------------------------- */
+.signoff {
+  margin-top: 4.5rem;
+  padding: 3.5rem 0 calc(3rem + env(safe-area-inset-bottom));
+  border-top: var(--rule);
+  text-align: center;
+}
+
+.signoff__line {
+  margin: 0;
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  font-size: 2rem;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: #FFDE00;
+}
+
+.signoff__sub {
+  margin: 1rem 0 0;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.signoff__logo {
+  display: block;
+  width: 96px;
+  margin: 3rem auto 0;
+}
+
+.signoff__legal {
+  margin: 1.25rem 0 0;
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* --------------------------------------------------------------------------
+   Wider screens — a laptop opening the link. Same single column; only the
+   gutters and headings grow. The billing does not change size here.
+   -------------------------------------------------------------------------- */
+/* The narrowest phones: tighten the jump bar so its five links stay on one
+   line, which --jump-h assumes. */
+@media (max-width: 359px) {
+  .jump { column-gap: 0.75rem; font-size: 0.75rem; letter-spacing: 0.04em; }
+}
+
+@media (min-width: 700px) {
+  :root { --gutter: 32px; }
+  .section__heading { font-size: 2.5rem; }
+  .signoff__line { font-size: 2.5rem; }
+}
