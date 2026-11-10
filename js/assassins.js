@@ -60,9 +60,10 @@
   'use strict';
 
   var sentinel = document.getElementById('chromeSentinel');
+  /* The ticket CTA used to ride this reveal too. It is now always visible
+     (see css/assassins.css), so only the nav is driven from here. */
   var bars = [
-    document.getElementById('siteNav'),
-    document.getElementById('ticketCta')
+    document.getElementById('siteNav')
   ].filter(Boolean);
 
   if (!bars.length) { return; }

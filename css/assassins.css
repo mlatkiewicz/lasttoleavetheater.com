@@ -1104,17 +1104,23 @@ html { scroll-padding-top: calc(var(--nav-h) + 1rem); }
   --chrome-z: 100;
   position: fixed;
   z-index: var(--chrome-z);
-  /* Hidden state. visibility, not display: display:none cannot transition, and
-     the delayed visibility step is what keeps a hidden element out of the tab
-     order without cutting the fade short. */
+}
+
+/* The ticket CTA is ALWAYS visible, from first paint — visitors who never
+   scrolled past the hero were missing that tickets were on sale. Only the nav
+   starts hidden and waits for the scroll reveal.
+
+   Hidden state. visibility, not display: display:none cannot transition, and
+   the delayed visibility step is what keeps a hidden element out of the tab
+   order without cutting the fade short. */
+.site-nav {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.35s ease, visibility 0s linear 0.35s;
 }
 
-/* The one class js/assassins.js sets — on both elements, in the same call. */
-.site-nav.is-visible,
-.ticket-cta.is-visible {
+/* The one class js/assassins.js sets, on the nav only. */
+.site-nav.is-visible {
   opacity: 1;
   visibility: visible;
   transition: opacity 0.35s ease, visibility 0s linear 0s;
@@ -1313,8 +1319,6 @@ html { scroll-padding-top: calc(var(--nav-h) + 1rem); }
 
 @media (prefers-reduced-motion: reduce) {
   .site-nav,
-  .ticket-cta,
   .site-nav.is-visible,
-  .ticket-cta.is-visible,
   .site-nav__link { transition: none; }
 }
